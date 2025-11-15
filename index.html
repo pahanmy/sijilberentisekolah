@@ -34,22 +34,39 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             
             <!-- Butang 1: Borang Murid (index.html) -->
-            <a href="index.html" class="group block p-6 sm:p-10 bg-white rounded-xl shadow-xl hover:shadow-2xl hover:scale-[1.02] transition duration-300 ease-in-out border-t-4 border-indigo-500 hover:border-indigo-700">
-                <div class="flex flex-col items-center">
-                    <!-- Ikon Pelajar -->
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-indigo-500 group-hover:text-indigo-700 mb-4 transition duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M19 21v-2a4 4 0 00-4-4H9a4 4 0 00-4 4v2" />
-                        <circle cx="12" cy="7" r="4" />
-                        <path d="M22 21v-2a4 4 0 00-3-3.87" />
-                        <path d="M2 19v2a4 4 0 004-4v-2" />
-                    </svg>
-                    <h2 class="text-2xl font-bold text-gray-800 mb-1">Borang Murid</h2>
-                    <p class="text-sm text-gray-600">Untuk murid mengisi maklumat berhenti sekolah dan minat khas.</p>
+            <div class="flex flex-col space-y-4">
+                <a href="index.html" class="group block p-6 sm:p-10 bg-white rounded-xl shadow-xl hover:shadow-2xl hover:scale-[1.02] transition duration-300 ease-in-out border-t-4 border-indigo-500 hover:border-indigo-700">
+                    <div class="flex flex-col items-center">
+                        <!-- Ikon Pelajar -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-indigo-500 group-hover:text-indigo-700 mb-4 transition duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M19 21v-2a4 4 0 00-4-4H9a4 4 0 00-4 4v2" />
+                            <circle cx="12" cy="7" r="4" />
+                            <path d="M22 21v-2a4 4 0 00-3-3.87" />
+                            <path d="M2 19v2a4 4 0 004-4v-2" />
+                        </svg>
+                        <h2 class="text-2xl font-bold text-gray-800 mb-1">Borang Murid</h2>
+                        <p class="text-sm text-gray-600">Untuk murid mengisi maklumat berhenti sekolah dan minat khas.</p>
+                    </div>
+                </a>
+
+                <!-- KOTAK PAUTAN (BARU) -->
+                <div class="bg-white p-4 rounded-xl shadow-md border border-indigo-200">
+                    <label class="block text-xs font-semibold text-indigo-700 mb-1">Pautan Borang Murid (Kongsi)</label>
+                    <div class="flex space-x-2">
+                        <input type="text" id="share-link-input" readonly class="flex-grow rounded-md border-indigo-300 shadow-sm text-xs p-2 bg-gray-50 cursor-pointer text-gray-600" onclick="this.select()">
+                        <button type="button" id="copy-link-btn" class="inline-flex items-center rounded-md bg-indigo-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-indigo-500 transition duration-150">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M7 9a2 2 0 012-2h6a2 2 0 012 2v6a2 2 0 01-2 2H9a2 2 0 01-2-2V9z" />
+                                <path d="M5 3a2 2 0 00-2 2v6a2 2 0 002 2V5h8a2 2 0 00-2-2H5z" />
+                            </svg>
+                        </button>
+                    </div>
+                    <p id="copy-status" class="text-xs text-green-700 mt-2 hidden">Pautan berjaya disalin!</p>
                 </div>
-            </a>
+            </div>
 
             <!-- Butang 2: Halaman Guru Kelas (Memaparkan Modal Pengesahan) -->
-            <button id="guru-login-btn" class="group block p-6 sm:p-10 bg-white rounded-xl shadow-xl hover:shadow-2xl hover:scale-[1.02] transition duration-300 ease-in-out border-t-4 border-green-500 hover:border-green-700 cursor-pointer">
+            <button id="guru-login-btn" class="group block p-6 sm:p-10 bg-white rounded-xl shadow-xl hover:shadow-2xl hover:scale-[1.02] transition duration-300 ease-in-out border-t-4 border-green-500 hover:border-green-700 cursor-pointer h-full self-start">
                 <div class="flex flex-col items-center">
                     <!-- Ikon Guru/Admin (Papan Pemuka) -->
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-green-500 group-hover:text-green-700 mb-4 transition duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -103,7 +120,49 @@
             const errorMessage = document.getElementById('error-message');
             const CORRECT_PASSWORD = "imananiqsara"; // Kata Laluan Rahsia
 
-            // Fungsi untuk membuka modal
+            // Elemen Pautan
+            const shareLinkInput = document.getElementById('share-link-input');
+            const copyLinkBtn = document.getElementById('copy-link-btn');
+            const copyStatus = document.getElementById('copy-status');
+
+            // Tetapkan pautan borang murid (index.html)
+            if (shareLinkInput) {
+                // Untuk memastikan pautan adalah ke index.html, kita ambil URL semasa dan ganti failnya.
+                // Jika menu.html dibuka sebagai fail akar, ia akan kekal index.html.
+                const currentPath = window.location.href;
+                const basePath = currentPath.substring(0, currentPath.lastIndexOf('/') + 1);
+                shareLinkInput.value = basePath + 'index.html';
+            }
+
+            // Handler untuk menyalin pautan
+            if (copyLinkBtn) {
+                copyLinkBtn.addEventListener('click', () => {
+                    if (shareLinkInput) {
+                        shareLinkInput.select();
+                        shareLinkInput.setSelectionRange(0, 99999);
+                        
+                        try {
+                            const successful = document.execCommand('copy');
+                            if (successful) {
+                                copyStatus.innerText = 'Pautan berjaya disalin!';
+                                copyStatus.classList.remove('hidden', 'text-red-500');
+                                copyStatus.classList.add('text-green-700');
+                                setTimeout(() => {
+                                    copyStatus.classList.add('hidden');
+                                }, 3000);
+                            } else {
+                                copyStatus.innerText = 'Gagal menyalin. Sila salin secara manual.';
+                                copyStatus.classList.remove('hidden');
+                            }
+                        } catch (err) {
+                            copyStatus.innerText = 'Gagal menyalin (Ralat browser). Sila salin secara manual.';
+                            copyStatus.classList.remove('hidden');
+                        }
+                    }
+                });
+            }
+            
+            // Fungsi untuk membuka modal log masuk guru
             loginBtn.addEventListener('click', () => {
                 passwordModal.classList.remove('hidden');
                 passwordInput.value = '';
@@ -111,7 +170,7 @@
                 passwordInput.focus();
             });
 
-            // Fungsi untuk menutup modal
+            // Fungsi untuk menutup modal log masuk guru
             cancelPasswordBtn.addEventListener('click', () => {
                 passwordModal.classList.add('hidden');
             });
