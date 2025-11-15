@@ -34,32 +34,60 @@
         .akuan-jadual td, .akuan-jadual th {
              border: 1px solid #000;
              padding: 4px 6px;
-             height: 25px; /* Menetapkan ketinggian minimum untuk kotak semak */
+             height: 25px; 
              box-sizing: border-box;
+             font-size: 10pt;
+             text-align: center;
+        }
+        .akuan-jadual td:first-child, .akuan-jadual th:first-child {
+             text-align: left;
         }
         .akuan-jadual th {
-             text-align: center;
              font-weight: bold;
              background-color: #f0f0f0;
         }
-        /* Gaya Khusus Sijil Khas - Jadual Pencapaian */
-        .sijil-pencapaian td, .sijil-pencapaian th {
-            border: 1px solid #000;
-            padding: 4px 6px;
-            text-align: center;
-            vertical-align: middle;
-            height: 40px;
-        }
-        .sijil-pencapaian th {
+        
+        /* Gaya Khusus Sijil Khas (Meniru Kotak Semak Berasingan) */
+        .sijil-program-heading {
+            font-size: 11pt;
             font-weight: bold;
-            font-size: 9pt;
-            background-color: #f0f0f0;
-        }
-        .sijil-pencapaian td:first-child, .sijil-pencapaian th:first-child {
-            text-align: left;
-            padding-left: 10px;
+            margin-top: 15px;
+            margin-bottom: 5px;
         }
 
+        .gred-item {
+            display: inline-block;
+            width: 24.5%; /* Hampir 4 item sebaris */
+            margin-right: 0.5%;
+            vertical-align: top;
+            padding: 5px 0;
+            min-height: 50px;
+            box-sizing: border-box;
+        }
+        
+        /* Style untuk NILAM - 2 baris */
+        .gred-item.nilam-top {
+            width: 32%; /* 3 item sebaris untuk baris atas */
+            margin-right: 1%;
+        }
+        .gred-item.nilam-bottom {
+            width: 32%; /* 3 item sebaris untuk baris bawah */
+            margin-right: 1%;
+        }
+
+        .check-box-display {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 1px solid #000;
+            text-align: center;
+            line-height: 12px;
+            font-size: 10px;
+            font-weight: bold;
+            vertical-align: middle;
+            margin-right: 5px;
+        }
+        
         /* Gaya untuk meniru bingkai */
         .scroll-border {
             border: 2px solid #000; 
@@ -152,7 +180,7 @@
                 <p>Pencapaian keseluruhan murid dalam peperiksaan sekolah dan awam adalah: <strong><span data-id="akuan-akademik"></span></strong>.</p>
 
                 <h3>B. KUALITI PERIBADI DAN SAHSIAH</h3>
-                <table class="akuan-jadual" style="width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 10pt;">
+                <table class="akuan-jadual" style="width: 100%; border-collapse: collapse; margin-top: 10px;">
                     <thead>
                         <tr>
                             <th style="width: 5%;">Bil.</th>
@@ -213,61 +241,67 @@
 
                     <p style="margin-top: 25px; font-size: 10pt;">Dengan ini disahkan program pencapaian pelajar tersebut dalam bidang berikut:</p>
 
-                    <table class="sijil-pencapaian" style="width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 10pt;">
-                        <thead>
-                            <tr style="border-bottom: 1px solid #000;">
-                                <th style="width: 35%; text-align: left; padding: 5px 10px; border-right: 1px solid #000;">Program</th>
-                                <th style="width: 15%; border-right: 1px solid #000;">Cemerlang <br>(7 Bintang - merit ke atas)</th>
-                                <th style="width: 25%; border-right: 1px solid #000;">Baik <br>(3-4 Bintang - 840-1919 mata merit)</th>
-                                <th style="width: 15%; border-right: 1px solid #000;">Memuaskan <br>(1-2 Bintang - 240-839 mata merit)</th>
-                                <th style="width: 15%;">Kurang Memuaskan <br>(Kurang daripada 240 mata merit)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td style="text-align: left; padding: 8px 10px; border-right: 1px solid #000;">Program Anugerah Skim Lencana Bintang</td>
-                                <td data-gred="Cemerlang" data-prog="Lencana Bintang" style="border-right: 1px solid #000;"></td>
-                                <td data-gred="Baik" data-prog="Lencana Bintang" style="border-right: 1px solid #000;"></td>
-                                <td data-gred="Memuaskan" data-prog="Lencana Bintang" style="border-right: 1px solid #000;"></td>
-                                <td data-gred="Kurang Memuaskan" data-prog="Lencana Bintang"></td>
-                            </tr>
-                            
-                            <tr>
-                                <td style="text-align: left; padding: 8px 10px; border-right: 1px solid #000;">Program Nilam (Nadi Ilmu Amalan Membaca)</td>
-                                
-                                <td style="border-right: 1px solid #000; padding: 0;" colspan="1">
-                                     <div style="display: flex; height: 100%;">
-                                        <div style="flex: 1; border-right: 1px solid #000;" data-gred="5 Bintang" data-prog="Nilam"></div>
-                                        <div style="flex: 1;" data-gred="4 Bintang" data-prog="Nilam"></div>
-                                     </div>
-                                </td>
-                                
-                                <td style="border-right: 1px solid #000; padding: 0;" colspan="1">
-                                     <div style="display: flex; height: 100%;">
-                                        <div style="flex: 1; border-right: 1px solid #000;" data-gred="3 Bintang" data-prog="Nilam"></div>
-                                        <div style="flex: 1;" data-gred="2 Bintang" data-prog="Nilam"></div>
-                                     </div>
-                                </td>
-                                
-                                <td style="border-right: 1px solid #000; padding: 0;" colspan="1">
-                                    <div style="display: flex; height: 100%;">
-                                        <div style="flex: 1; border-right: 1px solid #000;" data-gred="1 Bintang" data-prog="Nilam"></div>
-                                        <div style="flex: 1;" data-gred="Tidak Mencapai" data-prog="Nilam"></div>
-                                    </div>
-                                </td>
-                                
-                                <td data-gred="Kurang Memuaskan" data-prog="Nilam"></td>
-                            </tr>
+                    <div style="border: 2px solid #000; padding: 10px; margin-top: 15px; page-break-inside: avoid;">
+                        
+                        <div class="sijil-program-heading">Program Anugerah Skim Lencana Bintang</div>
+                        <div style="display: flex; flex-wrap: wrap; font-size: 9pt;">
+                            <div class="gred-item" data-prog="Lencana Bintang" data-gred="Cemerlang">
+                                <span class="check-box-display"></span> Cemerlang <br>(5-7 Bintang <br>1920 mata merit ke atas)
+                            </div>
+                            <div class="gred-item" data-prog="Lencana Bintang" data-gred="Baik">
+                                <span class="check-box-display"></span> Baik <br>(3-4 Bintang <br>840-1919 mata merit)
+                            </div>
+                            <div class="gred-item" data-prog="Lencana Bintang" data-gred="Memuaskan">
+                                <span class="check-box-display"></span> Memuaskan <br>(1-2 Bintang <br>240-839 mata merit)
+                            </div>
+                            <div class="gred-item" data-prog="Lencana Bintang" data-gred="Kurang Memuaskan">
+                                <span class="check-box-display"></span> Kurang Memuaskan <br>(Kurang daripada <br>240 mata merit)
+                            </div>
+                        </div>
 
-                            <tr>
-                                <td style="text-align: left; padding: 8px 10px; border-right: 1px solid #000;">Prestasi Kehadiran Sekolah</td>
-                                <td data-gred="Cemerlang" data-prog="Hadir" style="border-right: 1px solid #000;"></td>
-                                <td data-gred="Baik" data-prog="Hadir" style="border-right: 1px solid #000;"></td>
-                                <td data-gred="Memuaskan" data-prog="Hadir" style="border-right: 1px solid #000;"></td>
-                                <td data-gred="Kurang Memuaskan" data-prog="Hadir"></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                        <div class="sijil-program-heading" style="margin-top: 20px;">Program Nilam (Nadi Ilmu Amalan Membaca)</div>
+                        <div style="font-size: 9pt;">
+                            <div style="display: flex; margin-bottom: 5px;">
+                                <div class="gred-item nilam-top" data-prog="Nilam" data-gred="5 Bintang">
+                                    <span class="check-box-display"></span> 5 Bintang <br>(600 bahan bacaan ke atas)
+                                </div>
+                                <div class="gred-item nilam-top" data-prog="Nilam" data-gred="3 Bintang">
+                                    <span class="check-box-display"></span> 3 Bintang <br>(360 - 479 <br>bahan bacaan)
+                                </div>
+                                <div class="gred-item nilam-top" data-prog="Nilam" data-gred="1 Bintang">
+                                    <span class="check-box-display"></span> 1 Bintang <br>(120 - 239 <br>bahan bacaan)
+                                </div>
+                            </div>
+                            <div style="display: flex;">
+                                <div class="gred-item nilam-bottom" data-prog="Nilam" data-gred="4 Bintang">
+                                    <span class="check-box-display"></span> 4 Bintang <br>(480 - 599 <br>bahan bacaan)
+                                </div>
+                                <div class="gred-item nilam-bottom" data-prog="Nilam" data-gred="2 Bintang">
+                                    <span class="check-box-display"></span> 2 Bintang <br>(240 - 359 <br>bahan bacaan)
+                                </div>
+                                <div class="gred-item nilam-bottom" data-prog="Nilam" data-gred="Tidak Mencapai">
+                                    <span class="check-box-display"></span> Tidak mencapai tahap <br>(Kurang daripada 120 bahan bacaan)
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="sijil-program-heading" style="margin-top: 20px;">Prestasi Kehadiran Sekolah</div>
+                        <div style="display: flex; flex-wrap: wrap; font-size: 9pt;">
+                            <div class="gred-item" data-prog="Hadir" data-gred="Cemerlang">
+                                <span class="check-box-display"></span> Cemerlang <br>(98 - 100%)
+                            </div>
+                            <div class="gred-item" data-prog="Hadir" data-gred="Baik">
+                                <span class="check-box-display"></span> Baik <br>(90 - 97%)
+                            </div>
+                            <div class="gred-item" data-prog="Hadir" data-gred="Memuaskan">
+                                <span class="check-box-display"></span> Memuaskan <br>(85 - 89%)
+                            </div>
+                            <div class="gred-item" data-prog="Hadir" data-gred="Kurang Memuaskan">
+                                <span class="check-box-display"></span> Kurang Memuaskan <br>(Kurang daripada 85%)
+                            </div>
+                        </div>
+                        
+                    </div>
                     <div style="font-size: 10pt; margin-top: 50px;">
                         <p>Pengetua</p>
                         <p>Sekolah Menengah Kebangsaan Lutong</p>
@@ -367,7 +401,6 @@
             tempDiv.innerHTML = htmlContent;
 
             // --- 3. ISI DATA KE DALAM KEDUA-DUA TEMPLAT ---
-            // Fix: Cari elemen menggunakan data-page attribute, bukan ID template div.
             const akuanDoc = tempDiv.querySelector('[data-page="akuan"]');
             const sijilKhasDoc = tempDiv.querySelector('[data-page="sijil-khas"]');
 
@@ -377,12 +410,24 @@
                     return docElement.querySelector(selector);
                 };
 
-                // Fungsi untuk memasukkan tanda semak ke dalam sel jadual
+                // Fungsi untuk memasukkan tanda semak ke dalam sel jadual/div kotak
                 const checkGred = (gred, program, doc) => {
+                    // Cari sama ada ia sel <td> (Halaman 1) atau div kotak (Halaman 2)
                     const target = doc.querySelector(`[data-prog="${program}"][data-gred="${gred}"]`);
-                    // Hanya masukkan tanda semak jika gred wujud dan sepadan
+
                     if (target && gred && gred.trim() !== '' && gred.toUpperCase() !== 'N/A' && gred.toUpperCase() !== 'TIADA DATA') {
-                        target.innerHTML = '✔'; 
+                        
+                        // Jika ia untuk Halaman 1 (Jadual Akuan), masukkan tanda semak terus dalam <td>
+                        if (doc.getAttribute('data-page') === 'akuan') {
+                            target.innerHTML = '✔'; 
+                        
+                        // Jika ia untuk Halaman 2 (Jadual Khas - Div), cari elemen check-box-display
+                        } else if (doc.getAttribute('data-page') === 'sijil-khas') {
+                            const checkBox = target.querySelector('.check-box-display');
+                            if (checkBox) {
+                                checkBox.innerText = '✔';
+                            }
+                        }
                     }
                 };
 
@@ -456,9 +501,10 @@
                 penilaian.Kesopanan = 'Baik'; penilaian.Disiplin = 'Baik';
                 penilaian['Peratus Kehadiran'] = '100';
                 penilaian.Catatan = 'TIADA DATA PENILAIAN GURU DIREKODKAN.';
-                penilaian['Lencana Bintang'] = 'Memuaskan'; 
-                penilaian['Program Nilam'] = '1 Bintang'; 
-                penilaian['Prestasi Kehadiran Sijil Khas'] = 'Baik';
+                // Default Gred Sijil Khas
+                penilaian['Lencana Bintang'] = 'Baik'; // Ubah default agar dapat tanda semak di Baik
+                penilaian['Program Nilam'] = '5 Bintang'; 
+                penilaian['Prestasi Kehadiran Sijil Khas'] = 'Cemerlang';
                 penilaian['Jawatan Khas Lain'] = '';
                 for(let i=1; i<=5; i++) { penilaian[`Jawatan ${i}`] = 'N/A'; }
             }
@@ -492,7 +538,7 @@
                 if (akuanEl) templateAkuanHtml = akuanEl.querySelector('.print-document').outerHTML;
                 if (sijilEl) templateSijilKhasHtml = sijilEl.querySelector('.print-document').outerHTML;
                 
-                loadingMsg.innerText = 'Memuatkan data murid...';
+                loadingMsg.innerText = 'Memuatkan data...';
                 
                 const muridResponse = await fetch(sheetDBUrlMurid);
                 if (!muridResponse.ok) throw new Error("Gagal muat data murid.");
