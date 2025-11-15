@@ -30,38 +30,37 @@
             page-break-before: always;
         }
 
-        /* Gaya Khusus Sijil Khas */
-        .sijil-header { 
-            font-size: 10pt;
-            text-align: center;
-            border-bottom: 1px solid #000;
-            padding-bottom: 5px;
-            margin-bottom: 5px;
-            font-weight: bold;
+        /* Gaya Khusus Surat Akuan - Jadual Kualiti Peribadi */
+        .akuan-jadual td, .akuan-jadual th {
+             border: 1px solid #000;
+             padding: 4px 6px;
+             height: 25px; /* Menetapkan ketinggian minimum untuk kotak semak */
+             box-sizing: border-box;
         }
-        .sijil-baris { display: flex; margin-bottom: 2px; }
-        .sijil-baris .label { flex: 2; text-align: left; padding-left: 10px; }
-        .sijil-baris .gred-box { flex: 1; text-align: center; border: 1px solid #000; padding: 2px 0; }
-        .sijil-pencapaian { 
-            border: 2px solid #000; 
-            padding: 10px; 
-            margin-top: 15px;
-            page-break-inside: avoid; /* Penting untuk mengelakkan pemecahan baris */
+        .akuan-jadual th {
+             text-align: center;
+             font-weight: bold;
+             background-color: #f0f0f0;
         }
-        .check-box-inline {
-            display: inline-block;
-            width: 14px;
-            height: 14px;
+        /* Gaya Khusus Sijil Khas - Jadual Pencapaian */
+        .sijil-pencapaian td, .sijil-pencapaian th {
             border: 1px solid #000;
+            padding: 4px 6px;
             text-align: center;
-            line-height: 12px;
-            font-size: 10px;
-            font-weight: bold;
             vertical-align: middle;
-            margin-right: 5px;
+            height: 40px;
         }
-        
-        /* Gaya untuk meniru bingkai (seperti gambar yang anda berikan) */
+        .sijil-pencapaian th {
+            font-weight: bold;
+            font-size: 9pt;
+            background-color: #f0f0f0;
+        }
+        .sijil-pencapaian td:first-child, .sijil-pencapaian th:first-child {
+            text-align: left;
+            padding-left: 10px;
+        }
+
+        /* Gaya untuk meniru bingkai */
         .scroll-border {
             border: 2px solid #000; 
             padding: 20px; 
@@ -80,19 +79,6 @@
             pointer-events: none;
         }
         
-        /* Gaya Khusus Surat Akuan - Jadual Kualiti Peribadi */
-        .akuan-jadual td {
-             border: 1px solid #000;
-             padding: 4px 6px;
-        }
-        .akuan-jadual th {
-             border: 1px solid #000;
-             padding: 4px 6px;
-             text-align: center;
-             font-weight: bold;
-             background-color: #f0f0f0;
-        }
-
         @media print {
             body { background: white !important; padding: 0; margin: 0;}
             .print-hidden { display: none !important; } 
@@ -102,9 +88,6 @@
                 margin: 0.7cm; 
             }
         }
-        
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .animate-spin-slow { animation: spin 1.5s linear infinite; }
 
     </style>
 </head>
@@ -142,6 +125,7 @@
     </div>
 
     <div id="print-area" class="hidden">
+        
         <div id="template-akuan" style="display: none;">
             <div class="print-document" data-page="akuan">
                 <div style="text-align: center; margin-bottom: 20px;">
@@ -229,50 +213,61 @@
 
                     <p style="margin-top: 25px; font-size: 10pt;">Dengan ini disahkan program pencapaian pelajar tersebut dalam bidang berikut:</p>
 
-                    <div class="sijil-pencapaian">
-                        
-                        <div class="sijil-header sijil-baris" style="border: none;">
-                            <div class="label">Program</div>
-                            <div style="flex: 1.5; text-align: center;">Cemerlang <br>(7 Bintang - merit ke atas)</div>
-                            <div>Baik <br>(3-4 Bintang - 840-1919 mata merit)</div>
-                            <div>Memuaskan <br>(1-2 Bintang - 240-839 mata merit)</div>
-                            <div>Kurang Memuaskan <br>(Kurang daripada 240 mata merit)</div>
-                        </div>
+                    <table class="sijil-pencapaian" style="width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 10pt;">
+                        <thead>
+                            <tr style="border-bottom: 1px solid #000;">
+                                <th style="width: 35%; text-align: left; padding: 5px 10px; border-right: 1px solid #000;">Program</th>
+                                <th style="width: 15%; border-right: 1px solid #000;">Cemerlang <br>(7 Bintang - merit ke atas)</th>
+                                <th style="width: 25%; border-right: 1px solid #000;">Baik <br>(3-4 Bintang - 840-1919 mata merit)</th>
+                                <th style="width: 15%; border-right: 1px solid #000;">Memuaskan <br>(1-2 Bintang - 240-839 mata merit)</th>
+                                <th style="width: 15%;">Kurang Memuaskan <br>(Kurang daripada 240 mata merit)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="text-align: left; padding: 8px 10px; border-right: 1px solid #000;">Program Anugerah Skim Lencana Bintang</td>
+                                <td data-gred="Cemerlang" data-prog="Lencana Bintang" style="border-right: 1px solid #000;"></td>
+                                <td data-gred="Baik" data-prog="Lencana Bintang" style="border-right: 1px solid #000;"></td>
+                                <td data-gred="Memuaskan" data-prog="Lencana Bintang" style="border-right: 1px solid #000;"></td>
+                                <td data-gred="Kurang Memuaskan" data-prog="Lencana Bintang"></td>
+                            </tr>
+                            
+                            <tr>
+                                <td style="text-align: left; padding: 8px 10px; border-right: 1px solid #000;">Program Nilam (Nadi Ilmu Amalan Membaca)</td>
+                                
+                                <td style="border-right: 1px solid #000; padding: 0;" colspan="1">
+                                     <div style="display: flex; height: 100%;">
+                                        <div style="flex: 1; border-right: 1px solid #000;" data-gred="5 Bintang" data-prog="Nilam"></div>
+                                        <div style="flex: 1;" data-gred="4 Bintang" data-prog="Nilam"></div>
+                                     </div>
+                                </td>
+                                
+                                <td style="border-right: 1px solid #000; padding: 0;" colspan="1">
+                                     <div style="display: flex; height: 100%;">
+                                        <div style="flex: 1; border-right: 1px solid #000;" data-gred="3 Bintang" data-prog="Nilam"></div>
+                                        <div style="flex: 1;" data-gred="2 Bintang" data-prog="Nilam"></div>
+                                     </div>
+                                </td>
+                                
+                                <td style="border-right: 1px solid #000; padding: 0;" colspan="1">
+                                    <div style="display: flex; height: 100%;">
+                                        <div style="flex: 1; border-right: 1px solid #000;" data-gred="1 Bintang" data-prog="Nilam"></div>
+                                        <div style="flex: 1;" data-gred="Tidak Mencapai" data-prog="Nilam"></div>
+                                    </div>
+                                </td>
+                                
+                                <td data-gred="Kurang Memuaskan" data-prog="Nilam"></td>
+                            </tr>
 
-                        <div class="sijil-baris" style="border-top: 1px solid #000;">
-                            <div class="label" style="padding-top: 8px;">Program Anugerah Skim Lencana Bintang</div>
-                            <div class="gred-box" data-gred="Cemerlang" data-prog="Lencana Bintang"></div>
-                            <div class="gred-box" data-gred="Baik" data-prog="Lencana Bintang"></div>
-                            <div class="gred-box" data-gred="Memuaskan" data-prog="Lencana Bintang"></div>
-                            <div class="gred-box" data-gred="Kurang Memuaskan" data-prog="Lencana Bintang"></div>
-                        </div>
-                        
-                        <div class="sijil-baris" style="border-top: 1px solid #000;">
-                            <div class="label" style="padding-top: 8px;">Program Nilam (Nadi Ilmu Amalan Membaca)</div>
-                            <div style="flex: 1.5; display: flex;">
-                                <div class="gred-box" data-gred="5 Bintang" data-prog="Nilam" style="flex:1;"></div>
-                                <div class="gred-box" data-gred="4 Bintang" data-prog="Nilam" style="flex:1;"></div>
-                            </div>
-                            <div style="flex: 1; display: flex;">
-                                <div class="gred-box" data-gred="3 Bintang" data-prog="Nilam" style="flex:1;"></div>
-                                <div class="gred-box" data-gred="2 Bintang" data-prog="Nilam" style="flex:1;"></div>
-                            </div>
-                            <div style="flex: 1; display: flex;">
-                                <div class="gred-box" data-gred="1 Bintang" data-prog="Nilam" style="flex:1;"></div>
-                                <div class="gred-box" data-gred="Tidak Mencapai" data-prog="Nilam" style="flex:1;"></div>
-                            </div>
-                            <div class="gred-box" data-gred="Kurang Memuaskan" data-prog="Nilam"></div>
-                        </div>
-                        
-                        <div class="sijil-baris" style="border-top: 1px solid #000;">
-                            <div class="label" style="padding-top: 8px;">Prestasi Kehadiran Sekolah</div>
-                            <div class="gred-box" data-gred="Cemerlang" data-prog="Hadir"></div>
-                            <div class="gred-box" data-gred="Baik" data-prog="Hadir"></div>
-                            <div class="gred-box" data-gred="Memuaskan" data-prog="Hadir"></div>
-                            <div class="gred-box" data-gred="Kurang Memuaskan" data-prog="Hadir"></div>
-                        </div>
-                        
-                    </div>
+                            <tr>
+                                <td style="text-align: left; padding: 8px 10px; border-right: 1px solid #000;">Prestasi Kehadiran Sekolah</td>
+                                <td data-gred="Cemerlang" data-prog="Hadir" style="border-right: 1px solid #000;"></td>
+                                <td data-gred="Baik" data-prog="Hadir" style="border-right: 1px solid #000;"></td>
+                                <td data-gred="Memuaskan" data-prog="Hadir" style="border-right: 1px solid #000;"></td>
+                                <td data-gred="Kurang Memuaskan" data-prog="Hadir"></td>
+                            </tr>
+                        </tbody>
+                    </table>
                     <div style="font-size: 10pt; margin-top: 50px;">
                         <p>Pengetua</p>
                         <p>Sekolah Menengah Kebangsaan Lutong</p>
@@ -322,28 +317,21 @@
             const tarikhHariIni = formatTarikh(new Date().toISOString().slice(0, 10));
 
             // --- 1. Sediakan Data Jawatan ---
-            const jawatanHtml = [];
             const jawatanTitles = [
                 'Pengawas Sekolah', 'Pengawas Tingkatan', 'Pengawas Asrama', 
                 'Pengawas Kelas', 'Pengawas Perpustakaan'
             ];
-            const jawatanColumns = {
-                'Jawatan 1': 'Pengawas Sekolah', 
-                'Jawatan 2': 'Pengawas Tingkatan', 
-                'Jawatan 3': 'Pengawas Asrama', 
-                'Jawatan 4': 'Pengawas Kelas', 
-                'Jawatan 5': 'Pengawas Perpustakaan'
-            };
             
-            // Logik kotak semak untuk Jawatan Khas
+            // Logik kotak semak untuk Jawatan Khas (Halaman 1)
             const generateJawatanRow = (key, title, jawatanColumn) => {
                 const jenisJawatan = penilaian[key] || 'N/A';
+                // Cek kandungan field Jawatan 1 hingga 5
                 const isKetua = jenisJawatan.toUpperCase().includes('KETUA');
                 const isPenolong = jenisJawatan.toUpperCase().includes('PENOLONG') || jenisJawatan.toUpperCase().includes('SETIAUSAHA') || jenisJawatan.toUpperCase().includes('BENDAHARI') || jenisJawatan.toUpperCase().includes('BIRO');
                 
                 return `
-                    <div style="display: flex; border-bottom: 1px dashed #ccc; padding: 3px 0; font-weight: normal;">
-                        <div style="width: 38%;">${jawatanColumn}: ${title}</div>
+                    <div style="display: flex; border-bottom: 1px dashed #ccc; padding: 3px 0; font-weight: normal; font-size: 9pt;">
+                        <div style="width: 38%;">${jawatanColumn}. ${title}</div>
                         <div style="width: 20%; text-align: center;">${isKetua ? '✔' : ''}</div>
                         <div style="width: 25%; text-align: center;">${isPenolong ? '✔' : ''}</div>
                         <div style="width: 17%; text-align: center;">${(!isKetua && !isPenolong && jenisJawatan !== 'N/A' && jenisJawatan.trim() !== '') ? '✔' : ''}</div>
@@ -367,9 +355,9 @@
             jawatanCList += generateJawatanRow('Jawatan 5', 'Pengawas Perpustakaan', '5');
 
             if (penilaian['Jawatan Khas Lain'] && penilaian['Jawatan Khas Lain'].trim() !== '') {
-                 jawatanCList += `<div style="display: flex; padding: 3px 0; font-weight: normal;"><div style="width: 38%;">6. Lain-lain: ${penilaian['Jawatan Khas Lain'].toUpperCase()}</div><div style="width: 62%;"></div></div>`;
+                 jawatanCList += `<div style="display: flex; padding: 3px 0; font-weight: normal; font-size: 9pt;"><div style="width: 38%;">6. Lain-lain: ${penilaian['Jawatan Khas Lain'].toUpperCase()}</div><div style="width: 62%;"></div></div>`;
             } else {
-                 jawatanCList += `<div style="display: flex; padding: 3px 0; font-weight: normal;"><div style="width: 38%;">6. Lain-lain: TIADA</div><div style="width: 62%;"></div></div>`;
+                 jawatanCList += `<div style="display: flex; padding: 3px 0; font-weight: normal; font-size: 9pt;"><div style="width: 38%;">6. Lain-lain: TIADA</div><div style="width: 62%;"></div></div>`;
             }
 
 
@@ -379,7 +367,6 @@
             tempDiv.innerHTML = htmlContent;
 
             // --- 3. ISI DATA KE DALAM KEDUA-DUA TEMPLAT ---
-            // *PERUBAHAN UTAMA DI SINI*: Dapatkan elemen dengan attribute data-page
             const akuanDoc = tempDiv.querySelector('[data-page="akuan"]');
             const sijilKhasDoc = tempDiv.querySelector('[data-page="sijil-khas"]');
 
@@ -397,21 +384,20 @@
                     }
                 };
 
-                // --- Sijil Khas Mapping ---
+                // --- Sijil Khas Mapping (Halaman 2) ---
                 if (docElement.getAttribute('data-page') === 'sijil-khas') { 
                     querySelectorSafe('[data-id="sijil-khas-nama"]').innerText = murid['Nama Murid'] || 'N/A';
                     querySelectorSafe('[data-id="sijil-khas-ic"]').innerText = murid.IC || 'N/A';
                     querySelectorSafe('[data-id="sijil-khas-tingkatan"]').innerText = murid['Tingkatan Tertinggi'] || 'N/A';
                     querySelectorSafe('[data-id="sijil-tahun-khas"]').innerText = new Date().getFullYear(); 
                     
-                    // Logik Kotak Semak Sijil Khas (Halaman 2)
                     checkGred(penilaian['Lencana Bintang'], 'Lencana Bintang', docElement);
                     checkGred(penilaian['Program Nilam'], 'Nilam', docElement);
                     checkGred(penilaian['Prestasi Kehadiran Sijil Khas'], 'Hadir', docElement);
 
                 } 
                 
-                // --- Akuan Mapping ---
+                // --- Akuan Mapping (Halaman 1) ---
                 if (docElement.getAttribute('data-page') === 'akuan') { 
                     querySelectorSafe('[data-id="akuan-nama"]').innerText = murid['Nama Murid'] || 'N/A';
                     querySelectorSafe('[data-id="akuan-ic"]').innerText = murid.IC || 'N/A';
@@ -435,7 +421,7 @@
                     checkGred(penilaian.Kesopanan, 'Kesopanan', docElement);
                     checkGred(penilaian.Disiplin, 'Disiplin', docElement);
                     
-                    // Jawatan Khas (Jadual Kotak Semak)
+                    // Jawatan Khas (Jadual Kotak Semak - Teks)
                     querySelectorSafe('[data-id="akuan-jawatan"]').innerHTML = jawatanCList;
                     
                     // Kehadiran dan Catatan
@@ -461,15 +447,15 @@
             if (!penilaian || !penilaian.Akademik) {
                 // Default values if no comprehensive record exists
                 penilaian.Akademik = 'TIADA DATA'; 
-                penilaian.Bertanggungjawab = 'Memuaskan'; penilaian['Daya Usaha'] = 'Memuaskan';
-                penilaian.Jujur = 'Memuaskan'; penilaian['Keyakinan Diri'] = 'Memuaskan'; 
-                penilaian.Kepimpinan = 'Memuaskan';
-                penilaian.Kesopanan = 'Memuaskan'; penilaian.Disiplin = 'Memuaskan';
-                penilaian['Peratus Kehadiran'] = 'N/A';
+                penilaian.Bertanggungjawab = 'Baik'; penilaian['Daya Usaha'] = 'Baik';
+                penilaian.Jujur = 'Baik'; penilaian['Keyakinan Diri'] = 'Baik'; 
+                penilaian.Kepimpinan = 'Baik';
+                penilaian.Kesopanan = 'Baik'; penilaian.Disiplin = 'Baik';
+                penilaian['Peratus Kehadiran'] = '100';
                 penilaian.Catatan = 'TIADA DATA PENILAIAN GURU DIREKODKAN.';
                 penilaian['Lencana Bintang'] = 'Memuaskan'; 
                 penilaian['Program Nilam'] = '1 Bintang'; 
-                penilaian['Prestasi Kehadiran Sijil Khas'] = 'Memuaskan';
+                penilaian['Prestasi Kehadiran Sijil Khas'] = 'Baik';
                 penilaian['Jawatan Khas Lain'] = '';
                 for(let i=1; i<=5; i++) { penilaian[`Jawatan ${i}`] = 'N/A'; }
             }
@@ -495,7 +481,7 @@
         // Fungsi untuk memuatkan data dari SheetDBs
         const muatData = async () => {
             try {
-                // --- Kumpul Templat (Fix Awal) ---
+                // --- Kumpul Templat ---
                 const akuanEl = document.getElementById('template-akuan');
                 const sijilEl = document.getElementById('template-sijil-khas');
                 
