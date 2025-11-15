@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cetak Surat Akuan & Sijil Khas</title>
+    <!-- Muat naik Tailwind CSS untuk penggayaan -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #f7f7f7;
+        }
+
+        /* Gaya untuk dokumen yang dicetak */
+        .print-document {
+            font-family: 'Times New Roman', serif;
+            font-size: 11pt;
+            width: 210mm; 
+            margin: 0 auto;
+            padding: 20mm 18mm;
+            box-sizing: border-box;
+        }
+        
+        .print-document h2 { font-size: 14pt; font-weight: bold; margin-top: 20px; text-align: center; }
+        .print-document h3 { font-size: 12pt; font-weight: bold; margin-top: 15px; }
+        .print-document p, .print-document li, .print-document td { line-height: 1.6; }
+        
+        /* Memastikan Halaman 2 bermula di halaman baru */
+        .page-break {
+            page-break-before: always;
+        }
+
+        @media print {
+            body { background: white !important; padding: 0; margin: 0;}
+            .print-hidden { display: none !important; } 
+            .print-document { margin: 0; box-shadow: none; padding: 0.7cm; } /* Tetapkan margin cetak */
+            @page { 
+                size: A4 portrait;
+                margin: 0.7cm; 
+            }
+        }
+        
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .animate-spin-slow { animation: spin 1.5s linear infinite; }
+
+    </style>
+</head>
+<body class="text-gray-800">
+    
+    <div id="app-container" class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 print-hidden">
+        <h1 class="text-3xl font-bold text-center text-purple-700 mb-6">Senarai Cetakan Surat Akuan & Sijil Khas</h1>
+        <p class="text-center text-gray-600 mb-6">
+            Pilih murid di bawah untuk mencetak dokumen gabungan (2 halaman).
+        </p>
+        
+        <!-- Peringatan Cetakan -->
+        <div id="print-alert" class="p-3 mb-4 text-sm font-medium text-yellow-800 bg-yellow-100 rounded-lg">
+            <p class="font-bold">PERHATIAN PENTING:</p>
+            <p>Sila pastikan Destinasi cetak adalah **'Save as PDF'** dan Skala ditetapkan kepada **90%** untuk dokumen gabungan 2-halaman ini muat dengan sempurna.</p>
+        </div>
+
+        <!-- Kontena Jadual -->
+        <div class="bg-white rounded-lg shadow-xl overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bil.</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Murid</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tingkatan</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status Penilaian</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tindakan</th>
+                        </tr>
+                    </thead>
+                    <tbody id="jadual-murid" class="bg-white divide-y divide-gray-200">
+                        <tr><td colspan="5" class="px-6 py-12 text-center text-gray-500" id="loading-msg">Memuatkan data...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- === TEMPLAT DOKUMEN GABUNGAN (Surat Akuan + Sijil Khas) === -->
+    <div id="print-area" class="hidden">
+        <!-- Struktur akan diisi oleh JavaScript -->
+    </div>
+
+
+    <script>
+        const sheetDBUrlMurid = "https://sheetdb.io/api/v1/VJ0QYRSKTFYY0";
+        const sheetDBUrlGuru = "https://sheetdb.io/api/v1/ox3yu9lw1ua8g";
+
+        let dataMuridGlobal = [];
+        let dataPenilaianGlobal = [];
+
+        const loadingMsg = document.getElementById('loading-msg');
+        const jadualBody = document.getElementById('jadual-murid');
+        const printArea = document.getElementById('print-area');
+
+        // Fungsi Pembantu
+        const formatTarikh = (tarikhStr) => {
+            if (!tarikhStr) return 'N/A';
+            const [tahun, bulan, hari] = tarikhStr.split('-');
+            if (tahun && bulan && hari) {
+                return `${hari}/${bulan}/${tahun}`;
+            }
+            return tarikhStr;
+        };
+        
+        // Fungsi untuk mencari rekod penilaian yang telah disimpan
+        const cariRekodPenilaian = (ic) => {
+            // Cari rekod Komprehensif
+            return dataPenilaianGlobal.find(rekod => 
+                (rekod.IC === ic || rekod.IC === ic.toUpperCase()) && 
+                (rekod['Jenis Dokumen'] === 'Komprehensif')
+            );
+        };
+        
+        // Fungsi utama untuk memetakan data ke dalam templat HTML (Dokumen Gabungan)
+        const generateDocumentHtml = (murid, penilaian) => {
+            const tarikhHariIni = formatTarikh(new Date().toISOString().slice(0, 10));
+
+            // Gabungkan maklumat Jawatan Khas
+            const jawatanHtml = [];
+            const jawatanTitles = [
+                'Pengawas Sekolah', 'Pengawas Tingkatan', 'Pengawas Asrama', 
+                'Pengawas Kelas', 'Pengawas Perpustakaan'
+            ];
+            
+            // Dapatkan jawatan dari Jawatan 1 hingga 5
+            for (let i = 1; i <= 5; i++) {
+                const key = `Jawatan ${i}`;
+                if (penilaian[key] && penilaian[key] !== 'N/A' && penilaian[key].trim() !== '') {
+                    jawatanHtml.push(`<li>${jawatanTitles[i-1]}: ${penilaian[key].toUpperCase()}</li>`);
+                }
+            }
+
+            // Jawatan Lain-lain
+            if (penilaian['Jawatan Khas Lain'] && penilaian['Jawatan Khas Lain'].trim() !== '') {
+                 jawatanHtml.push(`<li>Lain-lain: ${penilaian['Jawatan Khas Lain'].toUpperCase()}</li>`);
+            }
+            
+            const jawatanList = jawatanHtml.length > 0 
+                ? `<ul style="list-style-type: disc; margin-left: 20px;">${jawatanHtml.join('')}</ul>` 
+                : `<p>TIADA JAWATAN KHAS DIREKODKAN</p>`;
+
+
+            // === TEMPLAT SURAT AKUAN (Halaman 1) ===
+            const suratAkuanHtml = `
+                <div class="print-document" id="akuan-page">
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <img src="https://placehold.co/40x48/ffffff/000000?text=JATA" alt="Jata Negara Placeholder" style="margin: 0 auto 10px; display: block;">
+                        <p style="font-size: 14pt; font-weight: bold;">SURAT AKUAN</p>
+                        <p style="font-size: 12pt;">Murid Tingkatan 5</p>
+                        <p style="font-size: 10pt; font-style: italic;">(Merangkumi rekod Tingkatan 3 hingga Tingkatan 5)</p>
+                    </div>
+
+                    <p style="text-align: justify; margin-top: 30px;">
+                        Dengan ini disahkan bahawa maklumat prestasi dan kualiti peribadi murid berikut adalah benar berdasarkan rekod sekolah:
+                    </p>
+                    
+                    <p style="font-size: 11pt; margin-top: 20px;">Nama Murid: <strong>${murid['Nama Murid'] || 'N/A'}</strong></p>
+                    <p style="font-size: 11pt;">No. K/P: <strong>${murid.IC || 'N/A'}</strong></p>
+                    <p style="font-size: 11pt;">Sekolah: <strong>${murid.Sekolah || 'N/A'}</strong></p>
+                    <p style="font-size: 11pt;">Tingkatan Tertinggi: <strong>${murid['Tingkatan Tertinggi'] || 'N/A'}</strong></p>
+                    <p style="font-size: 11pt;">Tarikh Masuk: <strong>${formatTarikh(murid['Tarikh Masuk']) || 'N/A'}</strong></p>
+                    <p style="font-size: 11pt;">Tarikh Tamat/Berhenti: <strong>${formatTarikh(murid['Tarikh Berhenti']) || 'N/A'}</strong></p>
+                    <p style="font-size: 11pt;">Peperiksaan Awam Diduduki: <strong>${murid['Peperiksaan Awam'] || 'TIADA'}</strong></p>
+                    <p style="font-align: justify; margin-top: 15px;">Murid ini merupakan warganegara <strong>${murid.Warganegara || 'MALAYSIA'}</strong> dan berhenti disebabkan <strong>${murid['Sebab Berhenti'] || 'TAMAT TINGKATAN LIMA'}</strong>.</p>
+                    
+                    <h3>A. PRESTASI AKADEMIK</h3>
+                    <p>Pencapaian keseluruhan murid dalam peperiksaan sekolah dan awam adalah: <strong>${penilaian.Akademik || 'BAIK'}</strong>.</p>
+
+                    <h3>B. KUALITI PERIBADI DAN SAHSIAH</h3>
+                    <table style="width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 10pt;">
+                        <tr><td style="width: 70%;">i) Bertanggungjawab</td><td>: <strong>${penilaian.Bertanggungjawab || 'BAIK'}</strong></td></tr>
+                        <tr><td>ii) Daya usaha</td><td>: <strong>${penilaian['Daya Usaha'] || 'BAIK'}</strong></td></tr>
+                        <tr><td>iii) Jujur</td><td>: <strong>${penilaian.Jujur || 'BAIK'}</strong></td></tr>
+                        <tr><td>iv) Keyakinan diri</td><td>: <strong>${penilaian['Keyakinan Diri'] || 'BAIK'}</strong></td></tr>
+                        <tr><td>v) Kepimpinan</td><td>: <strong>${penilaian.Kepimpinan || 'BAIK'}</strong></td></tr>
+                        <tr><td>vi) Kesopanan</td><td>: <strong>${penilaian.Kesopanan || 'BAIK'}</strong></td></tr>
+                        <tr><td>vii) Disiplin</td><td>: <strong>${penilaian.Disiplin || 'BAIK'}</strong></td></tr>
+                    </table>
+
+                    <h3>C. TUGAS KHAS / JAWATAN KHAS</h3>
+                    ${jawatanList}
+
+                    <h3>D. KEHADIRAN SEKOLAH</h3>
+                    <p>Peratus Kehadiran Keseluruhan Tahun Penilaian: <strong>${penilaian['Peratus Kehadiran'] || '100'}</strong>%</p>
+
+                    <h3>E. CATATAN GURU/PENTADBIR</h3>
+                    <p style="font-style: italic;">${penilaian.Catatan || 'TIADA CATATAN KHAS'}</p>
+
+                    <div style="margin-top: 40px; border-top: 1px solid #000; padding-top: 10px; font-size: 10pt;">
+                        <p>Bertarikh pada hari ini: <strong>${tarikhHariIni}</strong></p>
+                        <div style="display: flex; justify-content: space-between; margin-top: 30px;">
+                            <div><div style="height: 40px; border-bottom: 1px solid #000; width: 250px; margin-bottom: 5px;"></div><p>Tandatangan Guru Kelas</p></div>
+                            <div><div style="height: 40px; border-bottom: 1px solid #000; width: 250px; margin-bottom: 5px;"></div><p>Tandatangan Pengetua / Cop Sekolah</p></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // === TEMPLAT SIJIL KHAS (Halaman 2) ===
+            const sijilKhasHtml = `
+                <div class="print-document page-break" id="sijil-khas-page">
+                    <div style="text-align: center; margin-bottom: 20px; margin-top: 50px;">
+                        <p style="font-size: 16pt; font-weight: bold; color: #1e40af;">SIJIL PENCAPAIAN KHAS MURID TINGKATAN 5</p>
+                        <p style="font-size: 12pt;">TAHUN <strong>${murid.Tahun || new Date().getFullYear()}</strong></p>
+                    </div>
+                    
+                    <p style="text-align: center; margin-top: 30px; font-size: 12pt;">
+                        Dengan bangganya menganugerahkan sijil ini kepada:
+                    </p>
+                    
+                    <p style="font-size: 18pt; font-weight: bold; text-align: center; margin-top: 15px; border-bottom: 3px double #000; padding-bottom: 5px;">
+                        ${murid['Nama Murid'] || 'N/A'}
+                    </p>
+                    
+                    <p style="text-align: center; margin-top: 10px; font-size: 12pt;">
+                        (No. Kad Pengenalan: ${murid.IC || 'N/A'})
+                    </p>
+                    
+                    <h3 style="margin-top: 40px; text-decoration: underline;">PENGANUGERAHAN REKOD SEKOLAH TINGGI</h3>
+                    
+                    <ul style="list-style-type: none; padding: 0; margin-top: 10px;">
+                        <li style="margin-bottom: 15px; border-left: 5px solid #3b82f6; padding-left: 10px;">
+                            <strong>1. PENCAPAIAN KOKURIKULUM & SAHSIAH:</strong> ${penilaian['Lencana Bintang'] || 'TIADA DATA'}
+                            <br><em style="font-size: 10pt;">(Program Anugerah Skim Lencana Bintang)</em>
+                        </li>
+                        <li style="margin-bottom: 15px; border-left: 5px solid #10b981; padding-left: 10px;">
+                            <strong>2. PENCAPAIAN MEMBACA:</strong> ${penilaian['Program Nilam'] || 'TIADA DATA'}
+                            <br><em style="font-size: 10pt;">(Program Nilam - Nadi Ilmu Amalan Membaca)</em>
+                        </li>
+                        <li style="margin-bottom: 15px; border-left: 5px solid #f59e0b; padding-left: 10px;">
+                            <strong>3. PENCAPAIAN KEHADIRAN:</strong> ${penilaian['Prestasi Kehadiran Sijil Khas'] || 'TIADA DATA'}
+                            <br><em style="font-size: 10pt;">(Prestasi Kehadiran Sekolah)</em>
+                        </li>
+                    </ul>
+
+                    <div style="margin-top: 60px; border-top: 1px solid #000; padding-top: 10px; font-size: 10pt;">
+                        <p style="text-align: center; font-style: italic;">
+                            Disediakan di <strong>${murid.Sekolah || 'SMK LUTONG'}</strong> pada <strong>${tarikhHariIni}</strong>
+                        </p>
+                        <div style="display: flex; justify-content: space-between; margin-top: 50px;">
+                            <div><div style="height: 40px; border-bottom: 1px solid #000; width: 250px; margin-bottom: 5px;"></div><p>Guru Penasihat</p></div>
+                            <div><div style="height: 40px; border-bottom: 1px solid #000; width: 250px; margin-bottom: 5px;"></div><p>Tandatangan Pengetua / Cop Sekolah</p></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            return suratAkuanHtml + sijilKhasHtml;
+        };
+
+        // Fungsi Cetak Individu (Dipanggil dari jadual)
+        window.cetakDokumenGabungan = (index) => {
+            const murid = dataMuridGlobal[index];
+            const penilaian = cariRekodPenilaian(murid.IC) || {};
+            
+            // Jika tiada rekod penilaian, gunakan nilai lalai
+            if (!penilaian || !penilaian.Akademik) {
+                // Set Lalai Minimum jika tiada rekod komprehensif
+                penilaian.Akademik = 'BAIK';
+                penilaian.Bertanggungjawab = 'BAIK';
+                penilaian['Daya Usaha'] = 'BAIK';
+                penilaian.Jujur = 'BAIK';
+                penilaian['Keyakinan Diri'] = 'BAIK';
+                penilaian.Kepimpinan = 'BAIK';
+                penilaian.Kesopanan = 'BAIK';
+                penilaian.Disiplin = 'BAIK';
+                penilaian['Peratus Kehadiran'] = '100';
+                penilaian.Catatan = 'TIADA DATA PENILAIAN GURU DIREKODKAN.';
+                penilaian['Lencana Bintang'] = 'TIADA DATA';
+                penilaian['Program Nilam'] = 'TIADA DATA';
+                penilaian['Prestasi Kehadiran Sijil Khas'] = 'TIADA DATA';
+                penilaian['Jawatan Khas Lain'] = '';
+                // Set Jawatan 1-5 kepada 'N/A'
+                for(let i=1; i<=5; i++) { penilaian[`Jawatan ${i}`] = 'N/A'; }
+            }
+            
+            // Dapatkan HTML gabungan
+            const htmlToPrint = generateDocumentHtml(murid, penilaian);
+
+            // 1. Masukkan HTML ke dalam bekas cetakan
+            printArea.innerHTML = htmlToPrint;
+            printArea.classList.remove('hidden');
+            
+            // 2. Panggil dialog cetak
+            alert("PERHATIAN CETAKAN:\n\nSila pastikan Destinasi ditetapkan kepada 'Save as PDF' dan Skala ditetapkan kepada 90% untuk dokumen 2-halaman ini muat dengan sempurna.");
+            window.print();
+            
+            // 3. Bersihkan selepas cetak
+            setTimeout(() => {
+                printArea.innerHTML = '';
+                printArea.classList.add('hidden');
+            }, 500);
+        };
+        
+        // Fungsi untuk memuatkan data dari SheetDBs
+        const muatData = async () => {
+            try {
+                loadingMsg.innerText = 'Memuatkan data murid...';
+                
+                const muridResponse = await fetch(sheetDBUrlMurid);
+                if (!muridResponse.ok) throw new Error("Gagal muat data murid.");
+                
+                const penilaianResponse = await fetch(sheetDBUrlGuru);
+                if (!penilaianResponse.ok) throw new Error("Gagal muat data penilaian.");
+
+                dataMuridGlobal = await muridResponse.json();
+                dataPenilaianGlobal = await penilaianResponse.json();
+
+                dataMuridGlobal = dataMuridGlobal.filter(d => d['Nama Murid'] && d['IC']); 
+                
+                paparkanJadual();
+
+            } catch (error) {
+                console.error('Ralat Muat Data:', error);
+                loadingMsg.innerText = `RALAT: ${error.message}. Sila semak URL API.`;
+            }
+        };
+        
+        // Fungsi Paparkan Jadual
+        const paparkanJadual = () => {
+            if (dataMuridGlobal.length === 0) {
+                jadualBody.innerHTML = `<tr><td colspan="5" class="px-6 py-12 text-center text-gray-500">Tiada data murid lengkap di dalam sistem.</td></tr>`;
+                return;
+            }
+
+            let htmlContent = '';
+            dataMuridGlobal.forEach((murid, index) => {
+                const icMurid = murid.IC || '';
+                const status = cariRekodPenilaian(icMurid) ? 'Selesai' : 'Belum Dinilai';
+                const statusColor = status === 'Selesai' ? 'text-green-600 font-semibold' : 'text-red-500';
+
+                htmlContent += `
+                    <tr class="hover:bg-gray-50 transition duration-150">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${index + 1}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">${murid['Nama Murid']}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${murid['Tingkatan Tertinggi'] || 'N/A'}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm ${statusColor}">${status}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                            <button type="button" onclick="cetakDokumenGabungan(${index})" title="Cetak Surat Akuan & Sijil Khas"
+                               class="inline-flex items-center rounded-md bg-purple-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-purple-700">
+                                CETAK
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+            jadualBody.innerHTML = htmlContent;
+            loadingMsg.classList.add('hidden');
+        };
+
+        document.addEventListener('DOMContentLoaded', muatData);
+    </script>
+</body>
+</html>
