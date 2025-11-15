@@ -80,6 +80,12 @@
             </button>
         </div>
         
+        <!-- Peringatan Cetakan (BARU) -->
+        <div id="print-alert" class="p-3 mb-4 text-sm font-medium text-yellow-800 bg-yellow-100 rounded-lg hidden">
+            <p class="font-bold">PERHATIAN PENTING SEBELUM MENCETAK:</p>
+            <p>Sila pastikan tetapan skala ("Scale") di dalam dialog cetak pelayar anda ditetapkan kepada **90%** (atau pilih "Fit to Page" / "Muatkan ke Halaman") untuk memastikan sijil muat dalam satu halaman A4.</p>
+        </div>
+        
         <!-- Jadual Murid -->
         <div class="bg-white rounded-lg shadow-xl overflow-hidden">
             <div class="overflow-x-auto">
@@ -263,6 +269,7 @@
         const statusMesej = document.getElementById('status-mesej');
         const cetakPukalBtn = document.getElementById('cetak-pukal-btn');
         const sijilContainer = document.getElementById('sijil-container');
+        const printAlert = document.getElementById('print-alert');
         
         // Menggunakan .outerHTML untuk menangkap DIV templat penuh
         const sijilTemplateElement = document.querySelector('[data-template="sijil-page"]');
@@ -329,13 +336,14 @@
                 }
             }
         };
-
+        
         // Fungsi CETAK INDIVIDU BARU
         window.cetakIndividu = (index) => {
             const data = dataMuridGlobal[index];
             if (!data) return;
 
             tunjukStatus(`Menyediakan sijil untuk ${data['Nama Murid']}...`, 'info');
+            printAlert.classList.remove('hidden'); // Tunjukkan peringatan skala
 
             // 1. Dapatkan templat sijil
             const tempDiv = document.createElement('div');
@@ -362,6 +370,7 @@
             setTimeout(() => {
                 sijilContainer.innerHTML = sijilTemplateHtml; // Kembalikan templat asal
                 sijilContainer.classList.add('hidden');
+                printAlert.classList.add('hidden'); // Sembunyikan peringatan skala
                 tunjukStatus(`Sedia. Sijil ${data['Nama Murid']} telah dihantar ke dialog cetak.`, 'berjaya');
             }, 500); 
         };
@@ -374,6 +383,7 @@
             }
 
             tunjukStatus("Menyediakan sijil untuk cetakan pukal (Print Dialog)...", 'info');
+            printAlert.classList.remove('hidden'); // Tunjukkan peringatan skala
             
             // 1. Kosongkan bekas sijil
             sijilContainer.innerHTML = '';
@@ -399,6 +409,7 @@
             setTimeout(() => {
                 sijilContainer.innerHTML = sijilTemplateHtml; // Kembalikan templat asal
                 sijilContainer.classList.add('hidden');
+                printAlert.classList.add('hidden'); // Sembunyikan peringatan skala
                 tunjukStatus(`Sedia. ${dataMuridGlobal.length} sijil telah dihantar ke dialog cetak.`, 'berjaya');
             }, 500); // Beri masa untuk dialog cetak muncul
         };
