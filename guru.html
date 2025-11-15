@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Borang Sijil Berhenti Sekolah</title>
+    <title>Halaman Semakan Guru</title>
     <!-- Muat naik Tailwind CSS untuk penggayaan -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -11,136 +11,152 @@
         body {
             font-family: 'Inter', sans-serif;
         }
-        /* Menambah baik 'focus ring' untuk input */
-        input:focus, textarea:focus, select:focus {
-            box-shadow: 0 0 0 2px #6366f1; /* Indigo-500 shadow */
-            border-color: #6366f1 !important;
+        /* Animasi 'spin' untuk ikon 'loading' */
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .animate-spin-slow {
+            animation: spin 1.5s linear infinite;
         }
     </style>
 </head>
 <body class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 text-gray-800">
 
-    <!-- Ubah lebar maksimum untuk borang tunggal -->
-    <div class="max-w-3xl mx-auto p-4 sm:p-6 lg:p-8">
-        
-        <!-- Tajuk Utama yang dikemaskini -->
-        <div class="text-center mb-8">
-            <h1 class="text-3xl font-bold text-indigo-700">Borang Sijil Berhenti Sekolah</h1>
-            <p class="text-gray-600 mt-2">
-                Sila lengkapkan maklumat murid di bawah untuk simpanan data.
-            </p>
+    <!-- Lebar maksimum 6xl untuk memuatkan jadual -->
+    <div class="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8">
+        <h1 class="text-3xl font-bold text-center text-indigo-700 mb-6">Halaman Semakan Guru</h1>
+        <p class="text-center text-gray-600 mb-8">
+            Semak data murid yang telah dihantar ke Google Sheet.
+        </p>
+
+        <!-- Kontena untuk Butang Muat Semula dan Status -->
+        <div class="flex justify-between items-center mb-4">
+            <button type="button" id="muat-data-btn" class="inline-flex items-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-md hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 transition duration-150 ease-in-out">
+                <!-- Ikon 'Refresh' -->
+                <svg id="muat-ikon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101A7.002 7.002 0 0112.001 4c3.865 0 7 3.134 7 7s-3.135 7-7 7-7-3.134-7-7c0-1.554.506-3.018 1.39-4.215l1.415 1.414A4.982 4.982 0 007.001 11c0 2.757 2.243 5 5 5s5-2.243 5-5-2.243-5-5-5a4.984 4.984 0 00-4.23 2.508l2.13.001a1 1 0 010 2H4.001a1 1 0 01-1-1V3a1 1 0 011-1z" clip-rule="evenodd" />
+                </svg>
+                <span id="muat-teks">Muat Semula Data</span>
+            </button>
+            <div id="status-mesej" class="text-sm font-medium text-gray-600"></div>
         </div>
 
-        <!-- Ubah grid kepada 1 lajur sahaja -->
-        <div class="grid grid-cols-1 gap-8">
-            
-            <!-- Bahagian Borang Input (Kiri) -->
-            <div class="bg-white p-6 sm:p-8 rounded-xl shadow-xl">
-                <form id="sijil-form" class="space-y-6">
-                    
-                    <!-- Tajuk bahagian yang dikemaskini -->
-                    <fieldset>
-                        <legend class="text-xl font-semibold text-indigo-600 border-b border-indigo-100 pb-3 mb-4">Maklumat Asas Murid</legend>
+        <!-- Kontena Jadual dengan 'overflow' untuk responsif -->
+        <div class="bg-white rounded-lg shadow-xl overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bil.</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Murid</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No. IC</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tingkatan</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tindakan</th>
+                        </tr>
+                    </thead>
+                    <tbody id="jadual-murid" class="bg-white divide-y divide-gray-200">
+                        <!-- Data murid akan dimasukkan oleh JavaScript di sini -->
+                        <tr>
+                            <td colspan="5" class="px-6 py-12 text-center text-gray-500">
+                                Sila tekan butang "Muat Semula Data" untuk memaparkan maklumat.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <p class="text-xs text-gray-500 text-center mt-4">
+            Nota: Pautan butang "Tindakan" di bawah adalah contoh dan belum berfungsi sepenuhnya sehingga pautan borang disediakan.
+        </p>
+
+    </div>
+
+    <!-- Skrip JavaScript untuk memuat data dari SheetDB -->
+    <script type="module">
+        // URL API SheetDB yang sama seperti borang murid
+        const sheetDBUrl = "https://sheetdb.io/api/v1/VJ0QYRSKTFYY0";
+
+        // Dapatkan elemen DOM
+        const muatDataBtn = document.getElementById('muat-data-btn');
+        const muatIkon = document.getElementById('muat-ikon');
+        const muatTeks = document.getElementById('muat-teks');
+        const jadualBody = document.getElementById('jadual-murid');
+        const statusMesej = document.getElementById('status-mesej');
+
+        // Fungsi untuk memuat dan memaparkan data
+        const muatDataMurid = async () => {
+            // Tunjukkan status 'loading'
+            statusMesej.innerText = "Memuatkan data murid...";
+            statusMesej.classList.remove('text-red-600');
+            muatIkon.classList.add('animate-spin-slow');
+            muatTeks.innerText = "Memuatkan...";
+            muatDataBtn.disabled = true;
+
+            try {
+                const response = await fetch(sheetDBUrl);
+                if (!response.ok) {
+                    throw new Error(`Ralat Rangkaian: ${response.statusText}`);
+                }
+                const data = await response.json();
+
+                // Kosongkan jadual sedia ada
+                jadualBody.innerHTML = '';
+
+                if (data.length === 0) {
+                    // Paparkan mesej jika tiada data
+                    jadualBody.innerHTML = `<tr><td colspan="5" class="px-6 py-12 text-center text-gray-500">Tiada data murid ditemui.</td></tr>`;
+                    statusMesej.innerText = "Tiada data.";
+                } else {
+                    // Isikan jadual dengan data murid
+                    data.forEach((murid, index) => {
+                        const tr = document.createElement('tr');
+                        tr.className = "hover:bg-gray-50 transition duration-150";
                         
-                        <div class="space-y-4">
-                            <div>
-                                <label for="no-ic" class="block text-sm font-medium text-gray-700">Nombor IC (12 digit, tanpa -)</label>
-                                <input type="text" id="no-ic" maxlength="12" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="Cth: 050115101234">
-                            </div>
+                        // Cipta pautan tindakan (sebagai placeholder)
+                        // Kita akan gunakan IC murid untuk pautan (jika ada)
+                        const icMurid = murid['IC'] || '';
+                        
+                        tr.innerHTML = `
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${index + 1}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">${murid['Nama Murid'] || 'TIADA NAMA'}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${icMurid}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${murid['Tingkatan Tertinggi'] || ''}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                                <a href="#" onclick="return false;" title="Pautan Sijil Pencapaian Khas (Belum Sedia)"
+                                   class="inline-flex items-center rounded-md bg-blue-500 px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-blue-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500">
+                                    Sijil Pencapaian Khas
+                                </a>
+                                <a href="#" onclick="return false;" title="Pautan Surat Akuan (Belum Sedia)"
+                                   class="inline-flex items-center rounded-md bg-green-500 px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-green-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-500">
+                                    Surat Akuan
+                                </a>
+                            </td>
+                        `;
+                        jadualBody.appendChild(tr);
+                    });
+                    statusMesej.innerText = `Berjaya memuatkan ${data.length} rekod.`;
+                }
 
-                            <div>
-                                <label for="nama-murid" class="block text-sm font-medium text-gray-700">Nama Murid (Nama Penuh)</label>
-                                <input type="text" id="nama-murid" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                            </div>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <div>
-                                    <label for="tempat-lahir" class="block text-sm font-medium text-gray-700">Tempat Lahir</label>
-                                    <input type="text" id="tempat-lahir" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                                </div>
-                                <div>
-                                    <label for="tarikh-lahir" class="block text-sm font-medium text-gray-700">Tarikh Lahir (Automatik dari IC)</label>
-                                    <input type="date" id="tarikh-lahir" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 bg-gray-50" readonly>
-                                </div>
-                            </div>
-                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                                <div>
-                                    <label for="jantina" class="block text-sm font-medium text-gray-700">Jantina (Automatik dari IC)</label>
-                                    <input type="text" id="jantina" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 bg-gray-50" readonly>
-                                </div>
-                                <div>
-                                    <label for="warganegara" class="block text-sm font-medium text-gray-700">Warganegara / Nationality</label>
-                                    <input type="text" id="warganegara" value="MALAYSIA" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                                </div>
-                                <div>
-                                    <label for="kumpulan-etnik" class="block text-sm font-medium text-gray-700">Kumpulan Etnik</label>
-                                    <input type="text" id="kumpulan-etnik" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="Cth: MELAYU, CINA, IBAN">
-                                </div>
-                            </div>
-                        </div>
-                    </fieldset>
+            } catch (error) {
+                console.error('Gagal memuatkan data:', error);
+                statusMesej.innerText = "Gagal memuatkan data. Sila semak konsol.";
+                statusMesej.classList.add('text-red-600');
+                jadualBody.innerHTML = `<tr><td colspan="5" class="px-6 py-12 text-center text-red-500">Ralat: Gagal mendapatkan data dari SheetDB.</td></tr>`;
+            } finally {
+                // Berhentikan status 'loading'
+                muatIkon.classList.remove('animate-spin-slow');
+                muatTeks.innerText = "Muat Semula Data";
+                muatDataBtn.disabled = false;
+            }
+        };
 
-                    <fieldset>
-                        <legend class="text-xl font-semibold text-indigo-600 border-b border-indigo-100 pb-3 mb-4 pt-4">Maklumat Bapa/Ibu/Penjaga</legend>
-                        <div class="space-y-4">
-                            <div>
-                                <label for="nama-penjaga" class="block text-sm font-medium text-gray-700">Nama Bapa/Ibu/Penjaga</label>
-                                <input type="text" id="nama-penjaga" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                            </div>
-                            <div>
-                                <label for="alamat-penjaga" class="block text-sm font-medium text-gray-700">Alamat Bapa/Ibu/Penjaga</label>
-                                <textarea id="alamat-penjaga" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"></textarea>
-                            </div>
-                        </div>
-                    </fieldset>
+        // Tambah 'event listener' pada butang
+        muatDataBtn.addEventListener('click', muatDataMurid);
+        
+        // Muat data secara automatik semasa halaman dibuka
+        muatDataMurid();
 
-                    <fieldset>
-                        <legend class="text-xl font-semibold text-indigo-600 border-b border-indigo-100 pb-3 mb-4 pt-4">Maklumat Persekolahan</legend>
-                        <div class="space-y-4">
-                            <div>
-                                <label for="sekolah" class="block text-sm font-medium text-gray-700">Sekolah / School</label>
-                                <input type="text" id="sekolah" value="SMK LUTONG, MIRI" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                            </div>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <div>
-                                    <label for="bahasa-pengantar" class="block text-sm font-medium text-gray-700">Bahasa Pengantar</label>
-                                    <input type="text" id="bahasa-pengantar" value="BAHASA MELAYU" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                                </div>
-                                <div>
-                                    <label for="tarikh-masuk" class="block text-sm font-medium text-gray-700">Tarikh Kemasukan / Date of Admission</label>
-                                    <input type="date" id="tarikh-masuk" value="2021-01-20" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                                </div>
-                            </div>
-
-                            <!-- MEDAN 'No. Daftar Sekolah' TELAH DIBUANG DARI SINI -->
-                            
-                            <div>
-                                <label for="tarikh-berhenti" class="block text-sm font-medium text-gray-700">Tarikh Berhenti / Date of Leaving</label>
-                                <input type="date" id="tarikh-berhenti" value="2025-12-19" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                            </div>
-                            
-                            <div>
-                                <label for="tingkatan-tertinggi" class="block text-sm font-medium text-gray-700">Darjah/Tingkatan Tertinggi Dihadiri</label>
-                                <input type="text" id="tingkatan-tertinggi" value="5 BAKTI" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                            </div>
-                            <div>
-                                <label for="sebab-berhenti" class="block text-sm font-medium text-gray-700">Sebab Berhenti / Reason for Leaving</label>
-                                <input type="text" id="sebab-berhenti" value="TAMAT TINGKATAN LIMA" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                            </div>
-                            <div>
-                                <label for="peperiksaan-awam" class="block text-sm font-medium text-gray-700">Peperiksaan Awam Diduduki</label>
-                                <input type="text" id="peperiksaan-awam" value="SIJIL PELAJARAN MALAYSIA" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                            </div>
-                            <div>
-                                <label for="sekolah-terdahulu" class="block text-sm font-medium text-gray-700">Sekolah Terdahulu / Schools Previously Attended</label>
-                                <input type="text" id="sekolah-terdahulu" value="TIADA" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                            </div>
-                        </div>
-                    </fieldset>
-
-                    <fieldset>
-                        <legend class="text-xl font-semibold text-indigo-600 border-b border-indigo-100 pb-3 mb-4 pt-4">Minat atau Kebolehan Khas (Pilih maks. 3)</legend>
-                        <div id="minat-options-container" class="space-y-3">
-                            <!-- Senarai checkbox -->
-                            <div class="flex items-start"><input type="checkbox" name="minat-checkbox" value="MINAT DALAM BIDANG SAINS DAN TEKNOLOGI" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"><label class="ml-2 text-sm text-gray-700">Minat dalam bidang sains dan teknologi</label></div>
-                            <div class="flex items-start"><input type="checkbox" name="minat-checkbox" value="MINAT DALAM AKTIVITI KOKURIKULUM" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"><label class="ml-2 text-sm text-gray-700">Minat dalam aktiviti kokurikulum</label></div>
-                            <div class="flex items-start"><input type="checkbox" name="minat-checkbox" value="MINAT MEMBACA BAHAN ILMIAH"
+    </script>
+</body>
+</html>
