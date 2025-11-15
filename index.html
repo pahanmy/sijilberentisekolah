@@ -4,160 +4,197 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Borang Sijil Berhenti Sekolah</title>
+    <!-- Muat naik Tailwind CSS untuk penggayaan -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         /* Menggunakan fon Inter */
         body {
             font-family: 'Inter', sans-serif;
         }
+        /* Menambah baik 'focus ring' untuk input */
+        input:focus, textarea:focus, select:focus {
+            box-shadow: 0 0 0 2px #6366f1; /* Indigo-500 shadow */
+            border-color: #6366f1 !important;
+        }
     </style>
 </head>
-<body class="bg-gray-100">
+<body class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 text-gray-800">
 
+    <!-- Ubah lebar maksimum untuk borang tunggal -->
     <div class="max-w-3xl mx-auto p-4 sm:p-6 lg:p-8">
-        <h1 class="text-2xl font-bold text-center text-gray-800 mb-6">Borang Sijil Berhenti Sekolah Kerajaan</h1>
-        <p class="text-center text-gray-600 mb-8">
-            Borang ini hanya untuk pengisian maklumat murid bagi tujuan cetakan semula pada sijil asli kelak.
-        </p>
+        
+        <!-- Tajuk Utama yang dikemaskini -->
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-indigo-700">Borang Sijil Berhenti Sekolah</h1>
+            <p class="text-gray-600 mt-2">
+                Sila lengkapkan maklumat murid di bawah untuk simpanan data.
+            </p>
+        </div>
 
+        <!-- Ubah grid kepada 1 lajur sahaja -->
         <div class="grid grid-cols-1 gap-8">
             
-            <div class="bg-white p-6 rounded-lg shadow-lg">
-                <form id="sijil-form" class="space-y-4">
+            <!-- Bahagian Borang Input (Kiri) -->
+            <div class="bg-white p-6 sm:p-8 rounded-xl shadow-xl">
+                <form id="sijil-form" class="space-y-6">
                     
-                    <h2 class="text-lg font-semibold border-b pb-2">Maklumat Asas Murid</h2>
-                    
-                    <div>
-                        <label for="no-ic" class="block text-sm font-medium text-gray-700">Nombor IC (12 digit, tanpa -)</label>
-                        <input type="text" id="no-ic" maxlength="12" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" placeholder="Cth: 050115101234">
-                    </div>
-
-                    <div>
-                        <label for="nama-murid" class="block text-sm font-medium text-gray-700">Nama Murid (Nama Penuh)</label>
-                        <input type="text" id="nama-murid" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                    </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                            <label for="tempat-lahir" class="block text-sm font-medium text-gray-700">Tempat Lahir</label>
-                            <input type="text" id="tempat-lahir" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                        </div>
-                        <div>
-                            <label for="tarikh-lahir" class="block text-sm font-medium text-gray-700">Tarikh Lahir (Automatik dari IC)</label>
-                            <input type="date" id="tarikh-lahir" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50" readonly>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <div>
-                            <label for="jantina" class="block text-sm font-medium text-gray-700">Jantina (Automatik dari IC)</label>
-                            <input type="text" id="jantina" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50" readonly>
-                        </div>
-                        <div>
-                            <label for="warganegara" class="block text-sm font-medium text-gray-700">Warganegara / Nationality</label>
-                            <input type="text" id="warganegara" value="MALAYSIA" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                        </div>
-                        <div>
-                            <label for="kumpulan-etnik" class="block text-sm font-medium text-gray-700">Kumpulan Etnik</label>
-                            <input type="text" id="kumpulan-etnik" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" placeholder="Cth: MELAYU, CINA, IBAN">
-                        </div>
-                    </div>
-
-                    <h2 class="text-lg font-semibold border-b pt-4 pb-2">Maklumat Bapa/Ibu/Penjaga</h2>
-                    <div>
-                        <label for="nama-penjaga" class="block text-sm font-medium text-gray-700">Nama Bapa/Ibu/Penjaga</label>
-                        <input type="text" id="nama-penjaga" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                    </div>
-                    <div>
-                        <label for="alamat-penjaga" class="block text-sm font-medium text-gray-700">Alamat Bapa/Ibu/Penjaga</label>
-                        <textarea id="alamat-penjaga" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"></textarea>
-                    </div>
-
-                    <h2 class="text-lg font-semibold border-b pt-4 pb-2">Maklumat Persekolahan</h2>
-                    <div>
-                        <label for="sekolah" class="block text-sm font-medium text-gray-700">Sekolah / School</label>
-                        <input type="text" id="sekolah" value="SMK LUTONG, MIRI" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                    </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                            <label for="bahasa-pengantar" class="block text-sm font-medium text-gray-700">Bahasa Pengantar</label>
-                            <input type="text" id="bahasa-pengantar" value="BAHASA MELAYU" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                        </div>
-                        <div>
-                            <label for="tarikh-masuk" class="block text-sm font-medium text-gray-700">Tarikh Kemasukan / Date of Admission</label>
-                            <input type="date" id="tarikh-masuk" value="2021-01-20" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                            <label for="no-daftar-sekolah" class="block text-sm font-medium text-gray-700">Nombor Pendaftaran Sekolah</label>
-                            <input type="text" id="no-daftar-sekolah" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" placeholder="Cth: YEA5208">
-                        </div>
-                        <div>
-                            <label for="tarikh-berhenti" class="block text-sm font-medium text-gray-700">Tarikh Berhenti / Date of Leaving</label>
-                            <input type="date" id="tarikh-berhenti" value="2025-12-19" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                        </div>
-                    </div>
-                    <div>
-                        <label for="tingkatan-tertinggi" class="block text-sm font-medium text-gray-700">Darjah/Tingkatan Tertinggi Dihadiri</label>
-                        <input type="text" id="tingkatan-tertinggi" value="5 BAKTI" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                    </div>
-                    <div>
-                        <label for="sebab-berhenti" class="block text-sm font-medium text-gray-700">Sebab Berhenti / Reason for Leaving</label>
-                        <input type="text" id="sebab-berhenti" value="TAMAT TINGKATAN LIMA" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                    </div>
-                    <div>
-                        <label for="peperiksaan-awam" class="block text-sm font-medium text-gray-700">Peperiksaan Awam Diduduki</label>
-                        <input type="text" id="peperiksaan-awam" value="SIJIL PELAJARAN MALAYSIA" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                    </div>
-                    <div>
-                        <label for="sekolah-terdahulu" class="block text-sm font-medium text-gray-700">Sekolah Terdahulu / Schools Previously Attended</label>
-                        <input type="text" id="sekolah-terdahulu" value="TIADA" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
-                    </div>
-
-                    <h2 class="text-lg font-semibold border-b pt-4 pb-2">Minat atau Kebolehan Khas (Pilih maks. 3)</h2>
-                    <div id="minat-options-container" class="space-y-2">
-                        <div class="flex items-start"><input type="checkbox" name="minat-checkbox" value="MINAT DALAM BIDANG SAINS DAN TEKNOLOGI" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"><label class="ml-2 text-sm text-gray-700">Minat dalam bidang sains dan teknologi</label></div>
-                        <div class="flex items-start"><input type="checkbox" name="minat-checkbox" value="MINAT DALAM AKTIVITI KOKURIKULUM" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"><label class="ml-2 text-sm text-gray-700">Minat dalam aktiviti kokurikulum</label></div>
-                        <div class="flex items-start"><input type="checkbox" name="minat-checkbox" value="MINAT MEMBACA BAHAN ILMIAH" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"><label class="ml-2 text-sm text-gray-700">Minat membaca bahan ilmiah</label></div>
-                        <div class="flex items-start"><input type="checkbox" name="minat-checkbox" value="MINAT DALAM SENI VISUAL" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"><label class="ml-2 text-sm text-gray-700">Minat dalam seni visual</label></div>
-                        <div class="flex items-start"><input type="checkbox" name="minat-checkbox" value="MINAT DALAM MATEMATIK" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"><label class="ml-2 text-sm text-gray-700">Minat dalam matematik</label></div>
-                        <div class="flex items-start"><input type="checkbox" name="minat-checkbox" value="MINAT DALAM PENULISAN KREATIF" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"><label class="ml-2 text-sm text-gray-700">Minat dalam penulisan kreatif</label></div>
-                        <div class="flex items-start"><input type="checkbox" name="minat-checkbox" value="MINAT DALAM MUZIK" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"><label class="ml-2 text-sm text-gray-700">Minat dalam muzik</label></div>
-                        <div class="flex items-start"><input type="checkbox" name="minat-checkbox" value="MINAT DALAM SUKAN" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"><label class="ml-2 text-sm text-gray-700">Minat dalam sukan (cth: bola jaring, badminton, olahraga)</label></div>
-                        <div class="flex items-start"><input type="checkbox" name="minat-checkbox" value="KEBOLEHAN MEMIMPIN DAN BEKERJA DALAM KUMPULAN" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"><label class="ml-2 text-sm text-gray-700">Kebolehan memimpin dan bekerja dalam kumpulan</label></div>
-                        <div class="flex items-start"><input type="checkbox" name="minat-checkbox" value="KEBOLEHAN KOMUNIKASI YANG BAIK" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"><label class="ml-2 text-sm text-gray-700">Kebolehan komunikasi yang baik</label></div>
-                        <div class="flex items-start"><input type="checkbox" name="minat-checkbox" value="KEBOLEHAN BERFIKIR SECARA KRITIS DAN MENYELESAIKAN MASALAH" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"><label class="ml-2 text-sm text-gray-700">Kebolehan berfikir secara kritis dan menyelesaikan masalah</label></div>
-                        <div class="flex items-start"><input type="checkbox" name="minat-checkbox" value="KEBOLEHAN DALAM PENGATURCARAAN ASAS / ICT" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"><label class="ml-2 text-sm text-gray-700">Kebolehan dalam pengaturcaraan asas / ICT</label></div>
-                        <div class="flex items-start"><input type="checkbox" name="minat-checkbox" value="KEBOLEHAN SENI PERSEMBAHAN" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"><label class="ml-2 text-sm text-gray-700">Kebolehan seni persembahan</label></div>
-                        <div class="flex items-start"><input type="checkbox" name="minat-checkbox" value="KEBOLEHAN MELUKIS ATAU MENGHASILKAN KARYA SENI" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"><label class="ml-2 text-sm text-gray-700">Kebolehan melukis atau menghasilkan karya seni</label></div>
-                        <div class="flex items-start"><input type="checkbox" name="minat-checkbox" value="KEBOLEHAN AKADEMIK YANG KONSISTEN" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"><label class="ml-2 text-sm text-gray-700">Kebolehan akademik yang konsisten</label></div>
-                        <div class="flex items-start"><input type="checkbox" name="minat-checkbox" value="KEBOLEHAN DALAM SUKAN TERTENTU" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"><label class="ml-2 text-sm text-gray-700">Kebolehan dalam sukan tertentu</label></div>
+                    <!-- Tajuk bahagian yang dikemaskini -->
+                    <fieldset>
+                        <legend class="text-xl font-semibold text-indigo-600 border-b border-indigo-100 pb-3 mb-4">Maklumat Asas Murid</legend>
                         
-                        <div class="flex items-start">
-                            <input type="checkbox" id="minat-lain-checkbox" name="minat-checkbox" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
-                            <label for="minat-lain-checkbox" class="ml-2 text-sm text-gray-700">Lain-lain:</label>
-                            <input type="text" id="minat-lain-text" class="ml-2 flex-1 rounded-md border-gray-300 shadow-sm sm:text-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50" disabled>
-                        </div>
-                    </div>
-                    <div id="minat-error" class="text-red-600 text-sm mt-1 hidden">Anda hanya boleh pilih 3 minat/kebolehan.</div>
-                    
-                    <div>
-                        <label for="minat-khas" class="block text-sm font-medium text-gray-700 mt-3">Ringkasan Minat / Kebolehan Khas</label>
-                        <textarea id="minat-khas" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50" readonly placeholder="Pilihan anda akan digabungkan di sini..."></textarea>
-                    </div>
-                    <div>
-                        <label for="komen-pengetua" class="block text-sm font-medium text-gray-700">Komen Guru Besar/Pengetua (Dijana Automatik)</label>
-                        <textarea id="komen-pengetua" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50" readonly></textarea>
-                    </div>
+                        <div class="space-y-4">
+                            <div>
+                                <label for="no-ic" class="block text-sm font-medium text-gray-700">Nombor IC (12 digit, tanpa -)</label>
+                                <input type="text" id="no-ic" maxlength="12" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="Cth: 050115101234">
+                            </div>
 
+                            <div>
+                                <label for="nama-murid" class="block text-sm font-medium text-gray-700">Nama Murid (Nama Penuh)</label>
+                                <input type="text" id="nama-murid" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="tempat-lahir" class="block text-sm font-medium text-gray-700">Tempat Lahir</label>
+                                    <input type="text" id="tempat-lahir" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                </div>
+                                <div>
+                                    <label for="tarikh-lahir" class="block text-sm font-medium text-gray-700">Tarikh Lahir (Automatik dari IC)</label>
+                                    <input type="date" id="tarikh-lahir" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 bg-gray-50" readonly>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                <div>
+                                    <label for="jantina" class="block text-sm font-medium text-gray-700">Jantina (Automatik dari IC)</label>
+                                    <input type="text" id="jantina" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 bg-gray-50" readonly>
+                                </div>
+                                <div>
+                                    <label for="warganegara" class="block text-sm font-medium text-gray-700">Warganegara / Nationality</label>
+                                    <input type="text" id="warganegara" value="MALAYSIA" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                </div>
+                                <div>
+                                    <label for="kumpulan-etnik" class="block text-sm font-medium text-gray-700">Kumpulan Etnik</label>
+                                    <input type="text" id="kumpulan-etnik" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="Cth: MELAYU, CINA, IBAN">
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend class="text-xl font-semibold text-indigo-600 border-b border-indigo-100 pb-3 mb-4 pt-4">Maklumat Bapa/Ibu/Penjaga</legend>
+                        <div class="space-y-4">
+                            <div>
+                                <label for="nama-penjaga" class="block text-sm font-medium text-gray-700">Nama Bapa/Ibu/Penjaga</label>
+                                <input type="text" id="nama-penjaga" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                            </div>
+                            <div>
+                                <label for="alamat-penjaga" class="block text-sm font-medium text-gray-700">Alamat Bapa/Ibu/Penjaga</label>
+                                <textarea id="alamat-penjaga" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"></textarea>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend class="text-xl font-semibold text-indigo-600 border-b border-indigo-100 pb-3 mb-4 pt-4">Maklumat Persekolahan</legend>
+                        <div class="space-y-4">
+                            <div>
+                                <label for="sekolah" class="block text-sm font-medium text-gray-700">Sekolah / School</label>
+                                <input type="text" id="sekolah" value="SMK LUTONG, MIRI" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="bahasa-pengantar" class="block text-sm font-medium text-gray-700">Bahasa Pengantar</label>
+                                    <input type="text" id="bahasa-pengantar" value="BAHASA MELAYU" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                </div>
+                                <div>
+                                    <label for="tarikh-masuk" class="block text-sm font-medium text-gray-700">Tarikh Kemasukan / Date of Admission</label>
+                                    <input type="date" id="tarikh-masuk" value="2021-01-20" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                </div>
+                            </div>
+
+                            <!-- MEDAN 'No. Daftar Sekolah' TELAH DIBUANG DARI SINI -->
+                            
+                            <div>
+                                <label for="tarikh-berhenti" class="block text-sm font-medium text-gray-700">Tarikh Berhenti / Date of Leaving</label>
+                                <input type="date" id="tarikh-berhenti" value="2025-12-19" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                            </div>
+                            
+                            <div>
+                                <label for="tingkatan-tertinggi" class="block text-sm font-medium text-gray-700">Darjah/Tingkatan Tertinggi Dihadiri</label>
+                                <input type="text" id="tingkatan-tertinggi" value="5 BAKTI" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                            </div>
+                            <div>
+                                <label for="sebab-berhenti" class="block text-sm font-medium text-gray-700">Sebab Berhenti / Reason for Leaving</label>
+                                <input type="text" id="sebab-berhenti" value="TAMAT TINGKATAN LIMA" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                            </div>
+                            <div>
+                                <label for="peperiksaan-awam" class="block text-sm font-medium text-gray-700">Peperiksaan Awam Diduduki</label>
+                                <input type="text" id="peperiksaan-awam" value="SIJIL PELAJARAN MALAYSIA" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                            </div>
+                            <div>
+                                <label for="sekolah-terdahulu" class="block text-sm font-medium text-gray-700">Sekolah Terdahulu / Schools Previously Attended</label>
+                                <input type="text" id="sekolah-terdahulu" value="TIADA" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend class="text-xl font-semibold text-indigo-600 border-b border-indigo-100 pb-3 mb-4 pt-4">Minat atau Kebolehan Khas (Pilih maks. 3)</legend>
+                        <div id="minat-options-container" class="space-y-3">
+                            <!-- Senarai checkbox -->
+                            <div class="flex items-start"><input type="checkbox" name="minat-checkbox" value="MINAT DALAM BIDANG SAINS DAN TEKNOLOGI" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"><label class="ml-2 text-sm text-gray-700">Minat dalam bidang sains dan teknologi</label></div>
+                            <div class="flex items-start"><input type="checkbox" name="minat-checkbox" value="MINAT DALAM AKTIVITI KOKURIKULUM" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"><label class="ml-2 text-sm text-gray-700">Minat dalam aktiviti kokurikulum</label></div>
+                            <div class="flex items-start"><input type="checkbox" name="minat-checkbox" value="MINAT MEMBACA BAHAN ILMIAH" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"><label class="ml-2 text-sm text-gray-700">Minat membaca bahan ilmiah</label></div>
+                            <div class="flex items-start"><input type="checkbox" name="minat-checkbox" value="MINAT DALAM SENI VISUAL" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"><label class="ml-2 text-sm text-gray-700">Minat dalam seni visual</label></div>
+                            <div class="flex items-start"><input type="checkbox" name="minat-checkbox" value="MINAT DALAM MATEMATIK" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"><label class="ml-2 text-sm text-gray-700">Minat dalam matematik</label></div>
+                            <div class="flex items-start"><input type="checkbox" name="minat-checkbox" value="MINAT DALAM PENULISAN KREATIF" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"><label class="ml-2 text-sm text-gray-700">Minat dalam penulisan kreatif</label></div>
+                            <div class="flex items-start"><input type="checkbox" name="minat-checkbox" value="MINAT DALAM MUZIK" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"><label class="ml-2 text-sm text-gray-700">Minat dalam muzik</label></div>
+                            <div class="flex items-start"><input type="checkbox" name="minat-checkbox" value="MINAT DALAM SUKAN" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"><label class="ml-2 text-sm text-gray-700">Minat dalam sukan (cth: bola jaring, badminton, olahraga)</label></div>
+                            <div class="flex items-start"><input type="checkbox" name="minat-checkbox" value="KEBOLEHAN MEMIMPIN DAN BEKERJA DALAM KUMPULAN" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"><label class="ml-2 text-sm text-gray-700">Kebolehan memimpin dan bekerja dalam kumpulan</label></div>
+                            <div class="flex items-start"><input type="checkbox" name="minat-checkbox" value="KEBOLEHAN KOMUNIKASI YANG BAIK" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"><label class="ml-2 text-sm text-gray-700">Kebolehan komunikasi yang baik</label></div>
+                            <div class="flex items-start"><input type="checkbox" name="minat-checkbox" value="KEBOLEHAN BERFIKIR SECARA KRITIS DAN MENYELESAIKAN MASALAH" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"><label class="ml-2 text-sm text-gray-700">Kebolehan berfikir secara kritis dan menyelesaikan masalah</label></div>
+                            <div class="flex items-start"><input type="checkbox" name="minat-checkbox" value="KEBOLEHAN DALAM PENGATURCARAAN ASAS / ICT" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"><label class="ml-2 text-sm text-gray-700">Kebolehan dalam pengaturcaraan asas / ICT</label></div>
+                            <div class="flex items-start"><input type="checkbox" name="minat-checkbox" value="KEBOLEHAN SENI PERSEMBAHAN" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"><label class="ml-2 text-sm text-gray-700">Kebolehan seni persembahan</label></div>
+                            <div class="flex items-start"><input type="checkbox" name="minat-checkbox" value="KEBOLEHAN MELUKIS ATAU MENGHASILKAN KARYA SENI" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"><label class="ml-2 text-sm text-gray-700">Kebolehan melukis atau menghasilkan karya seni</label></div>
+                            <div class="flex items-start"><input type="checkbox" name="minat-checkbox" value="KEBOLEHAN AKADEMIK YANG KONSISTEN" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"><label class="ml-2 text-sm text-gray-700">Kebolehan akademik yang konsisten</label></div>
+                            <div class="flex items-start"><input type="checkbox" name="minat-checkbox" value="KEBOLEHAN DALAM SUKAN TERTENTU" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"><label class="ml-2 text-sm text-gray-700">Kebolehan dalam sukan tertentu</label></div>
+                            
+                            <!-- Pilihan Lain-lain -->
+                            <div class="flex items-center">
+                                <input type="checkbox" id="minat-lain-checkbox" name="minat-checkbox" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
+                                <label for="minat-lain-checkbox" class="ml-2 text-sm text-gray-700">Lain-lain:</label>
+                                <input type="text" id="minat-lain-text" class="ml-2 flex-1 rounded-md border-gray-300 shadow-sm sm:text-sm focus:border-indigo-500 focus:ring-indigo-500 bg-gray-50" disabled>
+                            </div>
+                        </div>
+                        <div id="minat-error" class="text-red-600 text-sm mt-1 hidden">Anda hanya boleh pilih 3 minat/kebolehan.</div>
+                        
+                        <div>
+                            <label for="minat-khas" class="block text-sm font-medium text-gray-700 mt-4">Ringkasan Minat / Kebolehan Khas</label>
+                            <textarea id="minat-khas" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 bg-gray-50" readonly placeholder="Pilihan anda akan digabungkan di sini..."></textarea>
+                        </div>
+                    </fieldset>
+
+
+                    <fieldset>
+                        <legend class="text-xl font-semibold text-indigo-600 border-b border-indigo-100 pb-3 mb-4 pt-4">Komen</legend>
+                        <div>
+                            <label for="komen-pengetua" class="block text-sm font-medium text-gray-700">Komen Guru Besar/Pengetua (Dijana Automatik)</label>
+                            <textarea id="komen-pengetua" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 bg-gray-50" readonly></textarea>
+                        </div>
+                    </fieldset>
+
+                    <!-- === BAHAGIAN BARU UNTUK HANTAR KE GOOGLE SHEET === -->
                     <div class="pt-6 border-t border-gray-200">
-                        <h2 class="text-lg font-semibold pb-2">Hantar Maklumat ke Google Sheet</h2>
+                        <h2 class="text-lg font-semibold pb-2">Hantar Maklumat</h2>
                         
+                        <!-- Arahan Persediaan (DISOROKKAN) -->
                         <details class="bg-gray-50 border border-gray-200 rounded-md p-3 mb-4 hidden">
+                            <summary class="text-sm font-medium text-gray-700 cursor-pointer">Arahan Persediaan SheetDB (Untuk Admin)</summary>
                             <div class="mt-3 text-sm text-gray-600 space-y-2">
                                 <p><strong>Langkah 1:</strong> Buat satu Google Sheet baru.</p>
                                 <p><strong>Langkah 2:</strong> Di baris pertama (header), anda <strong>MESTI</strong> taip nama lajur (headings) ini *tepat-tepat* seperti di bawah:</p>
+                                <!-- No. Daftar Sekolah telah dibuang dari senarai ini -->
                                 <code class="block bg-gray-200 p-2 rounded text-xs overflow-x-auto">
-                                    IC, Nama Murid, Tempat Lahir, Tarikh Lahir, Jantina, Warganegara, Etnik, Nama Penjaga, Alamat Penjaga, Sekolah, Bahasa Pengantar, Tarikh Masuk, No. Daftar Sekolah, Tarikh Berhenti, Tingkatan Tertinggi, Sebab Berhenti, Peperiksaan Awam, Sekolah Terdahulu, Minat / Kebolehan Khas, Komen Pengetua
+                                    IC, Nama Murid, Tempat Lahir, Tarikh Lahir, Jantina, Warganegara, Etnik, Nama Penjaga, Alamat Penjaga, Sekolah, Bahasa Pengantar, Tarikh Masuk, Tarikh Berhenti, Tingkatan Tertinggi, Sebab Berhenti, Peperiksaan Awam, Sekolah Terdahulu, Minat / Kebolehan Khas, Komen Pengetua
                                 </code>
                                 <p><strong>Langkah 3:</strong> Pergi ke laman web <a href="https://sheetdb.io/" target="_blank" class="text-blue-600 hover:underline">SheetDB.io</a> dan daftar akaun percuma.</p>
                                 <p><strong>Langkah 4:</strong> Klik "Create New API". Kongsi Google Sheet anda (gunakan pautan "Anyone with the link can edit") dan tampal pautan Google Sheet anda ke dalam SheetDB.</p>
@@ -165,25 +202,59 @@
                             </div>
                         </details>
                         
+                        <!-- URL API kini tersembunyi (type="hidden") -->
                         <input type="hidden" id="sheetdb-url" value="https://sheetdb.io/api/v1/VJ0QYRSKTFYY0">
                         
                         <div class="mt-4">
-                            <button type="button" id="hantar-sheet-btn" class="w-full inline-flex justify-center items-center rounded-md bg-green-600 px-4 py-3 text-base font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                                  <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009.175 17V5.106l4.8 1.371a1 1 0 001.169-1.409l-7-14z" />
+                            <!-- Butang Hantar yang dikemaskini -->
+                            <button type="button" id="hantar-sheet-btn" class="w-full inline-flex justify-center items-center rounded-md bg-indigo-600 px-4 py-3 text-base font-semibold text-white shadow-lg hover:bg-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 transition duration-150 ease-in-out">
+                                <!-- Ikon Hantar (Moden) -->
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.875L5.999 12zm0 0h7.5" />
                                 </svg>
-                                Hantar kepada guru kelas
+                                <!-- Tambah span untuk kawalan teks -->
+                                <span id="hantar-teks">Hantar kepada guru kelas</span>
                             </button>
                         </div>
                         
-                        <div id="sheet-status-mesej" class="mt-3 text-sm font-medium text-green-700 hidden"></div>
+                        <!-- Mesej status tersembunyi -->
+                        <div id="sheet-status-mesej" class="mt-4 text-sm font-medium text-center hidden"></div>
                     </div>
-                    </form>
-            </div>
+                    <!-- === TAMAT BAHAGIAN BARU === -->
+                    
+                </form>
+
+                <!-- Mesej Berjaya (Tersembunyi) -->
+                <div id="success-message" class="text-center p-8 hidden">
+                    <svg class="mx-auto h-16 w-16 text-green-500" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 16.5 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <h2 class="mt-4 text-2xl font-bold text-green-700">Terima Kasih!</h2>
+                    <p class="mt-2 text-gray-600">Maklumat anda telah berjaya dihantar kepada guru kelas.</p>
+                </div>
 
             </div>
+        </div>
     </div>
 
+    <!-- Modal Pengesahan -->
+    <div id="confirm-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4 hidden">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-sm p-6">
+            <h3 class="text-lg font-bold text-gray-900">Sahkan Penghantaran</h3>
+            <p class="mt-2 text-sm text-gray-600">Anda pasti semua maklumat yang diisi adalah betul dan ingin menghantarnya sekarang?</p>
+            <div class="mt-6 flex justify-end space-x-3">
+                <button type="button" id="cancel-hantar-btn" class="rounded-md bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                    Batal
+                </button>
+                <button type="button" id="confirm-hantar-btn" class="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">
+                    Ya, Hantar
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Skrip JavaScript untuk logik automatik IC -->
     <script type="module">
         // Pastikan DOM dimuat sepenuhnya sebelum menjalankan skrip
         document.addEventListener('DOMContentLoaded', () => {
@@ -191,8 +262,7 @@
             // --- Logik Auto-fill IC ---
             const icInput = document.getElementById('no-ic');
             const tarikhLahirInput = document.getElementById('tarikh-lahir');
-            // Betulkan ID untuk jantina, ia kini 'jantina' (input teks)
-            const jantinaInput = document.getElementById('jantina'); // Betulkan pembolehubah
+            const jantinaInput = document.getElementById('jantina');
 
             icInput.addEventListener('input', (e) => {
                 let ic = e.target.value.replace(/\D/g, ''); // Buang bukan digit
@@ -209,64 +279,39 @@
                     
                     // Tentukan abad (2000+ jika 00-sekarang, 1900+ jika > sekarang)
                     const tahunSemasa = new Date().getFullYear() % 100;
-                    // Tentukan abad (cth: 05 -> 2005, 98 -> 1998)
                     const abad = (parseInt(tahun, 10) <= (tahunSemasa + 1)) ? '20' : '19';
                     
-                    // Pastikan tarikhLahirInput wujud sebelum menggunakannya
                     if (tarikhLahirInput) {
                         tarikhLahirInput.value = `${abad}${tahun}-${bulan}-${hari}`;
                     }
 
                     // Ekstrak jantina (digit akhir)
                     const jantinaDigit = parseInt(ic.charAt(11), 10);
-                    // Pastikan jantinaInput wujud
                     if (jantinaInput) {
                         jantinaInput.value = (jantinaDigit % 2 === 0) ? 'PEREMPUAN' : 'LELAKI';
-                        // Paksa uppercase untuk Jantina juga
                         jantinaInput.value = jantinaInput.value.toUpperCase();
                     }
                 } else {
-                    // Kosongkan jika IC tidak lengkap
-                    if (tarikhLahirInput) {
-                        tarikhLahirInput.value = '';
-                    }
-                    if (jantinaInput) {
-                        jantinaInput.value = '';
-                    }
+                    if (tarikhLahirInput) tarikhLahirInput.value = '';
+                    if (jantinaInput) jantinaInput.value = '';
                 }
             });
 
             // --- Logik Force Uppercase ---
             const forceUppercase = (e) => {
-                // Jangan paksa uppercase untuk IC
-                if (e.target.id === 'no-ic') {
-                    return;
-                }
-
-                // Simpan kedudukan kursor
+                if (e.target.id === 'no-ic') return;
                 const start = e.target.selectionStart;
                 const end = e.target.selectionEnd;
-                
-                // Tukar nilai ke uppercase
                 e.target.value = e.target.value.toUpperCase();
-                
-                // Letakkan kursor kembali ke tempat asal
                 e.target.setSelectionRange(start, end);
             };
 
-            // Pilih semua input teks dan textarea
-            const textInputs = document.querySelectorAll(
-                'input[type="text"], textarea'
-            );
-            
-            // Tambah event listener 'input' pada setiap satu
+            const textInputs = document.querySelectorAll('input[type="text"], textarea');
             textInputs.forEach((input) => {
                 input.addEventListener('input', forceUppercase);
             });
 
-
             // --- Logik Komen Rawak ---
-            // const komenButton = document.getElementById('generate-komen'); // Dibuang
             const komenTextarea = document.getElementById('komen-pengetua');
             const komenList = [
                 "PELAJAR MENUNJUKKAN DISIPLIN YANG BAIK DAN MEMBERI KERJASAMA DALAM SEMUA AKTIVITI SEKOLAH.",
@@ -276,18 +321,13 @@
                 "PELAJAR MENUNJUKKAN PERKEMBANGAN YANG MEMUASKAN DAN SENTIASA MENGHORMATI GURU SERTA RAKAN."
             ];
             
-            // Jana komen secara automatik semasa halaman dibuka
-            if(komenTextarea) { // Tambah semakan jika elemen wujud
+            if(komenTextarea) {
                 const randomIndex = Math.floor(Math.random() * komenList.length);
                 komenTextarea.value = komenList[randomIndex];
             }
 
-            // Listener butang telah dibuang
-            // komenButton.addEventListener('click', () => { ... });
-
             // --- Logik Pilihan Minat (Checkboxes) ---
             const minatContainer = document.getElementById('minat-options-container');
-            // Tambah semakan null di sini, walaupun HTML sudah dibetulkan
             if (minatContainer) { 
                 const minatCheckboxes = minatContainer.querySelectorAll('input[name="minat-checkbox"]');
                 const minatTextarea = document.getElementById('minat-khas');
@@ -296,114 +336,105 @@
                 const lainText = document.getElementById('minat-lain-text');
                 const MAX_MINAT = 3;
 
-                // Fungsi berasingan untuk mengemas kini textarea minat
                 const updateMinatTextarea = () => {
-                    if (!minatTextarea) return; // Tambah semakan
+                    if (!minatTextarea) return;
                     const finalCheckedBoxes = Array.from(minatCheckboxes).filter(cb => cb.checked);
                     const selectedValues = finalCheckedBoxes.map(cb => {
                         if (cb.id === 'minat-lain-checkbox' && lainText) {
-                            // Jika 'Lain-lain' ditanda, ambil nilai dari kotak teks
-                            return lainText.value; // (forceUppercase sudah uruskan uppercase)
+                            return lainText.value;
                         } else {
-                            // Jika tidak, ambil nilai dari checkbox
                             return cb.value;
                         }
                     });
-                    
-                    minatTextarea.value = selectedValues
-                        .filter(val => val && val.trim() !== '') // Buang nilai kosong
-                        .join(', ');
+                    minatTextarea.value = selectedValues.filter(val => val && val.trim() !== '').join(', ');
                 };
 
                 minatContainer.addEventListener('change', (e) => {
-                    // Hanya bertindak jika ia checkbox
                     if (e.target.name !== 'minat-checkbox') return;
 
-                    // Logik untuk enable/disable kotak teks "Lain-lain"
                     if (e.target.id === 'minat-lain-checkbox' && lainText) {
                         lainText.disabled = !e.target.checked;
-                        if (!e.target.checked) {
-                            lainText.value = ''; // Kosongkan bila uncheck
-                        }
+                        if (!e.target.checked) lainText.value = '';
                     }
 
-                    // Kira berapa banyak yang ditanda
                     const checkedBoxes = Array.from(minatCheckboxes).filter(cb => cb.checked);
                     
                     if (checkedBoxes.length > MAX_MINAT) {
-                        // Jika lebih 3, batalkan tanda yang baru
                         e.target.checked = false; 
-                        // Jika yang dibatalkan ialah 'Lain-lain', disable kotak teksnya
                         if (e.target.id === 'minat-lain-checkbox' && lainText) {
                             lainText.disabled = true;
                             lainText.value = '';
                         }
-                        if(minatError) minatError.classList.remove('hidden'); // Tunjuk amaran
-                        // Sembunyikan amaran selepas 2 saat
+                        if(minatError) minatError.classList.remove('hidden');
                         setTimeout(() => {
                             if(minatError) minatError.classList.add('hidden');
                         }, 2000);
                     } else {
-                        if(minatError) minatError.classList.add('hidden'); // Sembunyi amaran
+                        if(minatError) minatError.classList.add('hidden');
                     }
                     
-                    // Kemas kini textarea
-                    updateMinatTextarea(); // Guna fungsi baru
+                    updateMinatTextarea();
 
-                    // Logik untuk disable/enable baki checkbox
                     const finalCheckedBoxes = Array.from(minatCheckboxes).filter(cb => cb.checked);
                     if (finalCheckedBoxes.length >= MAX_MINAT) {
                         minatCheckboxes.forEach(cb => {
-                            if (!cb.checked) {
-                                cb.disabled = true; // Matikan yang tidak ditanda
-                            }
+                            if (!cb.checked) cb.disabled = true;
                         });
                     } else {
-                        minatCheckboxes.forEach(cb => {
-                            cb.disabled = false; // Aktifkan semua
-                        });
+                        minatCheckboxes.forEach(cb => cb.disabled = false);
                     }
                 });
 
-                // Listener baru untuk kotak teks "Lain-lain"
-                // Kemas kini textarea utama apabila menaip di "Lain-lain"
                 if(lainText) {
                     lainText.addEventListener('input', () => {
-                        // forceUppercase akan handle uppercase secara automatik
                         updateMinatTextarea(); 
                     });
                 }
-            } // Tutup semakan 'if (minatContainer)'
+            }
 
-
-            // === LOGIK BARU UNTUK HANTAR KE GOOGLE SHEET ===
+            // === LOGIK HANTAR KE GOOGLE SHEET ===
             
+            // Elemen Borang & Status
+            const sijilForm = document.getElementById('sijil-form');
             const sheetdbUrlInput = document.getElementById('sheetdb-url');
             const hantarSheetBtn = document.getElementById('hantar-sheet-btn');
+            const hantarTeks = document.getElementById('hantar-teks');
             const sheetStatusMesej = document.getElementById('sheet-status-mesej');
+            
+            // Elemen Modal
+            const confirmModal = document.getElementById('confirm-modal');
+            const cancelHantarBtn = document.getElementById('cancel-hantar-btn');
+            const confirmHantarBtn = document.getElementById('confirm-hantar-btn');
 
-            // Fungsi untuk tunjuk mesej status
+            // Elemen Mesej Berjaya
+            const successMessage = document.getElementById('success-message');
+
+
             const tunjukMesejSheet = (mesej, jenis = 'berjaya') => {
                 if (!sheetStatusMesej) return;
                 sheetStatusMesej.innerText = mesej;
                 sheetStatusMesej.classList.remove('hidden', 'text-green-700', 'text-red-700');
-                sheetStatusMesej.classList.add(jenis === 'berjaya' ? 'text-green-700' : 'text-red-700');
+                if (jenis === 'berjaya') {
+                    sheetStatusMesej.classList.add('text-green-700');
+                } else {
+                    sheetStatusMesej.classList.add('text-red-700');
+                }
 
-                // Sembunyikan mesej selepas 5 saat
-                setTimeout(() => {
-                    sheetStatusMesej.classList.add('hidden');
-                }, 5000);
+                // Sembunyikan mesej jika ia bukan mesej 'berjaya' (kerana berjaya akan sembunyikan borang)
+                if (jenis !== 'berjaya') {
+                    setTimeout(() => {
+                        sheetStatusMesej.classList.add('hidden');
+                    }, 5000);
+                }
             };
             
-            // Helper untuk dapatkan nilai, pulangkan '' jika null
             const getValue = (id) => {
                 const el = document.getElementById(id);
                 return el ? el.value : '';
             };
 
-            // Fungsi untuk kumpul semua data dari borang sebagai JSON
+            // Fungsi kumpul data - 'No. Daftar Sekolah' DIBUANG
             const kumpulMaklumatJson = () => {
-                // Nama kunci (cth: 'IC') mesti TEPAT SAMA dengan tajuk lajur di Google Sheet
                 return {
                     'IC': getValue('no-ic'),
                     'Nama Murid': getValue('nama-murid'),
@@ -417,7 +448,6 @@
                     'Sekolah': getValue('sekolah'),
                     'Bahasa Pengantar': getValue('bahasa-pengantar'),
                     'Tarikh Masuk': getValue('tarikh-masuk'),
-                    'No. Daftar Sekolah': getValue('no-daftar-sekolah'),
                     'Tarikh Berhenti': getValue('tarikh-berhenti'),
                     'Tingkatan Tertinggi': getValue('tingkatan-tertinggi'),
                     'Sebab Berhenti': getValue('sebab-berhenti'),
@@ -428,7 +458,7 @@
                 };
             };
 
-            // Senarai medan yang WAJIB diisi [id, Nama Mesra]
+            // Senarai medan wajib - 'No. Daftar Sekolah' DIBUANG
             const medanWajib = [
                 ['no-ic', 'Nombor IC'],
                 ['nama-murid', 'Nama Murid'],
@@ -442,87 +472,109 @@
                 ['sekolah', 'Sekolah'],
                 ['bahasa-pengantar', 'Bahasa Pengantar'],
                 ['tarikh-masuk', 'Tarikh Masuk'],
-                ['no-daftar-sekolah', 'No. Daftar Sekolah'],
                 ['tarikh-berhenti', 'Tarikh Berhenti'],
                 ['tingkatan-tertinggi', 'Tingkatan Tertinggi'],
                 ['sebab-berhenti', 'Sebab Berhenti'],
                 ['peperiksaan-awam', 'Peperiksaan Awam'],
                 ['sekolah-terdahulu', 'Sekolah Terdahulu'],
                 ['minat-khas', 'Minat / Kebolehan Khas (sila pilih)'],
-                ['komen-pengetua', 'Komen Pengetua (automatik)'] // Kemas kini nama mesra
+                ['komen-pengetua', 'Komen Pengetua (automatik)']
             ];
+            
+            // Fungsi yang menjalankan Fetch (Penghantaran Sebenar)
+            const lakukanPenghantaran = () => {
+                const apiUrl = sheetdbUrlInput.value;
+                if (!apiUrl || !apiUrl.startsWith('https://sheetdb.io/api/v1/')) {
+                    tunjukMesejSheet("URL API SheetDB tidak sah. Sila semak semula.", 'gagal');
+                    return;
+                }
 
-            // Tambah listener pada butang Hantar
+                const data = kumpulMaklumatJson();
+                
+                tunjukMesejSheet("Menghantar data...", 'berjaya');
+                hantarSheetBtn.disabled = true;
+                if (hantarTeks) hantarTeks.innerText = "Menghantar...";
+
+                fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ data: data })
+                })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.created) {
+                        // BERJAYA! Sembunyikan borang, tunjuk mesej terima kasih.
+                        if (sijilForm) sijilForm.classList.add('hidden');
+                        if (successMessage) successMessage.classList.remove('hidden');
+                        // Sembunyikan juga mesej "Menghantar data..."
+                        if (sheetStatusMesej) sheetStatusMesej.classList.add('hidden');
+                    } else {
+                        console.error('Ralat SheetDB:', result);
+                        tunjukMesejSheet("Gagal dihantar. Semak Konsol (F12) untuk ralat.", 'gagal');
+                    }
+                })
+                .catch(error => {
+                    console.error('Ralat Fetch:', error);
+                    tunjukMesejSheet("Ralat berlaku. Sila periksa URL API dan sambungan internet anda.", 'gagal');
+                })
+                .finally(() => {
+                    // Hanya aktifkan semula butang jika PENGHANTARAN GAGAL
+                    // (Iaitu, jika mesej berjaya MASIH tersembunyi)
+                    if (successMessage && successMessage.classList.contains('hidden')) { 
+                        hantarSheetBtn.disabled = false;
+                        if (hantarTeks) hantarTeks.innerText = "Hantar kepada guru kelas";
+                    }
+                });
+            };
+
+            // 1. Listener untuk BUTANG HANTAR UTAMA (Validasi & Tunjuk Modal)
             if(hantarSheetBtn) {
                 hantarSheetBtn.addEventListener('click', () => {
 
-                    // --- VALIDASI BARU ---
+                    // Validasi
                     let medanPertamaKosong = null;
                     for (const [id, nama] of medanWajib) {
                         const medan = document.getElementById(id);
-                        // Semak jika medan wujud dan jika ia kosong
                         if (!medan || !medan.value || medan.value.trim() === '') {
                             medanPertamaKosong = nama;
                             if (medan) {
-                                medan.focus(); // Fokus pada medan yang kosong jika ia wujud
+                                medan.focus(); 
                             } else {
-                                console.error(`Medan wajib hilang: ${id}`); // Log ralat jika medan tidak wujud
+                                console.error(`Medan wajib hilang: ${id}`);
                             }
-                            break; // Berhenti pada ralat pertama
+                            break;
                         }
                     }
 
                     if (medanPertamaKosong) {
                         tunjukMesejSheet(`Sila isi medan "${medanPertamaKosong}" terlebih dahulu.`, 'gagal');
-                        return; // Hentikan proses hantar
-                    }
-                    // --- TAMAT VALIDASI BARU ---
-
-                    const apiUrl = sheetdbUrlInput.value;
-                    
-                    if (!apiUrl || !apiUrl.startsWith('https://sheetdb.io/api/v1/')) {
-                        tunjukMesejSheet("URL API SheetDB tidak sah. Sila semak semula.", 'gagal');
                         return;
                     }
 
-                    const data = kumpulMaklumatJson();
-                    
-                    // Tunjuk status & disable butang
-                    tunjukMesejSheet("Menghantar data...", 'berjaya');
-                    hantarSheetBtn.disabled = true;
-
-                    // Hantar data ke SheetDB
-                    fetch(apiUrl, {
-                        method: 'POST',
-                        headers: {
-                            'Accept': 'application/json',
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            data: data // Hantar sebagai satu baris
-                        })
-                    })
-                    .then(response => response.json())
-                    .then(result => {
-                        if (result.created) {
-                            tunjukMesejSheet(`Berjaya! ${result.created} baris telah ditambah ke Google Sheet.`);
-                            // Anda boleh kosongkan borang jika mahu
-                            // document.getElementById('sijil-form').reset();
-                        } else {
-                            console.error('Ralat SheetDB:', result);
-                            tunjukMesejSheet("Gagal dihantar. Semak Konsol (F12) untuk ralat.", 'gagal');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Ralat Fetch:', error);
-                        tunjukMesejSheet("Ralat berlaku. Sila periksa URL API dan sambungan internet anda.", 'gagal');
-                    })
-                    .finally(() => {
-                        // Aktifkan semula butang
-                        hantarSheetBtn.disabled = false;
-                    });
+                    // Jika lulus validasi, tunjuk modal
+                    if (confirmModal) {
+                        confirmModal.classList.remove('hidden');
+                    }
                 });
-            } // Tutup semakan 'if (hantarSheetBtn)'
+            }
+
+            // 2. Listener untuk butang "Batal" pada modal
+            if (cancelHantarBtn && confirmModal) {
+                cancelHantarBtn.addEventListener('click', () => {
+                    confirmModal.classList.add('hidden');
+                });
+            }
+            
+            // 3. Listener untuk butang "Ya, Hantar" pada modal
+            if (confirmHantarBtn && confirmModal) {
+                confirmHantarBtn.addEventListener('click', () => {
+                    confirmModal.classList.add('hidden');
+                    lakukanPenghantaran(); // Panggil fungsi fetch sebenar
+                });
+            }
 
         }); // Tutup DOMContentLoaded
     </script>
