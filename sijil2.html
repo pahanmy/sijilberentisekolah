@@ -47,7 +47,7 @@
              background-color: #f0f0f0;
         }
         
-        /* Gaya Khusus Sijil Khas (Meniru Kotak Semak Berasingan) */
+        /* Gaya Khusus Sijil Khas - Jadual Pencapaian */
         .sijil-program-heading {
             font-size: 11pt;
             font-weight: bold;
@@ -127,11 +127,6 @@
             Pilih murid di bawah untuk mencetak dokumen gabungan (2 halaman).
         </p>
         
-        <div id="print-alert" class="p-3 mb-4 text-sm font-medium text-yellow-800 bg-yellow-100 rounded-lg">
-            <p class="font-bold">PERHATIAN PENTING:</p>
-            <p>Sila pastikan Destinasi cetak adalah **'Save as PDF'** dan Skala ditetapkan kepada **90%** untuk dokumen gabungan 2-halaman ini muat dengan sempurna.</p>
-        </div>
-
         <div class="bg-white rounded-lg shadow-xl overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="min-w-full divide-y divide-gray-200">
@@ -502,7 +497,7 @@
                 penilaian['Peratus Kehadiran'] = '100';
                 penilaian.Catatan = 'TIADA DATA PENILAIAN GURU DIREKODKAN.';
                 // Default Gred Sijil Khas
-                penilaian['Lencana Bintang'] = 'Baik'; // Ubah default agar dapat tanda semak di Baik
+                penilaian['Lencana Bintang'] = 'Baik'; 
                 penilaian['Program Nilam'] = '5 Bintang'; 
                 penilaian['Prestasi Kehadiran Sijil Khas'] = 'Cemerlang';
                 penilaian['Jawatan Khas Lain'] = '';
@@ -517,7 +512,7 @@
             printArea.classList.remove('hidden');
             
             // 2. Panggil dialog cetak
-            alert("PERHATIAN CETAKAN:\n\nSila pastikan Destinasi ditetapkan kepada 'Save as PDF' dan Skala cetakan adalah 90% untuk dokumen 2-halaman ini muat dengan sempurna.");
+            // Peringatan cetak telah dibuang seperti yang diminta.
             window.print();
             
             // 3. Bersihkan selepas cetak
