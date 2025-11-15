@@ -79,16 +79,7 @@
             border: 8px double #000;
             pointer-events: none;
         }
-        .scroll-border::before {
-            border-style: solid;
-            border-width: 8px 0 0 8px;
-            top: -8px;
-            left: -8px;
-            border-color: #000;
-            border-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 100 100" preserveAspectRatio="none"><path fill="none" stroke="black" stroke-width="2" d="M0,0 L100,0 M0,0 L0,100"/></svg>') 10;
-        }
-
-
+        
         @media print {
             body { background: white !important; padding: 0; margin: 0;}
             .print-hidden { display: none !important; } 
@@ -145,7 +136,7 @@
         
         <!-- TEMPLAT AKUAN (Halaman 1) -->
         <div id="template-akuan" style="display: none;">
-            <div class="print-document">
+            <div class="print-document" data-page="akuan">
                 <div style="text-align: center; margin-bottom: 20px;">
                     <img src="https://placehold.co/40x48/ffffff/000000?text=JATA" alt="Jata Negara Placeholder" style="margin: 0 auto 10px; display: block;">
                     <p style="font-size: 14pt; font-weight: bold;">SURAT AKUAN</p>
@@ -201,7 +192,7 @@
 
         <!-- TEMPLAT SIJIL KHAS (Halaman 2) - MENIRU IMEJ YANG DIBERIKAN -->
         <div id="template-sijil-khas" style="display: none;">
-            <div class="print-document page-break">
+            <div class="print-document page-break" data-page="sijil-khas">
                 <div class="scroll-border" style="padding: 25px;">
                     <div style="text-align: center; margin-bottom: 20px;">
                         <p style="font-size: 12pt; font-family: serif;">SEKOLAH MENENGAH KEBANGSAAN LUTONG</p>
@@ -283,6 +274,8 @@
 
         let dataMuridGlobal = [];
         let dataPenilaianGlobal = [];
+        let templateAkuanHtml = '';
+        let templateSijilKhasHtml = '';
 
         const loadingMsg = document.getElementById('loading-msg');
         const jadualBody = document.getElementById('jadual-murid');
@@ -332,24 +325,25 @@
                 : `<p>TIADA JAWATAN KHAS DIREKODKAN</p>`;
 
 
-            // --- 2. TEMPLAT SURAT AKUAN (Halaman 1) ---
-            const suratAkuanTemplate = document.getElementById('template-akuan').innerHTML;
-            
-            // --- 3. TEMPLAT SIJIL KHAS (Halaman 2) ---
-            const sijilKhasTemplate = document.getElementById('template-sijil-khas').innerHTML;
-
-            const htmlContent = suratAkuanTemplate + sijilKhasTemplate;
+            // --- 2. GABUNGKAN TEMPLAT YANG TELAH DISIMPAN ---
+            const htmlContent = templateAkuanHtml + templateSijilKhasHtml;
             const tempDiv = document.createElement('div');
             tempDiv.innerHTML = htmlContent;
 
-            // --- 4. ISI DATA KE DALAM KEDUA-DUA TEMPLAT ---
+            // --- 3. ISI DATA KE DALAM KEDUA-DUA TEMPLAT ---
             const mapDataToElements = (docElement) => {
-                // Sijil Khas Mapping
-                if (docElement.querySelector('.scroll-border')) {
-                    docElement.querySelector('[data-id="sijil-khas-nama"]').innerText = murid['Nama Murid'] || 'N/A';
-                    docElement.querySelector('[data-id="sijil-khas-ic"]').innerText = murid.IC || 'N/A';
-                    docElement.querySelector('[data-id="sijil-khas-tingkatan"]').innerText = murid['Tingkatan Tertinggi'] || 'N/A';
-                    docElement.querySelector('[data-id="sijil-tahun-khas"]').innerText = new Date().getFullYear(); 
+                
+                const querySelectorSafe = (selector) => {
+                    return docElement.querySelector(selector);
+                };
+
+                // --- Sijil Khas Mapping ---
+                // Cek unik untuk Sijil Khas
+                if (querySelectorSafe('[data-page="sijil-khas"]')) {
+                    querySelectorSafe('[data-id="sijil-khas-nama"]').innerText = murid['Nama Murid'] || 'N/A';
+                    querySelectorSafe('[data-id="sijil-khas-ic"]').innerText = murid.IC || 'N/A';
+                    querySelectorSafe('[data-id="sijil-khas-tingkatan"]').innerText = murid['Tingkatan Tertinggi'] || 'N/A';
+                    querySelectorSafe('[data-id="sijil-tahun-khas"]').innerText = new Date().getFullYear(); 
                     
                     // Logik Kotak Semak Sijil Khas
                     const checkGred = (gred, program) => {
@@ -363,38 +357,41 @@
                     checkGred(penilaian['Program Nilam'], 'Nilam');
                     checkGred(penilaian['Prestasi Kehadiran Sijil Khas'], 'Hadir');
 
-                } else { 
-                    // Akuan Mapping
-                    docElement.querySelector('[data-id="akuan-nama"]').innerText = murid['Nama Murid'] || 'N/A';
-                    docElement.querySelector('[data-id="akuan-ic"]').innerText = murid.IC || 'N/A';
-                    docElement.querySelector('[data-id="akuan-sekolah"]').innerText = murid.Sekolah || 'N/A';
-                    docElement.querySelector('[data-id="akuan-tingkatan"]').innerText = murid['Tingkatan Tertinggi'] || 'N/A';
-                    docElement.querySelector('[data-id="akuan-tarikh-masuk"]').innerText = formatTarikh(murid['Tarikh Masuk']) || 'N/A';
-                    docElement.querySelector('[data-id="akuan-tarikh-berhenti"]').innerText = formatTarikh(murid['Tarikh Berhenti']) || 'N/A';
-                    docElement.querySelector('[data-id="akuan-peperiksaan"]').innerText = murid['Peperiksaan Awam'] || 'TIADA';
-                    docElement.querySelector('[data-id="akuan-warganegara"]').innerText = murid.Warganegara || 'MALAYSIA';
-                    docElement.querySelector('[data-id="akuan-sebab-berhenti"]').innerText = murid['Sebab Berhenti'] || 'TAMAT TINGKATAN LIMA';
+                } 
+                
+                // --- Akuan Mapping ---
+                // Cek unik untuk Surat Akuan
+                if (querySelectorSafe('[data-page="akuan"]')) {
+                    querySelectorSafe('[data-id="akuan-nama"]').innerText = murid['Nama Murid'] || 'N/A';
+                    querySelectorSafe('[data-id="akuan-ic"]').innerText = murid.IC || 'N/A';
+                    querySelectorSafe('[data-id="akuan-sekolah"]').innerText = murid.Sekolah || 'N/A';
+                    querySelectorSafe('[data-id="akuan-tingkatan"]').innerText = murid['Tingkatan Tertinggi'] || 'N/A';
+                    querySelectorSafe('[data-id="akuan-tarikh-masuk"]').innerText = formatTarikh(murid['Tarikh Masuk']) || 'N/A';
+                    querySelectorSafe('[data-id="akuan-tarikh-berhenti"]').innerText = formatTarikh(murid['Tarikh Berhenti']) || 'N/A';
+                    querySelectorSafe('[data-id="akuan-peperiksaan"]').innerText = murid['Peperiksaan Awam'] || 'TIADA';
+                    querySelectorSafe('[data-id="akuan-warganegara"]').innerText = murid.Warganegara || 'MALAYSIA';
+                    querySelectorSafe('[data-id="akuan-sebab-berhenti"]').innerText = murid['Sebab Berhenti'] || 'TAMAT TINGKATAN LIMA';
                     
-                    docElement.querySelector('[data-id="akuan-akademik"]').innerText = penilaian.Akademik || 'BAIK';
-                    docElement.querySelector('[data-id="akuan-gred-1"]').innerText = penilaian.Bertanggungjawab || 'BAIK';
-                    docElement.querySelector('[data-id="akuan-gred-2"]').innerText = penilaian['Daya Usaha'] || 'BAIK';
-                    docElement.querySelector('[data-id="akuan-gred-3"]').innerText = penilaian.Jujur || 'BAIK';
-                    docElement.querySelector('[data-id="akuan-gred-4"]').innerText = penilaian['Keyakinan Diri'] || 'BAIK';
-                    docElement.querySelector('[data-id="akuan-gred-5"]').innerText = penilaian.Kepimpinan || 'BAIK';
-                    docElement.querySelector('[data-id="akuan-gred-6"]').innerText = penilaian.Kesopanan || 'BAIK';
-                    docElement.querySelector('[data-id="akuan-gred-7"]').innerText = penilaian.Disiplin || 'BAIK';
-                    docElement.querySelector('[data-id="akuan-jawatan"]').innerHTML = jawatanList;
-                    docElement.querySelector('[data-id="akuan-peratus-hadir"]').innerText = penilaian['Peratus Kehadiran'] || '100';
-                    docElement.querySelector('[data-id="akuan-catatan"]').innerText = penilaian.Catatan || 'TIADA CATATAN KHAS';
-                    docElement.querySelector('[data-id="akuan-tarikh-cetak"]').innerText = tarikhHariIni;
+                    querySelectorSafe('[data-id="akuan-akademik"]').innerText = penilaian.Akademik || 'BAIK';
+                    querySelectorSafe('[data-id="akuan-gred-1"]').innerText = penilaian.Bertanggungjawab || 'BAIK';
+                    querySelectorSafe('[data-id="akuan-gred-2"]').innerText = penilaian['Daya Usaha'] || 'BAIK';
+                    querySelectorSafe('[data-id="akuan-gred-3"]').innerText = penilaian.Jujur || 'BAIK';
+                    querySelectorSafe('[data-id="akuan-gred-4"]').innerText = penilaian['Keyakinan Diri'] || 'BAIK';
+                    querySelectorSafe('[data-id="akuan-gred-5"]').innerText = penilaian.Kepimpinan || 'BAIK';
+                    querySelectorSafe('[data-id="akuan-gred-6"]').innerText = penilaian.Kesopanan || 'BAIK';
+                    querySelectorSafe('[data-id="akuan-gred-7"]').innerText = penilaian.Disiplin || 'BAIK';
+                    querySelectorSafe('[data-id="akuan-jawatan"]').innerHTML = jawatanList;
+                    querySelectorSafe('[data-id="akuan-peratus-hadir"]').innerText = penilaian['Peratus Kehadiran'] || '100';
+                    querySelectorSafe('[data-id="akuan-catatan"]').innerText = penilaian.Catatan || 'TIADA CATATAN KHAS';
+                    querySelectorSafe('[data-id="akuan-tarikh-cetak"]').innerText = tarikhHariIni;
                 }
             };
             
-            const akuanDoc = tempDiv.querySelector('#akuan-page');
-            const sijilKhasDoc = tempDiv.querySelector('#sijil-khas-page');
+            const akuanDoc = tempDiv.querySelector('#template-akuan > .print-document');
+            const sijilKhasDoc = tempDiv.querySelector('#template-sijil-khas > .print-document');
 
-            mapDataToElements(akuanDoc);
-            mapDataToElements(sijilKhasDoc);
+            if (akuanDoc) mapDataToElements(akuanDoc);
+            if (sijilKhasDoc) mapDataToElements(sijilKhasDoc);
 
             return tempDiv.innerHTML;
         };
@@ -439,6 +436,13 @@
         // Fungsi untuk memuatkan data dari SheetDBs
         const muatData = async () => {
             try {
+                // --- Kumpul Templat (Fix Awal) ---
+                const akuanEl = document.getElementById('template-akuan');
+                const sijilEl = document.getElementById('template-sijil-khas');
+                
+                if (akuanEl) templateAkuanHtml = akuanEl.innerHTML;
+                if (sijilEl) templateSijilKhasHtml = sijilEl.innerHTML;
+                
                 loadingMsg.innerText = 'Memuatkan data murid...';
                 
                 const muridResponse = await fetch(sheetDBUrlMurid);
