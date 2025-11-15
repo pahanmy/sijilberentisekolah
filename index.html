@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Utama Aplikasi</title>
+    <!-- Muat naik Tailwind CSS untuk penggayaan -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Menggunakan fon Inter */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Animasi 'shake' untuk ralat input */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+        .shake {
+            animation: shake 0.5s;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-100 text-gray-800 flex flex-col items-center justify-center p-4">
+
+    <!-- Kontena Utama -->
+    <div class="w-full max-w-4xl text-center flex-grow flex flex-col justify-center">
+        <h1 class="text-4xl font-extrabold text-indigo-700 mb-2">Sistem Dokumentasi Sijil Murid</h1>
+        <h2 class="text-xl font-semibold text-indigo-500 mb-8">SMK Lutong Miri</h2>
+        <p class="text-gray-600 mb-12">Sila pilih peranan anda untuk meneruskan:</p>
+
+        <!-- Pilihan Menu -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            
+            <!-- Butang 1: Borang Murid (index.html) -->
+            <a href="index.html" class="group block p-6 sm:p-10 bg-white rounded-xl shadow-xl hover:shadow-2xl hover:scale-[1.02] transition duration-300 ease-in-out border-t-4 border-indigo-500 hover:border-indigo-700">
+                <div class="flex flex-col items-center">
+                    <!-- Ikon Pelajar -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-indigo-500 group-hover:text-indigo-700 mb-4 transition duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M19 21v-2a4 4 0 00-4-4H9a4 4 0 00-4 4v2" />
+                        <circle cx="12" cy="7" r="4" />
+                        <path d="M22 21v-2a4 4 0 00-3-3.87" />
+                        <path d="M2 19v2a4 4 0 004-4v-2" />
+                    </svg>
+                    <h2 class="text-2xl font-bold text-gray-800 mb-1">Borang Murid</h2>
+                    <p class="text-sm text-gray-600">Untuk murid mengisi maklumat berhenti sekolah dan minat khas.</p>
+                </div>
+            </a>
+
+            <!-- Butang 2: Halaman Guru Kelas (Memaparkan Modal Pengesahan) -->
+            <button id="guru-login-btn" class="group block p-6 sm:p-10 bg-white rounded-xl shadow-xl hover:shadow-2xl hover:scale-[1.02] transition duration-300 ease-in-out border-t-4 border-green-500 hover:border-green-700 cursor-pointer">
+                <div class="flex flex-col items-center">
+                    <!-- Ikon Guru/Admin (Papan Pemuka) -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-green-500 group-hover:text-green-700 mb-4 transition duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                        <line x1="12" y1="3" x2="12" y2="21" />
+                        <line x1="3" y1="12" x2="21" y2="12" />
+                    </svg>
+                    <h2 class="text-2xl font-bold text-gray-800 mb-1">Guru Kelas</h2>
+                    <p class="text-sm text-gray-600">Untuk guru menyemak data dan membuat penilaian komprehensif.</p>
+                </div>
+            </button>
+            
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="w-full max-w-4xl mt-8 p-4 text-center text-xs text-gray-500 border-t border-gray-300">
+        <p>Dibangunkan oleh Pahan | Versi 1.0 (2025)</p>
+    </footer>
+
+    <!-- === MODAL PENGESAHAN KATA LALUAN GURU === -->
+    <div id="password-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 p-4 hidden">
+        <div class="bg-white rounded-lg shadow-2xl w-full max-w-sm p-6">
+            <h3 class="text-xl font-bold text-gray-900 mb-4 border-b pb-2">Akses Guru Kelas</h3>
+            <p class="text-sm text-gray-600 mb-4">Sila masukkan kata laluan untuk mengakses papan pemuka guru.</p>
+            
+            <div>
+                <input type="password" id="password-input" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2" placeholder="Kata Laluan">
+                <p id="error-message" class="text-red-500 text-xs mt-2 hidden">Kata laluan salah. Sila cuba lagi.</p>
+            </div>
+            
+            <div class="mt-6 flex justify-end space-x-3">
+                <button type="button" id="cancel-password-btn" class="rounded-md bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                    Batal
+                </button>
+                <button type="button" id="submit-password-btn" class="rounded-md bg-green-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500">
+                    Masuk
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const loginBtn = document.getElementById('guru-login-btn');
+            const passwordModal = document.getElementById('password-modal');
+            const passwordInput = document.getElementById('password-input');
+            const submitPasswordBtn = document.getElementById('submit-password-btn');
+            const cancelPasswordBtn = document.getElementById('cancel-password-btn');
+            const errorMessage = document.getElementById('error-message');
+            const CORRECT_PASSWORD = "imananiqsara"; // Kata Laluan Rahsia
+
+            // Fungsi untuk membuka modal
+            loginBtn.addEventListener('click', () => {
+                passwordModal.classList.remove('hidden');
+                passwordInput.value = '';
+                errorMessage.classList.add('hidden');
+                passwordInput.focus();
+            });
+
+            // Fungsi untuk menutup modal
+            cancelPasswordBtn.addEventListener('click', () => {
+                passwordModal.classList.add('hidden');
+            });
+
+            const handleLoginAttempt = () => {
+                const enteredPassword = passwordInput.value.toLowerCase();
+                
+                if (enteredPassword === CORRECT_PASSWORD) {
+                    errorMessage.classList.add('hidden');
+                    // Navigasi ke halaman guru.html
+                    window.location.href = 'guru.html';
+                } else {
+                    errorMessage.classList.remove('hidden');
+                    passwordInput.value = '';
+                    // Tambah kesan shake pada modal untuk feedback visual
+                    passwordModal.querySelector('.bg-white').classList.add('shake');
+                    setTimeout(() => {
+                        passwordModal.querySelector('.bg-white').classList.remove('shake');
+                        passwordInput.focus();
+                    }, 500);
+                }
+            };
+
+            // Listener untuk butang 'Masuk'
+            submitPasswordBtn.addEventListener('click', handleLoginAttempt);
+
+            // Listener untuk butang 'Enter' pada input
+            passwordInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault(); // Elak form submit biasa
+                    handleLoginAttempt();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
