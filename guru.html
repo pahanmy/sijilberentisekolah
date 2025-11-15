@@ -112,14 +112,21 @@
                 <span id="muat-teks">Muat Semula Data</span>
             </button>
             
-            <!-- Butang Pautan Sheet (BARU) -->
+            <!-- Pautan Sheet & Sijil -->
             <div class="flex items-center space-x-2 order-3 sm:order-2 w-full sm:w-auto justify-center sm:justify-start">
+                
+                <!-- Pautan BARU: Halaman Cetak Sijil -->
+                <a href="sijil.html" target="_blank" title="Cetak Sijil Berhenti" class="inline-flex items-center rounded-md bg-pink-600 px-3 py-2 text-xs font-semibold text-white shadow-sm hover:bg-pink-700 transition duration-150">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><path d="M6 14h12v7H6z"/></svg>
+                    Cetak Sijil
+                </a>
+
                 <a href="https://docs.google.com/spreadsheets/d/1vI6gHBDzU8qSap1wxrub0VDYf8uCVyVZRzcUzEVRbEc/edit?usp=sharing" target="_blank" title="Lihat Data Pengisian Borang Murid" class="inline-flex items-center rounded-md bg-gray-500 px-3 py-2 text-xs font-semibold text-white shadow-sm hover:bg-gray-600 transition duration-150">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><path d="M12 18v-6"/><path d="M9 15h6"/></svg>
                     Data Murid
                 </a>
                 <a href="https://docs.google.com/spreadsheets/d/18vpqeqMOwrCVwyjZUOVO_fsYX2bpzQPzOUhPbNqTERA/edit?usp=sharing" target="_blank" title="Lihat Data Penilaian Guru" class="inline-flex items-center rounded-md bg-yellow-600 px-3 py-2 text-xs font-semibold text-white shadow-sm hover:bg-yellow-700 transition duration-150">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/><path d="M12 10v4"/></svg>
                     Penilaian Guru
                 </a>
             </div>
@@ -454,10 +461,6 @@
         let dataMuridGlobal = []; 
         let dataPenilaianGlobal = []; // Untuk menyimpan semua data penilaian guru
 
-        // URL Pautan Google Sheet (BARU)
-        const URL_SHEET_MURID = "https://docs.google.com/spreadsheets/d/1vI6gHBDzU8qSap1wxrub0VDYf8uCVyVZRzcUzEVRbEc/edit?usp=sharing";
-        const URL_SHEET_PENILAIAN = "https://docs.google.com/spreadsheets/d/18vpqeqMOwrCVwyjZUOVO_fsYX2bpzQPzOUhPbNqTERA/edit?usp=sharing";
-
         // Dapatkan elemen DOM
         const muatDataBtn = document.getElementById('muat-data-btn');
         const muatIkon = document.getElementById('muat-ikon');
@@ -720,7 +723,8 @@
 
             // 1. Validasi URL API Guru
             if (!apiUrl || !apiUrl.startsWith('https://sheetdb.io/api/v1/')) {
-                alert("RALAT: URL API Penilaian Guru tidak sah. Sila semak semula kod.");
+                // Menggunakan console.error bukan alert
+                console.error("RALAT: URL API Penilaian Guru tidak sah. Sila semak semula kod.");
                 return false;
             }
 
@@ -830,7 +834,7 @@
             muatDataBtn.disabled = true;
 
             // Muat kedua-dua set data secara serentak
-            const [muridResponse, penilaianResponse] = await Promise.all([
+            const [muridResponse] = await Promise.all([
                 fetch(sheetDBUrlMurid),
                 muatDataPenilaian() 
             ]);
