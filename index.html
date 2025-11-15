@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Borang Sijil Berhenti Sekolah</title>
-    <!-- Muat naik Tailwind CSS untuk penggayaan -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         /* Menggunakan fon Inter */
@@ -15,17 +14,14 @@
 </head>
 <body class="bg-gray-100">
 
-    <!-- Ubah lebar maksimum untuk borang tunggal -->
     <div class="max-w-3xl mx-auto p-4 sm:p-6 lg:p-8">
         <h1 class="text-2xl font-bold text-center text-gray-800 mb-6">Borang Sijil Berhenti Sekolah Kerajaan</h1>
         <p class="text-center text-gray-600 mb-8">
             Borang ini hanya untuk pengisian maklumat murid bagi tujuan cetakan semula pada sijil asli kelak.
         </p>
 
-        <!-- Ubah grid kepada 1 lajur sahaja -->
         <div class="grid grid-cols-1 gap-8">
             
-            <!-- Bahagian Borang Input (Kiri) -->
             <div class="bg-white p-6 rounded-lg shadow-lg">
                 <form id="sijil-form" class="space-y-4">
                     
@@ -36,7 +32,6 @@
                         <input type="text" id="no-ic" maxlength="12" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" placeholder="Cth: 050115101234">
                     </div>
 
-                    <!-- MEDAN-MEDAN YANG HILANG DITAMBAH SEMULA DI SINI -->
                     <div>
                         <label for="nama-murid" class="block text-sm font-medium text-gray-700">Nama Murid (Nama Penuh)</label>
                         <input type="text" id="nama-murid" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
@@ -54,7 +49,6 @@
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div>
                             <label for="jantina" class="block text-sm font-medium text-gray-700">Jantina (Automatik dari IC)</label>
-                            <!-- Menggunakan input teks readonly untuk konsistensi, kerana ia diisi oleh JS -->
                             <input type="text" id="jantina" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50" readonly>
                         </div>
                         <div>
@@ -99,7 +93,7 @@
                         </div>
                         <div>
                             <label for="tarikh-berhenti" class="block text-sm font-medium text-gray-700">Tarikh Berhenti / Date of Leaving</label>
-                            <input type="date" id="tarikh-berhenti" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                            <input type="date" id="tarikh-berhenti" value="2025-12-19" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                         </div>
                     </div>
                     <div>
@@ -119,10 +113,8 @@
                         <input type="text" id="sekolah-terdahulu" value="TIADA" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
                     </div>
 
-                    <!-- BAHAGIAN MINAT KHAS (YANG MENYEBABKAN RALAT) DITAMBAH SEMULA -->
                     <h2 class="text-lg font-semibold border-b pt-4 pb-2">Minat atau Kebolehan Khas (Pilih maks. 3)</h2>
                     <div id="minat-options-container" class="space-y-2">
-                        <!-- Senarai checkbox -->
                         <div class="flex items-start"><input type="checkbox" name="minat-checkbox" value="MINAT DALAM BIDANG SAINS DAN TEKNOLOGI" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"><label class="ml-2 text-sm text-gray-700">Minat dalam bidang sains dan teknologi</label></div>
                         <div class="flex items-start"><input type="checkbox" name="minat-checkbox" value="MINAT DALAM AKTIVITI KOKURIKULUM" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"><label class="ml-2 text-sm text-gray-700">Minat dalam aktiviti kokurikulum</label></div>
                         <div class="flex items-start"><input type="checkbox" name="minat-checkbox" value="MINAT MEMBACA BAHAN ILMIAH" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"><label class="ml-2 text-sm text-gray-700">Minat membaca bahan ilmiah</label></div>
@@ -140,7 +132,6 @@
                         <div class="flex items-start"><input type="checkbox" name="minat-checkbox" value="KEBOLEHAN AKADEMIK YANG KONSISTEN" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"><label class="ml-2 text-sm text-gray-700">Kebolehan akademik yang konsisten</label></div>
                         <div class="flex items-start"><input type="checkbox" name="minat-checkbox" value="KEBOLEHAN DALAM SUKAN TERTENTU" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"><label class="ml-2 text-sm text-gray-700">Kebolehan dalam sukan tertentu</label></div>
                         
-                        <!-- Pilihan Lain-lain -->
                         <div class="flex items-start">
                             <input type="checkbox" id="minat-lain-checkbox" name="minat-checkbox" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
                             <label for="minat-lain-checkbox" class="ml-2 text-sm text-gray-700">Lain-lain:</label>
@@ -153,34 +144,15 @@
                         <label for="minat-khas" class="block text-sm font-medium text-gray-700 mt-3">Ringkasan Minat / Kebolehan Khas</label>
                         <textarea id="minat-khas" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50" readonly placeholder="Pilihan anda akan digabungkan di sini..."></textarea>
                     </div>
-                    <!-- TAMAT BAHAGIAN MINAT KHAS -->
-
-
                     <div>
                         <label for="komen-pengetua" class="block text-sm font-medium text-gray-700">Komen Guru Besar/Pengetua (Dijana Automatik)</label>
                         <textarea id="komen-pengetua" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-gray-50" readonly></textarea>
                     </div>
 
-                    <!-- Butang Jana Komen Rawak telah dibuang -->
-
-                    <!-- === BAHAGIAN EMEL LAMA DIBUANG === -->
-                    <!-- <div class="pt-6 border-t border-gray-200"> ... (Semua kod emel/salin dibuang dari sini) ... </div> -->
-                    <!-- === TAMAT BAHAGIAN LAMA === -->
-
-                    <!-- === BAHAGIAN BARU UNTUK HANTAR KE GOOGLE SHEET === -->
                     <div class="pt-6 border-t border-gray-200">
                         <h2 class="text-lg font-semibold pb-2">Hantar Maklumat ke Google Sheet</h2>
                         
-                        <!-- Teks penerangan telah dibuang -->
-                        <!-- 
-                        <p class="text-sm text-gray-600 mb-4">
-                            Fungsi ini membolehkan anda menghantar data dari borang ini terus ke Google Sheet menggunakan perkhidmatan percuma seperti <a href="https://sheetdb.io/" target="_blank" class="text-blue-600 hover:underline">SheetDB.io</a>.
-                        </p> 
-                        -->
-
-                        <!-- Arahan Persediaan (DISOROKKAN) -->
                         <details class="bg-gray-50 border border-gray-200 rounded-md p-3 mb-4 hidden">
-                            <!-- Arahan kini disorokkan menggunakan 'hidden' -->
                             <div class="mt-3 text-sm text-gray-600 space-y-2">
                                 <p><strong>Langkah 1:</strong> Buat satu Google Sheet baru.</p>
                                 <p><strong>Langkah 2:</strong> Di baris pertama (header), anda <strong>MESTI</strong> taip nama lajur (headings) ini *tepat-tepat* seperti di bawah:</p>
@@ -193,20 +165,10 @@
                             </div>
                         </details>
                         
-                        <!-- URL API kini tersembunyi (type="hidden") -->
                         <input type="hidden" id="sheetdb-url" value="https://sheetdb.io/api/v1/VJ0QYRSKTFYY0">
                         
-                        <!-- Bahagian input URL yang asal telah dibuang -->
-                        <!-- 
-                        <div>
-                            <label for="sheetdb-url" class="block text-sm font-medium text-gray-700">URL API SheetDB</label>
-                            <input type="text" id="sheetdb-url" value="https://sheetdb.io/api/v1/VJ0QYRSKTFYY0" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" placeholder="https://sheetdb.io/api/v1/...">
-                        </div> 
-                        -->
-
                         <div class="mt-4">
                             <button type="button" id="hantar-sheet-btn" class="w-full inline-flex justify-center items-center rounded-md bg-green-600 px-4 py-3 text-base font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600">
-                                <!-- Ikon Hantar -->
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
                                   <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009.175 17V5.106l4.8 1.371a1 1 0 001.169-1.409l-7-14z" />
                                 </svg>
@@ -214,20 +176,14 @@
                             </button>
                         </div>
                         
-                        <!-- Mesej status tersembunyi -->
                         <div id="sheet-status-mesej" class="mt-3 text-sm font-medium text-green-700 hidden"></div>
                     </div>
-                    <!-- === TAMAT BAHAGIAN BARU === -->
-                    
-                </form>
+                    </form>
             </div>
 
-            <!-- Bahagian Pratonton (Kanan) telah dibuang -->
-
-        </div>
+            </div>
     </div>
 
-    <!-- Skrip JavaScript untuk logik automatik IC -->
     <script type="module">
         // Pastikan DOM dimuat sepenuhnya sebelum menjalankan skrip
         document.addEventListener('DOMContentLoaded', () => {
