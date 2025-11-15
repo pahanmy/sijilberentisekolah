@@ -123,10 +123,20 @@
     
     <div id="app-container" class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8 print-hidden">
         <h1 class="text-3xl font-bold text-center text-purple-700 mb-6">Senarai Cetakan Surat Akuan & Sijil Khas</h1>
-        <p class="text-center text-gray-600 mb-6">
+        <p class="text-center text-gray-600 mb-4">
             Pilih murid di bawah untuk mencetak dokumen gabungan (2 halaman).
         </p>
         
+        <div class="text-center mb-6">
+            <button type="button" onclick="cetakPukal()" id="cetak-pukal-btn"
+               class="inline-flex items-center rounded-md bg-pink-600 px-6 py-2 text-sm font-semibold text-white shadow-lg hover:bg-pink-700 disabled:opacity-50 transition duration-150">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5 mr-2">
+                    <path fill-rule="evenodd" d="M5 2.75C5 1.784 5.784 1 6.75 1h6.5c.966 0 1.75.784 1.75 1.75v3.5A2.75 2.75 0 0112.5 9H7.5A2.75 2.75 0 014.75 6.25v-3.5zm3.25 2a.75.75 0 000 1.5h3.5a.75.75 0 000-1.5h-3.5z" clip-rule="evenodd" />
+                    <path d="M4 9.5a2.75 2.75 0 012.75-2.75h6.5A2.75 2.75 0 0116 9.5v5.75c0 1.487-1.207 2.71-2.75 2.71H6.75C5.207 18 4 16.787 4 15.25V9.5zM12 11a.75.75 0 01.75.75v.5a.75.75 0 01-1.5 0v-.5a.75.75 0 01.75-.75zm-2 0a.75.75 0 01.75.75v.5a.75.75 0 01-1.5 0v-.5a.75.75 0 01.75-.75zm-3.25.75a.75.75 0 000 1.5h.5a.75.75 0 000-1.5h-.5z" />
+                </svg>
+                CETAK PUKAL SEMUA MURID
+            </button>
+        </div>
         <div class="bg-white rounded-lg shadow-xl overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="min-w-full divide-y divide-gray-200">
@@ -322,6 +332,7 @@
         const loadingMsg = document.getElementById('loading-msg');
         const jadualBody = document.getElementById('jadual-murid');
         const printArea = document.getElementById('print-area');
+        const cetakPukalBtn = document.getElementById('cetak-pukal-btn');
 
         // Fungsi Pembantu
         const formatTarikh = (tarikhStr) => {
@@ -354,7 +365,6 @@
             // Logik kotak semak untuk Jawatan Khas (Halaman 1)
             const generateJawatanRow = (key, title, jawatanColumn) => {
                 const jenisJawatan = penilaian[key] || 'N/A';
-                // Cek kandungan field Jawatan 1 hingga 5
                 const isKetua = jenisJawatan.toUpperCase().includes('KETUA');
                 const isPenolong = jenisJawatan.toUpperCase().includes('PENOLONG') || jenisJawatan.toUpperCase().includes('SETIAUSAHA') || jenisJawatan.toUpperCase().includes('BENDAHARI') || jenisJawatan.toUpperCase().includes('BIRO');
                 
@@ -407,7 +417,6 @@
 
                 // Fungsi untuk memasukkan tanda semak ke dalam sel jadual/div kotak
                 const checkGred = (gred, program, doc) => {
-                    // Cari sama ada ia sel <td> (Halaman 1) atau div kotak (Halaman 2)
                     const target = doc.querySelector(`[data-prog="${program}"][data-gred="${gred}"]`);
 
                     if (target && gred && gred.trim() !== '' && gred.toUpperCase() !== 'N/A' && gred.toUpperCase() !== 'TIADA DATA') {
@@ -480,13 +489,11 @@
 
             return tempDiv.innerHTML;
         };
-
-        // Fungsi Cetak Individu (Dipanggil dari jadual)
-        window.cetakDokumenGabungan = (index) => {
-            const murid = dataMuridGlobal[index];
+        
+        // Fungsi untuk mendapatkan data penilaian (termasuk nilai default jika tiada)
+        const getPenilaianData = (murid) => {
             const penilaian = cariRekodPenilaian(murid.IC) || {};
             
-            // --- Set Nilai Lalai jika Tiada Penilaian ---
             if (!penilaian || !penilaian.Akademik) {
                 // Default values if no comprehensive record exists
                 penilaian.Akademik = 'TIADA DATA'; 
@@ -496,14 +503,56 @@
                 penilaian.Kesopanan = 'Baik'; penilaian.Disiplin = 'Baik';
                 penilaian['Peratus Kehadiran'] = '100';
                 penilaian.Catatan = 'TIADA DATA PENILAIAN GURU DIREKODKAN.';
-                // Default Gred Sijil Khas
                 penilaian['Lencana Bintang'] = 'Baik'; 
                 penilaian['Program Nilam'] = '5 Bintang'; 
                 penilaian['Prestasi Kehadiran Sijil Khas'] = 'Cemerlang';
                 penilaian['Jawatan Khas Lain'] = '';
                 for(let i=1; i<=5; i++) { penilaian[`Jawatan ${i}`] = 'N/A'; }
             }
+            return penilaian;
+        }
+
+        // FUNGSI BARU: CETAK PUKAL SEMUA MURID
+        window.cetakPukal = () => {
+            if (dataMuridGlobal.length === 0) {
+                alert("Tiada data murid untuk dicetak.");
+                return;
+            }
             
+            cetakPukalBtn.disabled = true;
+            cetakPukalBtn.innerText = "Memproses Cetakan...";
+
+            let combinedHtml = '';
+
+            // Gabungkan HTML untuk semua murid
+            dataMuridGlobal.forEach(murid => {
+                const penilaian = getPenilaianData(murid);
+                combinedHtml += generateDocumentHtml(murid, penilaian);
+            });
+
+            // 1. Masukkan HTML gabungan ke dalam bekas cetakan
+            printArea.innerHTML = combinedHtml;
+            printArea.classList.remove('hidden');
+            
+            // 2. Panggil dialog cetak
+            alert(`Sedia untuk mencetak ${dataMuridGlobal.length} set dokumen (Halaman: ${dataMuridGlobal.length * 2}).\n\nSila semak pratinjau cetakan dan pastikan skala ditetapkan kepada 76% atau 90% (mengikut kesesuaian cetakan anda).`);
+
+            window.print();
+            
+            // 3. Bersihkan selepas cetak
+            setTimeout(() => {
+                printArea.innerHTML = '';
+                printArea.classList.add('hidden');
+                cetakPukalBtn.disabled = false;
+                cetakPukalBtn.innerText = "CETAK PUKAL SEMUA MURID";
+            }, 500);
+        };
+        
+        // FUNGSI SEDIA ADA: CETAK INDIVIDU
+        window.cetakDokumenGabungan = (index) => {
+            const murid = dataMuridGlobal[index];
+            const penilaian = getPenilaianData(murid);
+
             // Dapatkan HTML gabungan
             const htmlToPrint = generateDocumentHtml(murid, penilaian);
 
@@ -512,7 +561,7 @@
             printArea.classList.remove('hidden');
             
             // 2. Panggil dialog cetak
-            // Peringatan cetak telah dibuang seperti yang diminta.
+            // Tiada peringatan dialog, hanya cetus cetakan.
             window.print();
             
             // 3. Bersihkan selepas cetak
@@ -551,6 +600,7 @@
             } catch (error) {
                 console.error('Ralat Muat Data:', error);
                 loadingMsg.innerText = `RALAT: ${error.message}. Sila semak URL API.`;
+                cetakPukalBtn.disabled = true; // Disable pukal jika gagal muat data
             }
         };
         
@@ -558,6 +608,7 @@
         const paparkanJadual = () => {
             if (dataMuridGlobal.length === 0) {
                 jadualBody.innerHTML = `<tr><td colspan="5" class="px-6 py-12 text-center text-gray-500">Tiada data murid lengkap di dalam sistem.</td></tr>`;
+                cetakPukalBtn.disabled = true;
                 return;
             }
 
@@ -584,6 +635,7 @@
             });
             jadualBody.innerHTML = htmlContent;
             loadingMsg.classList.add('hidden');
+            cetakPukalBtn.disabled = false;
         };
 
         document.addEventListener('DOMContentLoaded', muatData);
