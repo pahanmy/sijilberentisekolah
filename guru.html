@@ -85,16 +85,46 @@
             Semak data murid yang telah dihantar ke Google Sheet.
         </p>
 
+        <!-- === KOTAK ANALISIS STATUS (BARU) === -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div class="bg-white p-4 rounded-lg shadow-md border-b-4 border-indigo-400">
+                <p class="text-xs font-medium text-gray-500">Jumlah Murid</p>
+                <p id="analisis-jumlah" class="text-2xl font-bold text-indigo-700">0</p>
+            </div>
+            <div class="bg-white p-4 rounded-lg shadow-md border-b-4 border-green-400">
+                <p class="text-xs font-medium text-gray-500">Selesai Dinilai</p>
+                <p id="analisis-selesai" class="text-2xl font-bold text-green-700">0</p>
+            </div>
+            <div class="bg-white p-4 rounded-lg shadow-md border-b-4 border-red-400">
+                <p class="text-xs font-medium text-gray-500">Belum Dinilai</p>
+                <p id="analisis-belum" class="text-2xl font-bold text-red-600">0</p>
+            </div>
+        </div>
+        
         <!-- Kontena untuk Butang Muat Semula dan Status -->
-        <div class="flex justify-between items-center mb-4">
-            <button type="button" id="muat-data-btn" class="inline-flex items-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-md hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 transition duration-150 ease-in-out">
+        <div class="flex flex-wrap justify-between items-center mb-4 space-y-3 sm:space-y-0">
+            
+            <button type="button" id="muat-data-btn" class="inline-flex items-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-md hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 transition duration-150 ease-in-out order-1 w-full sm:w-auto">
                 <!-- Ikon 'Refresh' -->
                 <svg id="muat-ikon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
                     <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101A7.002 7.002 0 0112.001 4c3.865 0 7 3.134 7 7s-3.135 7-7 7-7-3.134-7-7c0-1.554.506-3.018 1.39-4.215l1.415 1.414A4.982 4.982 0 007.001 11c0 2.757 2.243 5 5 5s5-2.243 5-5-2.243-5-5-5a4.984 4.984 0 00-4.23 2.508l2.13.001a1 1 0 010 2H4.001a1 1 0 01-1-1V3a1 1 0 011-1z" clip-rule="evenodd" />
                 </svg>
                 <span id="muat-teks">Muat Semula Data</span>
             </button>
-            <div id="status-mesej" class="text-sm font-medium text-gray-600"></div>
+            
+            <!-- Butang Pautan Sheet (BARU) -->
+            <div class="flex items-center space-x-2 order-3 sm:order-2 w-full sm:w-auto justify-center sm:justify-start">
+                <a href="https://docs.google.com/spreadsheets/d/1vI6gHBDzU8qSap1wxrub0VDYf8uCVyVZRzcUzEVRbEc/edit?usp=sharing" target="_blank" title="Lihat Data Pengisian Borang Murid" class="inline-flex items-center rounded-md bg-gray-500 px-3 py-2 text-xs font-semibold text-white shadow-sm hover:bg-gray-600 transition duration-150">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><path d="M12 18v-6"/><path d="M9 15h6"/></svg>
+                    Data Murid
+                </a>
+                <a href="https://docs.google.com/spreadsheets/d/18vpqeqMOwrCVwyjZUOVO_fsYX2bpzQPzOUhPbNqTERA/edit?usp=sharing" target="_blank" title="Lihat Data Penilaian Guru" class="inline-flex items-center rounded-md bg-yellow-600 px-3 py-2 text-xs font-semibold text-white shadow-sm hover:bg-yellow-700 transition duration-150">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+                    Penilaian Guru
+                </a>
+            </div>
+
+            <div id="status-mesej" class="text-sm font-medium text-gray-600 order-2 sm:order-3 w-full text-center sm:text-right"></div>
         </div>
 
         <!-- Kontena Jadual dengan 'overflow' untuk responsif -->
@@ -424,12 +454,21 @@
         let dataMuridGlobal = []; 
         let dataPenilaianGlobal = []; // Untuk menyimpan semua data penilaian guru
 
+        // URL Pautan Google Sheet (BARU)
+        const URL_SHEET_MURID = "https://docs.google.com/spreadsheets/d/1vI6gHBDzU8qSap1wxrub0VDYf8uCVyVZRzcUzEVRbEc/edit?usp=sharing";
+        const URL_SHEET_PENILAIAN = "https://docs.google.com/spreadsheets/d/18vpqeqMOwrCVwyjZUOVO_fsYX2bpzQPzOUhPbNqTERA/edit?usp=sharing";
+
         // Dapatkan elemen DOM
         const muatDataBtn = document.getElementById('muat-data-btn');
         const muatIkon = document.getElementById('muat-ikon');
         const muatTeks = document.getElementById('muat-teks');
         const jadualBody = document.getElementById('jadual-murid');
         const statusMesej = document.getElementById('status-mesej');
+        
+        // Analisis DOM (BARU)
+        const analisisJumlah = document.getElementById('analisis-jumlah');
+        const analisisSelesai = document.getElementById('analisis-selesai');
+        const analisisBelum = document.getElementById('analisis-belum');
         
         // Elemen Modal Penilaian Tunggal
         const penilaianMuridModal = document.getElementById('penilaian-murid-modal');
