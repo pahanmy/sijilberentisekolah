@@ -367,6 +367,7 @@
             tempDiv.innerHTML = htmlContent;
 
             // --- 3. ISI DATA KE DALAM KEDUA-DUA TEMPLAT ---
+            // Fix: Cari elemen menggunakan data-page attribute, bukan ID template div.
             const akuanDoc = tempDiv.querySelector('[data-page="akuan"]');
             const sijilKhasDoc = tempDiv.querySelector('[data-page="sijil-khas"]');
 
@@ -379,8 +380,9 @@
                 // Fungsi untuk memasukkan tanda semak ke dalam sel jadual
                 const checkGred = (gred, program, doc) => {
                     const target = doc.querySelector(`[data-prog="${program}"][data-gred="${gred}"]`);
-                    if (target) {
-                        target.innerHTML = '✔'; // Masukkan tanda semak
+                    // Hanya masukkan tanda semak jika gred wujud dan sepadan
+                    if (target && gred && gred.trim() !== '' && gred.toUpperCase() !== 'N/A' && gred.toUpperCase() !== 'TIADA DATA') {
+                        target.innerHTML = '✔'; 
                     }
                 };
 
@@ -391,6 +393,7 @@
                     querySelectorSafe('[data-id="sijil-khas-tingkatan"]').innerText = murid['Tingkatan Tertinggi'] || 'N/A';
                     querySelectorSafe('[data-id="sijil-tahun-khas"]').innerText = new Date().getFullYear(); 
                     
+                    // Logik Kotak Semak Sijil Khas
                     checkGred(penilaian['Lencana Bintang'], 'Lencana Bintang', docElement);
                     checkGred(penilaian['Program Nilam'], 'Nilam', docElement);
                     checkGred(penilaian['Prestasi Kehadiran Sijil Khas'], 'Hadir', docElement);
@@ -409,7 +412,7 @@
                     querySelectorSafe('[data-id="akuan-warganegara"]').innerText = murid.Warganegara || 'MALAYSIA';
                     querySelectorSafe('[data-id="akuan-sebab-berhenti"]').innerText = murid['Sebab Berhenti'] || 'TAMAT TINGKATAN LIMA';
                     
-                    // Akademik (Bukan Jadual)
+                    // Akademik
                     querySelectorSafe('[data-id="akuan-akademik"]').innerText = penilaian.Akademik || 'BAIK';
                     
                     // Kualiti Peribadi (Jadual Kotak Semak)
