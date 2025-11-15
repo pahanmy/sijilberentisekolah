@@ -18,6 +18,41 @@
         .animate-spin-slow {
             animation: spin 1.5s linear infinite;
         }
+        /* Styling untuk Modal */
+        .modal-overlay {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+        .modal-body-scroll {
+            max-height: 85vh; /* Hadkan ketinggian modal agar boleh discroll */
+            overflow-y: auto;
+        }
+        /* Style untuk jadual modal */
+        .modal-table th, .modal-table td {
+            padding: 10px 8px; /* Lebih padding */
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 0.875rem; /* text-sm */
+        }
+        .modal-table thead th {
+            font-weight: 700; /* Bold */
+            background-color: #eef2ff; /* Indigo-50 */
+            color: #3730a3; /* Indigo-800 */
+        }
+        /* Penyesuaian Radio Button */
+        .custom-radio {
+            appearance: none;
+            width: 1rem;
+            height: 1rem;
+            border: 2px solid #9ca3af; /* Gray-400 */
+            border-radius: 50%;
+            transition: all 0.15s ease-in-out;
+            cursor: pointer;
+        }
+        .custom-radio:checked {
+            border-color: #4f46e5; /* Indigo-600 */
+            background-color: #4f46e5;
+            box-shadow: 0 0 0 2px white, 0 0 0 4px #4f46e5;
+        }
     </style>
 </head>
 <body class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 text-gray-800">
@@ -67,15 +102,227 @@
         </div>
         
         <p class="text-xs text-gray-500 text-center mt-4">
-            Nota: Pautan butang "Tindakan" di bawah adalah contoh dan belum berfungsi sepenuhnya sehingga pautan borang disediakan.
+            Nota: Pautan butang "Tindakan" di bawah adalah contoh.
         </p>
 
     </div>
 
+    <!-- === MODAL SURAT AKUAN (BARU) === -->
+    <div id="surat-akuan-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4 hidden modal-overlay">
+        <!-- Modal Content (Lebar lebih besar untuk borang) -->
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-4xl modal-body-scroll">
+            <div class="p-6 sm:p-8">
+                <h3 class="text-2xl font-bold text-indigo-700 border-b border-indigo-200 pb-3 mb-4">Pengisian Surat Akuan Sekolah</h3>
+                
+                <form id="surat-akuan-form" class="mt-4 space-y-6">
+                    <!-- Maklumat Asas Murid -->
+                    <div class="p-4 border border-indigo-200 rounded-lg bg-indigo-50/50 space-y-1">
+                        <p class="text-sm font-medium">Nama Murid: <span id="modal-nama-murid" class="font-semibold text-indigo-800"></span></p>
+                        <p class="text-sm font-medium">No. K/P: <span id="modal-ic-murid" class="font-semibold text-indigo-800"></span></p>
+                        <p class="text-sm font-medium">Tempoh Sekolah: <span id="modal-tempoh-sekolah" class="font-semibold text-indigo-800"></span></p>
+                        <p class="text-sm font-medium">Tingkatan Tertinggi: <span id="modal-tingkatan" class="font-semibold text-indigo-800"></span></p>
+                        <!-- Maklumat penting yang disembunyikan untuk proses penghantaran data -->
+                        <input type="hidden" id="modal-ic-hidden"> 
+                        <input type="hidden" id="modal-tarikh-masuk">
+                        <input type="hidden" id="modal-tarikh-berhenti">
+                    </div>
+
+                    <!-- Bahagian A: Prestasi Akademik (Tukar ke Radio Button) -->
+                    <h4 class="text-lg font-semibold text-gray-800 mt-4">A. Prestasi Akademik</h4>
+                    <div class="flex flex-wrap items-center gap-6 p-3 bg-white border border-gray-200 rounded-lg shadow-sm">
+                        <label class="text-sm font-medium text-gray-700">Pencapaian:</label>
+                        <div class="flex items-center space-x-4">
+                            <!-- Butang Cemerlang -->
+                            <label class="flex items-center space-x-1 cursor-pointer">
+                                <input type="radio" name="prestasi-akademik" value="Cemerlang" class="custom-radio">
+                                <span class="text-sm">Cemerlang</span>
+                            </label>
+                            <!-- Butang Baik (Default) -->
+                            <label class="flex items-center space-x-1 cursor-pointer">
+                                <input type="radio" name="prestasi-akademik" value="Baik" class="custom-radio" checked>
+                                <span class="text-sm">Baik</span>
+                            </label>
+                            <!-- Butang Memuaskan -->
+                            <label class="flex items-center space-x-1 cursor-pointer">
+                                <input type="radio" name="prestasi-akademik" value="Memuaskan" class="custom-radio">
+                                <span class="text-sm">Memuaskan</span>
+                            </label>
+                            <!-- Butang Tidak Memuaskan -->
+                            <label class="flex items-center space-x-1 cursor-pointer">
+                                <input type="radio" name="prestasi-akademik" value="Tidak Memuaskan" class="custom-radio">
+                                <span class="text-sm">Tidak Memuaskan</span>
+                            </label>
+                        </div>
+                    </div>
+
+
+                    <!-- Bahagian B: Kualiti Peribadi (Gred Radio Buttons, Default Baik) -->
+                    <h4 class="text-lg font-semibold text-gray-800">B. Kualiti Peribadi</h4>
+                    <div class="overflow-x-auto border rounded-lg shadow-sm">
+                        <table class="min-w-full modal-table">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="w-1/3">Kualiti</th>
+                                    <th class="text-center">Cemerlang</th>
+                                    <th class="text-center">Baik</th>
+                                    <th class="text-center">Memuaskan</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Data Kualiti Peribadi (Semua ditetapkan kepada Baik) -->
+                                <tr id="row-bertanggungjawab">
+                                    <td>i) Bertanggungjawab</td>
+                                    <td class="text-center"><input type="radio" name="gred-1" value="Cemerlang" class="custom-radio"></td>
+                                    <td class="text-center"><input type="radio" name="gred-1" value="Baik" class="custom-radio" checked></td>
+                                    <td class="text-center"><input type="radio" name="gred-1" value="Memuaskan" class="custom-radio"></td>
+                                </tr>
+                                <tr id="row-dayausaha">
+                                    <td>ii) Daya usaha</td>
+                                    <td class="text-center"><input type="radio" name="gred-2" value="Cemerlang" class="custom-radio"></td>
+                                    <td class="text-center"><input type="radio" name="gred-2" value="Baik" class="custom-radio" checked></td>
+                                    <td class="text-center"><input type="radio" name="gred-2" value="Memuaskan" class="custom-radio"></td>
+                                </tr>
+                                <tr id="row-jujur">
+                                    <td>iii) Jujur</td>
+                                    <td class="text-center"><input type="radio" name="gred-3" value="Cemerlang" class="custom-radio"></td>
+                                    <td class="text-center"><input type="radio" name="gred-3" value="Baik" class="custom-radio" checked></td>
+                                    <td class="text-center"><input type="radio" name="gred-3" value="Memuaskan" class="custom-radio"></td>
+                                </tr>
+                                <tr id="row-keyakinan">
+                                    <td>iv) Keyakinan diri</td>
+                                    <td class="text-center"><input type="radio" name="gred-4" value="Cemerlang" class="custom-radio"></td>
+                                    <td class="text-center"><input type="radio" name="gred-4" value="Baik" class="custom-radio" checked></td>
+                                    <td class="text-center"><input type="radio" name="gred-4" value="Memuaskan" class="custom-radio"></td>
+                                </tr>
+                                <tr id="row-kepimpinan">
+                                    <td>v) Kepimpinan</td>
+                                    <td class="text-center"><input type="radio" name="gred-5" value="Cemerlang" class="custom-radio"></td>
+                                    <td class="text-center"><input type="radio" name="gred-5" value="Baik" class="custom-radio" checked></td>
+                                    <td class="text-center"><input type="radio" name="gred-5" value="Memuaskan" class="custom-radio"></td>
+                                </tr>
+                                <tr id="row-kesopanan">
+                                    <td>vi) Kesopanan</td>
+                                    <td class="text-center"><input type="radio" name="gred-6" value="Cemerlang" class="custom-radio"></td>
+                                    <td class="text-center"><input type="radio" name="gred-6" value="Baik" class="custom-radio" checked></td>
+                                    <td class="text-center"><input type="radio" name="gred-6" value="Memuaskan" class="custom-radio"></td>
+                                </tr>
+                                <tr id="row-disiplin">
+                                    <td>vii) Disiplin</td>
+                                    <td class="text-center"><input type="radio" name="gred-7" value="Cemerlang" class="custom-radio"></td>
+                                    <td class="text-center"><input type="radio" name="gred-7" value="Baik" class="custom-radio" checked></td>
+                                    <td class="text-center"><input type="radio" name="gred-7" value="Memuaskan" class="custom-radio"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Bahagian C: Tugas Khas / Jawatan Khas (Checkbox) -->
+                    <h4 class="text-lg font-semibold text-gray-800">C. Tugas Khas / Jawatan Khas (Pilih yang berkaitan)</h4>
+                    <div class="overflow-x-auto border rounded-lg shadow-sm">
+                        <table class="min-w-full modal-table">
+                            <thead>
+                                <tr>
+                                    <th class="w-1/3">Tugas Khas</th>
+                                    <th class="text-center">Ketua</th>
+                                    <th class="text-center">Penolong Ketua/Setiausaha/Bendahari/Ketua Biro</th>
+                                    <th class="text-center">Ahli Jawatankuasa</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Data Tugas Khas -->
+                                <tr id="jaw-1">
+                                    <td>1. Pengawas Sekolah</td>
+                                    <td class="text-center"><input type="radio" name="jaw-1" value="Ketua" class="custom-radio"></td>
+                                    <td class="text-center"><input type="radio" name="jaw-1" value="Penolong" class="custom-radio"></td>
+                                    <td class="text-center"><input type="radio" name="jaw-1" value="Ahli" class="custom-radio"></td>
+                                </tr>
+                                <tr id="jaw-2">
+                                    <td>2. Pengawas Tingkatan</td>
+                                    <td class="text-center"><input type="radio" name="jaw-2" value="Ketua" class="custom-radio"></td>
+                                    <td class="text-center"><input type="radio" name="jaw-2" value="Penolong" class="custom-radio"></td>
+                                    <td class="text-center"><input type="radio" name="jaw-2" value="Ahli" class="custom-radio"></td>
+                                </tr>
+                                <tr id="jaw-3">
+                                    <td>3. Pengawas Asrama</td>
+                                    <td class="text-center"><input type="radio" name="jaw-3" value="Ketua" class="custom-radio"></td>
+                                    <td class="text-center"><input type="radio" name="jaw-3" value="Penolong" class="custom-radio"></td>
+                                    <td class="text-center"><input type="radio" name="jaw-3" value="Ahli" class="custom-radio"></td>
+                                </tr>
+                                <tr id="jaw-4">
+                                    <td>4. Pengawas Kelas</td>
+                                    <td class="text-center"><input type="radio" name="jaw-4" value="Ketua" class="custom-radio"></td>
+                                    <td class="text-center"><input type="radio" name="jaw-4" value="Penolong" class="custom-radio"></td>
+                                    <td class="text-center"><input type="radio" name="jaw-4" value="Ahli" class="custom-radio"></td>
+                                </tr>
+                                <tr id="jaw-5">
+                                    <td>5. Pengawas Perpustakaan</td>
+                                    <td class="text-center"><input type="radio" name="jaw-5" value="Ketua" class="custom-radio"></td>
+                                    <td class="text-center"><input type="radio" name="jaw-5" value="Penolong" class="custom-radio"></td>
+                                    <td class="text-center"><input type="radio" name="jaw-5" value="Ahli" class="custom-radio"></td>
+                                </tr>
+                                <tr id="jaw-6">
+                                    <td>6. Lain-lain (Nyatakan)</td>
+                                    <td colspan="3"><input type="text" id="jaw-lain" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Bahagian D: Kehadiran -->
+                    <h4 class="text-lg font-semibold text-gray-800">D. Kehadiran Sekolah</h4>
+                    <div class="flex items-center space-x-4">
+                        <label for="peratus-hadir" class="text-sm font-medium text-gray-700">Peratus Kehadiran (%):</label>
+                        <input type="number" id="peratus-hadir" value="100" min="0" max="100" class="w-20 rounded-md border-gray-300 shadow-sm text-sm focus:border-indigo-500 focus:ring-indigo-500">
+                    </div>
+                    
+                    <!-- Bahagian E: Catatan -->
+                    <h4 class="text-lg font-semibold text-gray-800">E. Catatan</h4>
+                    <div>
+                        <textarea id="catatan-tambahan" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"></textarea>
+                    </div>
+
+                    <!-- Input tersembunyi untuk menyimpan URL API guru (untuk simpan penilaian) -->
+                    <input type="hidden" id="sheetdb-url-guru" value="https://sheetdb.io/api/v1/ox3yu9lw1ua8g"> <!-- TELAH DIKEMASKINI DENGAN URL BARU -->
+
+                    <!-- Butang Aksi -->
+                    <div class="pt-4 flex justify-end space-x-3 border-t border-gray-200">
+                        <button type="button" id="tutup-modal-btn" class="rounded-md bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 transition duration-150 ease-in-out">
+                            Tutup
+                        </button>
+                        <button type="button" id="simpan-data-btn" class="rounded-md bg-green-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 transition duration-150 ease-in-out">
+                            Simpan Data Penilaian
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- === TAMAT MODAL SURAT AKUAN === -->
+    
+    <!-- === MODAL PENGESAHAN SIMPAN GURU === -->
+    <div id="confirm-simpan-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4 hidden">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-sm p-6">
+            <h3 class="text-lg font-bold text-gray-900">Sahkan Penyimpanan Data</h3>
+            <p class="mt-2 text-sm text-gray-600">Anda pasti ingin menyimpan dan mengemaskini maklumat penilaian Surat Akuan ini?</p>
+            <div class="mt-6 flex justify-end space-x-3">
+                <button type="button" id="batal-simpan-btn" class="rounded-md bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                    Batal
+                </button>
+                <button type="button" id="teruskan-simpan-btn" class="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">
+                    Ya, Simpan
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- === TAMAT MODAL PENGESAHAN SIMPAN GURU === -->
+
+
     <!-- Skrip JavaScript untuk memuat data dari SheetDB -->
     <script type="module">
-        // URL API SheetDB yang sama seperti borang murid
-        const sheetDBUrl = "https://sheetdb.io/api/v1/VJ0QYRSKTFYY0";
+        // URL API SheetDB untuk data murid (sumber data jadual)
+        const sheetDBUrlMurid = "https://sheetdb.io/api/v1/VJ0QYRSKTFYY0"; 
+        // Pembolehubah untuk menyimpan semua data murid yang dimuatkan
+        let dataMuridGlobal = []; 
 
         // Dapatkan elemen DOM
         const muatDataBtn = document.getElementById('muat-data-btn');
@@ -83,22 +330,256 @@
         const muatTeks = document.getElementById('muat-teks');
         const jadualBody = document.getElementById('jadual-murid');
         const statusMesej = document.getElementById('status-mesej');
+        
+        // Elemen Modal Surat Akuan
+        const suratAkuanModal = document.getElementById('surat-akuan-modal');
+        const tutupModalBtn = document.getElementById('tutup-modal-btn');
+        
+        // Elemen Borang & Butang Simpan
+        const simpanDataBtn = document.getElementById('simpan-data-btn');
+        const suratAkuanForm = document.getElementById('surat-akuan-form');
 
-        // Fungsi untuk memuat dan memaparkan data
+        // Elemen Modal Pengesahan Simpan
+        const confirmSimpanModal = document.getElementById('confirm-simpan-modal');
+        const batalSimpanBtn = document.getElementById('batal-simpan-btn');
+        const teruskanSimpanBtn = document.getElementById('teruskan-simpan-btn');
+        
+        // Tutup modal bila butang 'Tutup' diklik
+        if (tutupModalBtn) {
+            tutupModalBtn.addEventListener('click', () => {
+                suratAkuanModal.classList.add('hidden');
+            });
+        }
+        // Tutup modal bila overlay diklik (pilihan)
+        if (suratAkuanModal) {
+             suratAkuanModal.addEventListener('click', (e) => {
+                const modalContent = suratAkuanModal.querySelector('.bg-white');
+                if (modalContent && !modalContent.contains(e.target)) {
+                    suratAkuanModal.classList.add('hidden');
+                }
+            });
+        }
+
+        // Fungsi untuk format tarikh (YYYY-MM-DD -> DD/MM/YYYY)
+        const formatTarikh = (tarikhStr) => {
+            if (!tarikhStr) return '';
+            const [tahun, bulan, hari] = tarikhStr.split('-');
+            if (tahun && bulan && hari) {
+                // Format kepada DD/MM/YYYY (gaya yang biasa digunakan dalam dokumen)
+                return `${hari}/${bulan}/${tahun}`;
+            }
+            return tarikhStr; // Pulangkan asal jika format salah
+        };
+        
+        // Fungsi untuk paparkan mesej status sementara di dalam jadual guru
+        const tunjukStatusGuru = (mesej, jenis = 'info') => {
+            if (!statusMesej) return;
+            statusMesej.innerText = mesej;
+            statusMesej.classList.remove('text-red-600', 'text-green-700', 'text-gray-600');
+            if (jenis === 'gagal') {
+                statusMesej.classList.add('text-red-600');
+            } else if (jenis === 'berjaya') {
+                statusMesej.classList.add('text-green-700');
+            } else {
+                statusMesej.classList.add('text-gray-600');
+            }
+
+            // Sembunyikan selepas 5 saat jika bukan loading
+            if (jenis !== 'loading') {
+                setTimeout(() => {
+                    statusMesej.innerText = 'Sedia.';
+                    statusMesej.classList.remove('text-red-600', 'text-green-700');
+                    statusMesej.classList.add('text-gray-600');
+                }, 5000);
+            }
+        };
+
+        // Fungsi untuk memaparkan modal Surat Akuan
+        window.paparModalSuratAkuan = (index) => {
+            const murid = dataMuridGlobal[index];
+            if (!murid) {
+                console.error("Data murid tidak ditemui.");
+                return;
+            }
+
+            // Dapatkan elemen dalam modal
+            document.getElementById('modal-nama-murid').innerText = murid['Nama Murid'] || 'N/A';
+            document.getElementById('modal-ic-murid').innerText = murid['IC'] || 'N/A';
+            document.getElementById('modal-tingkatan').innerText = murid['Tingkatan Tertinggi'] || 'N/A';
+            
+            const tarikhMasuk = formatTarikh(murid['Tarikh Masuk']);
+            const tarikhBerhenti = formatTarikh(murid['Tarikh Berhenti']);
+
+            // Simpan maklumat penting dalam hidden field untuk proses penghantaran
+            document.getElementById('modal-ic-hidden').value = murid['IC'] || '';
+            document.getElementById('modal-tarikh-masuk').value = murid['Tarikh Masuk'] || '';
+            document.getElementById('modal-tarikh-berhenti').value = murid['Tarikh Berhenti'] || '';
+
+            // Paparkan tempoh sekolah (Contoh: 20/01/2021 hingga 19/12/2025)
+            document.getElementById('modal-tempoh-sekolah').innerText = `${tarikhMasuk} hingga ${tarikhBerhenti}`;
+
+            // Reset borang gred/jawatan setiap kali modal dibuka (Ini juga menetapkan lalai 'Baik' semula)
+            document.getElementById('surat-akuan-form').reset();
+            
+            // Set lalai untuk Prestasi Akademik kepada 'Baik'
+            const prestasiAkademikRadios = document.querySelectorAll('input[name="prestasi-akademik"]');
+            prestasiAkademikRadios.forEach(radio => {
+                if (radio.value === 'Baik') {
+                    radio.checked = true;
+                }
+            });
+
+            // Tunjukkan modal
+            suratAkuanModal.classList.remove('hidden');
+        };
+
+        // Fungsi utama untuk mengumpul, menyimpan data, dan menjana surat (pencetakan)
+        const lakukanSimpanData = async () => {
+            
+            // Dapatkan URL API penilaian guru
+            const sheetDBUrlGuruInput = document.getElementById('sheetdb-url-guru');
+            const apiUrl = sheetDBUrlGuruInput.value;
+
+            // Kumpulan data
+            const getRadioValue = (name) => {
+                const radioChecked = document.querySelector(`input[name="${name}"]:checked`);
+                return radioChecked ? radioChecked.value : '';
+            };
+
+            const kualitiPeribadiValues = [];
+            for (let i = 1; i <= 7; i++) {
+                kualitiPeribadiValues.push(getRadioValue(`gred-${i}`));
+            }
+            
+            const jawatanKhasValues = [];
+            for (let i = 1; i <= 5; i++) {
+                jawatanKhasValues.push(getRadioValue(`jaw-${i}`));
+            }
+            
+            // Data yang akan dihantar ke SheetDB (Pastikan kunci sepadan dengan Lajur Sheet!)
+            const dataHantar = {
+                // Maklumat Asas
+                'IC': document.getElementById('modal-ic-hidden').value,
+                'Nama Murid': document.getElementById('modal-nama-murid').innerText,
+                'Tingkatan': document.getElementById('modal-tingkatan').innerText,
+                'Tarikh Masuk': document.getElementById('modal-tarikh-masuk').value,
+                'Tarikh Berhenti': document.getElementById('modal-tarikh-berhenti').value,
+                
+                // Bahagian A: Akademik
+                'Akademik': getRadioValue('prestasi-akademik'),
+                
+                // Bahagian B: Kualiti Peribadi
+                'Bertanggungjawab': kualitiPeribadiValues[0],
+                'Daya Usaha': kualitiPeribadiValues[1],
+                'Jujur': kualitiPeribadiValues[2],
+                'Keyakinan Diri': kualitiPeribadiValues[3],
+                'Kepimpinan': kualitiPeribadiValues[4],
+                'Kesopanan': kualitiPeribadiValues[5],
+                'Disiplin': kualitiPeribadiValues[6],
+
+                // Bahagian C: Jawatan Khas
+                'Jawatan 1': jawatanKhasValues[0], // Pengawas Sekolah
+                'Jawatan 2': jawatanKhasValues[1], // Pengawas Tingkatan
+                'Jawatan 3': jawatanKhasValues[2], // Pengawas Asrama
+                'Jawatan 4': jawatanKhasValues[3], // Pengawas Kelas
+                'Jawatan 5': jawatanKhasValues[4], // Pengawas Perpustakaan
+                'Jawatan Khas Lain': document.getElementById('jaw-lain').value,
+
+                // Bahagian D & E
+                'Peratus Kehadiran': document.getElementById('peratus-hadir').value,
+                'Catatan': document.getElementById('catatan-tambahan').value,
+            };
+
+            // 1. Validasi URL API Guru
+            if (!apiUrl || !apiUrl.startsWith('https://sheetdb.io/api/v1/')) {
+                alert("RALAT: URL API Penilaian Guru tidak sah. Sila semak semula kod.");
+                return false;
+            }
+
+            // 2. Lakukan Penghantaran Data ke SheetDB Penilaian Guru
+            simpanDataBtn.disabled = true;
+            simpanDataBtn.innerText = "Menyimpan...";
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ data: dataHantar })
+                });
+
+                const result = await response.json();
+
+                if (result.created) {
+                    // Berjaya disimpan!
+                    tutupModal(suratAkuanModal);
+                    tunjukStatusGuru("Maklumat Penilaian Berjaya Disimpan dan Dikemaskini.", 'berjaya');
+                    return true;
+                } else {
+                    console.error('Ralat SheetDB (Simpan Guru):', result);
+                    tunjukStatusGuru("RALAT: Gagal menyimpan data penilaian. Sila semak konsol.", 'gagal');
+                    return false;
+                }
+            } catch (error) {
+                console.error('Ralat Fetch (Simpan Guru):', error);
+                tunjukStatusGuru("RALAT: Ralat sambungan berlaku. Gagal menyimpan data penilaian.", 'gagal');
+                return false;
+            } finally {
+                simpanDataBtn.disabled = false;
+                simpanDataBtn.innerText = "Simpan Data Penilaian";
+            }
+        };
+        
+        const tutupModal = (modalElement) => {
+            if (modalElement) modalElement.classList.add('hidden');
+        }
+
+        // --- PENGENDALI ACARA BUTANG SIMPAN ---
+
+        // 1. Apabila butang 'Simpan Data Penilaian' diklik (Tunjuk Modal Pengesahan)
+        if (simpanDataBtn) {
+            simpanDataBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                tutupModal(suratAkuanModal); // Sembunyikan modal borang
+                confirmSimpanModal.classList.remove('hidden'); // Tunjukkan modal pengesahan
+            });
+        }
+        
+        // 2. Apabila butang 'Batal' dalam modal pengesahan diklik
+        if (batalSimpanBtn) {
+            batalSimpanBtn.addEventListener('click', () => {
+                tutupModal(confirmSimpanModal); // Tutup modal pengesahan
+                suratAkuanModal.classList.remove('hidden'); // Tunjukkan semula modal borang
+            });
+        }
+
+        // 3. Apabila butang 'Ya, Simpan' dalam modal pengesahan diklik (Lakukan Penghantaran)
+        if (teruskanSimpanBtn) {
+            teruskanSimpanBtn.addEventListener('click', () => {
+                tutupModal(confirmSimpanModal); // Tutup modal pengesahan
+                lakukanSimpanData();
+            });
+        }
+        
+        // Fungsi untuk memuat dan memaparkan data murid (sama seperti sebelumnya)
         const muatDataMurid = async () => {
             // Tunjukkan status 'loading'
-            statusMesej.innerText = "Memuatkan data murid...";
-            statusMesej.classList.remove('text-red-600');
+            tunjukStatusGuru("Memuatkan data murid...", 'loading');
             muatIkon.classList.add('animate-spin-slow');
             muatTeks.innerText = "Memuatkan...";
             muatDataBtn.disabled = true;
 
             try {
-                const response = await fetch(sheetDBUrl);
+                const response = await fetch(sheetDBUrlMurid);
                 if (!response.ok) {
                     throw new Error(`Ralat Rangkaian: ${response.statusText}`);
                 }
                 const data = await response.json();
+                
+                // Simpan data ke pembolehubah global
+                dataMuridGlobal = data; 
 
                 // Kosongkan jadual sedia ada
                 jadualBody.innerHTML = '';
@@ -106,15 +587,13 @@
                 if (data.length === 0) {
                     // Paparkan mesej jika tiada data
                     jadualBody.innerHTML = `<tr><td colspan="5" class="px-6 py-12 text-center text-gray-500">Tiada data murid ditemui.</td></tr>`;
-                    statusMesej.innerText = "Tiada data.";
+                    tunjukStatusGuru("Tiada data.");
                 } else {
                     // Isikan jadual dengan data murid
                     data.forEach((murid, index) => {
                         const tr = document.createElement('tr');
                         tr.className = "hover:bg-gray-50 transition duration-150";
                         
-                        // Cipta pautan tindakan (sebagai placeholder)
-                        // Kita akan gunakan IC murid untuk pautan (jika ada)
                         const icMurid = murid['IC'] || '';
                         
                         tr.innerHTML = `
@@ -127,21 +606,21 @@
                                    class="inline-flex items-center rounded-md bg-blue-500 px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-blue-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500">
                                     Sijil Pencapaian Khas
                                 </a>
-                                <a href="#" onclick="return false;" title="Pautan Surat Akuan (Belum Sedia)"
-                                   class="inline-flex items-center rounded-md bg-green-500 px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-green-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-500">
+                                <!-- Butang Surat Akuan yang memanggil fungsi JS -->
+                                <button type="button" onclick="paparModalSuratAkuan(${index})" title="Buka Borang Surat Akuan"
+                                   class="inline-flex items-center rounded-md bg-green-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600">
                                     Surat Akuan
-                                </a>
+                                </button>
                             </td>
                         `;
                         jadualBody.appendChild(tr);
                     });
-                    statusMesej.innerText = `Berjaya memuatkan ${data.length} rekod.`;
+                    tunjukStatusGuru(`Berjaya memuatkan ${data.length} rekod.`);
                 }
 
             } catch (error) {
                 console.error('Gagal memuatkan data:', error);
-                statusMesej.innerText = "Gagal memuatkan data. Sila semak konsol.";
-                statusMesej.classList.add('text-red-600');
+                tunjukStatusGuru("Gagal memuatkan data. Sila semak konsol.", 'gagal');
                 jadualBody.innerHTML = `<tr><td colspan="5" class="px-6 py-12 text-center text-red-500">Ralat: Gagal mendapatkan data dari SheetDB.</td></tr>`;
             } finally {
                 // Berhentikan status 'loading'
