@@ -16,14 +16,27 @@
             border-color: #6366f1 !important;
         }
         
-        /* === PEMBETULAN KONTRAS UNTUK INPUT READONLY/DISABLED === */
-        /* Tetapkan latar belakang putih untuk kontras yang lebih baik */
-        .input-readonly {
-            background-color: #f8fafc !important; /* light sky-50/100, lebih cerah daripada bg-gray-50 */
-            color: #1f2937 !important; /* dark text */
-            border: 1px solid #d1d5db !important; /* Gray-300 border */
+        /* === STYLE BARU UNTUK INPUT === */
+        
+        /* Gaya untuk Input yang Boleh Diisi (Untuk Kontras yang Lebih Baik) */
+        .input-aktif {
+            background-color: #f9fafb; /* Gray-50/100 */
+            border: 1px solid #d1d5db; /* Gray-300 */
+        }
+
+        /* Gaya untuk Input Readonly/Disabled (Kontras Jelas & Rupa Berbeza) */
+        .input-readonly-styled {
+            background-color: #ffffff !important; /* Putih */
+            color: #4b5563 !important; /* Gray-600 */
+            border: none !important;
+            border-bottom: 2px solid #9ca3af !important; /* Sempadan bawah yang jelas */
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
             cursor: default;
         }
+        .input-readonly-styled::placeholder {
+            color: #9ca3af; /* Gray-400 */
+        }
+
         /* Style untuk checkbox container */
         .minat-item {
             padding: 5px 0;
@@ -53,35 +66,35 @@
                         <div class="space-y-4">
                             <div>
                                 <label for="no-ic" class="block text-sm font-medium text-gray-700">Nombor IC (12 digit, tanpa -)</label>
-                                <input type="text" id="no-ic" maxlength="12" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="Cth: 050115101234">
+                                <input type="text" id="no-ic" maxlength="12" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 input-aktif" placeholder="Cth: 050115101234">
                             </div>
 
                             <div>
                                 <label for="nama-murid" class="block text-sm font-medium text-gray-700">Nama Murid (Nama Penuh)</label>
-                                <input type="text" id="nama-murid" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                <input type="text" id="nama-murid" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 input-aktif">
                             </div>
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
                                     <label for="tempat-lahir" class="block text-sm font-medium text-gray-700">Tempat Lahir</label>
-                                    <input type="text" id="tempat-lahir" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                    <input type="text" id="tempat-lahir" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 input-aktif">
                                 </div>
                                 <div>
                                     <label for="tarikh-lahir" class="block text-sm font-medium text-gray-700">Tarikh Lahir (Automatik dari IC)</label>
-                                    <input type="date" id="tarikh-lahir" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 input-readonly" readonly>
+                                    <input type="date" id="tarikh-lahir" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 input-readonly-styled" readonly>
                                 </div>
                             </div>
                             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                                 <div>
                                     <label for="jantina" class="block text-sm font-medium text-gray-700">Jantina (Automatik dari IC)</label>
-                                    <input type="text" id="jantina" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 input-readonly" readonly>
+                                    <input type="text" id="jantina" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 input-readonly-styled" readonly>
                                 </div>
                                 <div>
                                     <label for="warganegara" class="block text-sm font-medium text-gray-700">Warganegara / Nationality</label>
-                                    <input type="text" id="warganegara" value="MALAYSIA" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                    <input type="text" id="warganegara" value="MALAYSIA" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 input-aktif">
                                 </div>
                                 <div>
                                     <label for="kumpulan-etnik" class="block text-sm font-medium text-gray-700">Kumpulan Etnik</label>
-                                    <input type="text" id="kumpulan-etnik" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" placeholder="Cth: MELAYU, CINA, IBAN">
+                                    <input type="text" id="kumpulan-etnik" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 input-aktif" placeholder="Cth: MELAYU, CINA, IBAN">
                                 </div>
                             </div>
                         </div>
@@ -92,11 +105,11 @@
                         <div class="space-y-4">
                             <div>
                                 <label for="nama-penjaga" class="block text-sm font-medium text-gray-700">Nama Bapa/Ibu/Penjaga</label>
-                                <input type="text" id="nama-penjaga" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                <input type="text" id="nama-penjaga" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 input-aktif">
                             </div>
                             <div>
                                 <label for="alamat-penjaga" class="block text-sm font-medium text-gray-700">Alamat Bapa/Ibu/Penjaga</label>
-                                <textarea id="alamat-penjaga" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"></textarea>
+                                <textarea id="alamat-penjaga" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 input-aktif"></textarea>
                             </div>
                         </div>
                     </fieldset>
@@ -106,40 +119,40 @@
                         <div class="space-y-4">
                             <div>
                                 <label for="sekolah" class="block text-sm font-medium text-gray-700">Sekolah / School</label>
-                                <input type="text" id="sekolah" value="SMK LUTONG, MIRI" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                <input type="text" id="sekolah" value="SMK LUTONG, MIRI" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 input-aktif">
                             </div>
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
                                     <label for="bahasa-pengantar" class="block text-sm font-medium text-gray-700">Bahasa Pengantar</label>
-                                    <input type="text" id="bahasa-pengantar" value="BAHASA MELAYU" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                    <input type="text" id="bahasa-pengantar" value="BAHASA MELAYU" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 input-aktif">
                                 </div>
                                 <div>
                                     <label for="tarikh-masuk" class="block text-sm font-medium text-gray-700">Tarikh Kemasukan / Date of Admission</label>
-                                    <input type="date" id="tarikh-masuk" value="2021-01-20" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                    <input type="date" id="tarikh-masuk" value="2021-01-20" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 input-aktif">
                                 </div>
                             </div>
 
                             
                             <div>
                                 <label for="tarikh-berhenti" class="block text-sm font-medium text-gray-700">Tarikh Berhenti / Date of Leaving</label>
-                                <input type="date" id="tarikh-berhenti" value="2025-12-19" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                <input type="date" id="tarikh-berhenti" value="2025-12-19" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 input-aktif">
                             </div>
                             
                             <div>
                                 <label for="tingkatan-tertinggi" class="block text-sm font-medium text-gray-700">Darjah/Tingkatan Tertinggi Dihadiri</label>
-                                <input type="text" id="tingkatan-tertinggi" value="5 BAKTI" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                <input type="text" id="tingkatan-tertinggi" value="5 BAKTI" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 input-aktif">
                             </div>
                             <div>
                                 <label for="sebab-berhenti" class="block text-sm font-medium text-gray-700">Sebab Berhenti / Reason for Leaving</label>
-                                <input type="text" id="sebab-berhenti" value="TAMAT TINGKATAN LIMA" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                <input type="text" id="sebab-berhenti" value="TAMAT TINGKATAN LIMA" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 input-aktif">
                             </div>
                             <div>
                                 <label for="peperiksaan-awam" class="block text-sm font-medium text-gray-700">Peperiksaan Awam Diduduki</label>
-                                <input type="text" id="peperiksaan-awam" value="SIJIL PELAJARAN MALAYSIA" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                <input type="text" id="peperiksaan-awam" value="SIJIL PELAJARAN MALAYSIA" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 input-aktif">
                             </div>
                             <div>
                                 <label for="sekolah-terdahulu" class="block text-sm font-medium text-gray-700">Sekolah Terdahulu / Schools Previously Attended</label>
-                                <input type="text" id="sekolah-terdahulu" value="TIADA" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                <input type="text" id="sekolah-terdahulu" value="TIADA" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 input-aktif">
                             </div>
                         </div>
                     </fieldset>
@@ -167,14 +180,14 @@
                             <div class="flex items-center pt-2">
                                 <input type="checkbox" id="minat-lain-checkbox" name="minat-checkbox" class="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
                                 <label for="minat-lain-checkbox" class="ml-2 text-sm font-medium text-gray-700">Lain-lain:</label>
-                                <input type="text" id="minat-lain-text" class="ml-2 flex-1 rounded-md border-gray-300 shadow-sm sm:text-sm focus:border-indigo-500 focus:ring-indigo-500 input-readonly" disabled>
+                                <input type="text" id="minat-lain-text" class="ml-2 flex-1 rounded-md border-gray-300 shadow-sm sm:text-sm focus:border-indigo-500 focus:ring-indigo-500 input-readonly-styled" disabled>
                             </div>
                         </div>
                         <div id="minat-error" class="text-red-600 text-sm mt-1 hidden">Anda hanya boleh pilih 3 minat/kebolehan.</div>
                         
                         <div>
                             <label for="minat-khas" class="block text-sm font-medium text-gray-700 mt-4">Ringkasan Minat / Kebolehan Khas</label>
-                            <textarea id="minat-khas" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 input-readonly" readonly placeholder="Pilihan anda akan digabungkan di sini..."></textarea>
+                            <textarea id="minat-khas" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 input-readonly-styled" readonly placeholder="Pilihan anda akan digabungkan di sini..."></textarea>
                         </div>
                     </fieldset>
 
@@ -183,7 +196,7 @@
                         <legend class="text-xl font-semibold text-indigo-600 border-b border-indigo-100 pb-3 mb-4 pt-4">Komen</legend>
                         <div>
                             <label for="komen-pengetua" class="block text-sm font-medium text-gray-700">Komen Guru Besar/Pengetua (Dijana Automatik)</label>
-                            <textarea id="komen-pengetua" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 input-readonly" readonly></textarea>
+                            <textarea id="komen-pengetua" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 input-readonly-styled" readonly></textarea>
                         </div>
                     </fieldset>
 
@@ -315,9 +328,9 @@
             
             if(komenTextarea) {
                 const randomIndex = Math.floor(Math.random() * komenList.length);
-                // Tambah kelas input-readonly setelah nilai ditetapkan
+                // Tambah kelas input-readonly-styled setelah nilai ditetapkan
                 komenTextarea.value = komenList[randomIndex];
-                komenTextarea.classList.add('input-readonly');
+                komenTextarea.classList.add('input-readonly-styled');
             }
 
             // --- Logik Pilihan Minat (Checkboxes) ---
@@ -348,7 +361,15 @@
 
                     if (e.target.id === 'minat-lain-checkbox' && lainText) {
                         lainText.disabled = !e.target.checked;
-                        if (!e.target.checked) lainText.value = '';
+                        // Tambah atau buang kelas readonly
+                        if (e.target.checked) {
+                             lainText.classList.remove('input-readonly-styled');
+                             lainText.classList.add('input-aktif');
+                        } else {
+                             lainText.classList.remove('input-aktif');
+                             lainText.classList.add('input-readonly-styled');
+                             lainText.value = '';
+                        }
                     }
 
                     const checkedBoxes = Array.from(minatCheckboxes).filter(cb => cb.checked);
@@ -358,6 +379,8 @@
                         if (e.target.id === 'minat-lain-checkbox' && lainText) {
                             lainText.disabled = true;
                             lainText.value = '';
+                            lainText.classList.remove('input-aktif');
+                            lainText.classList.add('input-readonly-styled');
                         }
                         if(minatError) minatError.classList.remove('hidden');
                         setTimeout(() => {
@@ -385,9 +408,19 @@
                     });
                 }
                 
-                // Tambah kelas readonly pada minat-khas
-                if(minatTextarea) minatTextarea.classList.add('input-readonly');
+                // Set kelas readonly pada minat-khas (Ringkasan)
+                if(minatTextarea) minatTextarea.classList.add('input-readonly-styled');
+                // Set kelas readonly pada minat-lain-text (Lain-lain) pada permulaan
+                if(lainText) lainText.classList.add('input-readonly-styled');
             }
+            
+            // Tambah kelas input-aktif pada input biasa yang belum ada style
+            document.querySelectorAll('.mt-1.block.w-full.rounded-md:not([readonly]):not([disabled])').forEach(input => {
+                if (!input.classList.contains('input-aktif')) {
+                    input.classList.add('input-aktif');
+                }
+            });
+
 
             // === LOGIK HANTAR KE GOOGLE SHEET ===
             
