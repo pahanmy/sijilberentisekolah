@@ -115,7 +115,13 @@
             <!-- Pautan Sheet & Sijil -->
             <div class="flex items-center space-x-2 order-3 sm:order-2 w-full sm:w-auto justify-center sm:justify-start">
                 
-                <!-- Pautan BARU: Halaman Cetak Sijil -->
+                <!-- Pautan BARU: Halaman Cetak Surat Akuan (ke cetak_akuan_list.html) -->
+                <a href="cetak_akuan_list.html" target="_blank" title="Cetak Surat Akuan & Sijil Khas" class="inline-flex items-center rounded-md bg-purple-600 px-3 py-2 text-xs font-semibold text-white shadow-sm hover:bg-purple-700 transition duration-150">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><path d="M10 12H8"/><path d="M16 12h-2"/><path d="M16 16h-6"/><path d="M8 16h2"/></svg>
+                    Cetak Akuan
+                </a>
+
+                <!-- Pautan Halaman Cetak Sijil -->
                 <a href="sijil.html" target="_blank" title="Cetak Sijil Berhenti" class="inline-flex items-center rounded-md bg-pink-600 px-3 py-2 text-xs font-semibold text-white shadow-sm hover:bg-pink-700 transition duration-150">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><path d="M6 14h12v7H6z"/></svg>
                     Cetak Sijil
@@ -420,13 +426,18 @@
                     <input type="hidden" id="sheetdb-url-guru" value="https://sheetdb.io/api/v1/ox3yu9lw1ua8g">
 
                     <!-- Butang Aksi -->
-                    <div class="pt-4 flex justify-end space-x-3 border-t border-gray-200">
-                        <button type="button" id="tutup-penilaian-btn" class="rounded-md bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 transition duration-150 ease-in-out">
-                            Tutup
+                    <div class="pt-4 flex justify-between space-x-3 border-t border-gray-200">
+                        <button type="button" id="cetak-akuan-btn" class="rounded-md bg-pink-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-pink-700 transition duration-150 ease-in-out">
+                            Jana Surat Akuan & Sijil Khas (Print)
                         </button>
-                        <button type="button" id="simpan-penilaian-btn" class="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 transition duration-150 ease-in-out">
-                            Simpan Data Penilaian
-                        </button>
+                        <div class="flex space-x-3">
+                            <button type="button" id="tutup-penilaian-btn" class="rounded-md bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 transition duration-150 ease-in-out">
+                                Tutup
+                            </button>
+                            <button type="button" id="simpan-penilaian-btn" class="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 transition duration-150 ease-in-out">
+                                Simpan Data Penilaian
+                            </button>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -478,12 +489,14 @@
         const tutupPenilaianBtn = document.getElementById('tutup-penilaian-btn');
         const simpanPenilaianBtn = document.getElementById('simpan-penilaian-btn');
         const penilaianMuridForm = document.getElementById('penilaian-murid-form');
+        const cetakAkuanBtn = document.getElementById('cetak-akuan-btn'); // Butang cetak akuan
 
         // Elemen Modal Pengesahan Simpan
         const confirmSimpanModal = document.getElementById('confirm-simpan-modal');
         const batalSimpanBtn = document.getElementById('batal-simpan-btn');
         const teruskanSimpanBtn = document.getElementById('teruskan-simpan-btn');
         
+
         // Tutup modal penilaian bila butang 'Tutup' diklik
         if (tutupPenilaianBtn) {
             tutupPenilaianBtn.addEventListener('click', () => {
@@ -500,8 +513,7 @@
                 }
             });
         }
-
-
+        
         // Fungsi untuk format tarikh (YYYY-MM-DD -> DD/MM/YYYY)
         const formatTarikh = (tarikhStr) => {
             if (!tarikhStr) return '';
@@ -517,15 +529,12 @@
         const formatCapMasa = (timestamp) => {
             if (!timestamp) return 'n/a';
             try {
-                // Kita anggap timestamp adalah string ISO atau serupa (cth: 2025-11-15T02:43:00.000Z)
                 const date = new Date(timestamp);
-                // Pastikan tarikh adalah sah sebelum memformat
                 if (isNaN(date)) return 'n/a'; 
 
                 const tarikh = date.toLocaleDateString('ms-MY', { day: '2-digit', month: '2-digit', year: 'numeric' });
                 const masa = date.toLocaleTimeString('ms-MY', { hour: '2-digit', minute: '2-digit', hour12: true });
                 
-                // Gunakan div dengan class kecil yang baru
                 return `<div class="status-time">Tarikh: ${tarikh.toLowerCase()}<br>Masa: ${masa.toLowerCase()}</div>`;
             } catch (e) {
                 return 'n/a';
@@ -588,6 +597,12 @@
             }
             return false;
         };
+        
+        // Mendapatkan nilai radio button yang dipilih
+        const getRadioValue = (name) => {
+            const radioChecked = penilaianMuridForm.querySelector(`input[name="${name}"]:checked`);
+            return radioChecked ? radioChecked.value : '';
+        };
 
         // Fungsi untuk memaparkan modal Penilaian Murid (Tunggal)
         window.paparModalPenilaianMurid = (index) => {
@@ -603,7 +618,7 @@
                 return;
             }
 
-            // --- 1. Isi Maklumat Asas ---
+            // --- 1. Isi Maklumat Asas & Map Data Asas Murid ---
             document.getElementById('penilaian-nama-murid').innerText = murid['Nama Murid'] || 'N/A';
             document.getElementById('penilaian-ic-murid').innerText = icMurid || 'N/A';
             document.getElementById('penilaian-tingkatan').innerText = murid['Tingkatan Tertinggi'] || 'N/A';
@@ -613,7 +628,7 @@
             document.getElementById('penilaian-ic-hidden').value = icMurid || '';
             document.getElementById('penilaian-tarikh-masuk').value = murid['Tarikh Masuk'] || '';
             document.getElementById('penilaian-tarikh-berhenti').value = murid['Tarikh Berhenti'] || '';
-
+            
             // Reset borang
             document.getElementById('penilaian-murid-form').reset();
             
@@ -773,17 +788,15 @@
             }
         };
 
+        // === FUNGSI JANA DOKUMEN CETAK GABUNGAN BARU (NAVIGATE) ===
+        // FUNGSI INI KINI DIBUANG DARI MODAL, GANTI DENGAN CETAK_AKUAN_LIST.HTML
+        
         // --- PENGENDALI ACARA SIMPAN ---
 
         // 1. Apabila butang 'Simpan Data Penilaian' diklik (Tunjuk Modal Pengesahan)
         if (simpanPenilaianBtn) {
             simpanPenilaianBtn.addEventListener('click', (e) => {
                 e.preventDefault();
-                // Semak samada sedang mengemaskini rekod sedia ada (PUT) atau mencipta yang baru (POST)
-                const icUntukUpdate = document.getElementById('penilaian-ic-hidden').value;
-                const rekodSediaAda = cariRekodPenilaian(icUntukUpdate, 'Komprehensif');
-                
-                // Kita akan tunjuk modal pengesahan, dan tentukan tindakan di teruskanSimpanBtn
                 tutupModal(penilaianMuridModal); // Sembunyikan modal borang
                 confirmSimpanModal.classList.remove('hidden'); // Tunjukkan modal pengesahan
             });
@@ -817,7 +830,6 @@
                 }
                 const data = await response.json();
                 dataPenilaianGlobal = data;
-                console.log(`Berjaya memuatkan ${data.length} rekod penilaian guru.`);
                 return data;
             } catch (error) {
                 console.error('Ralat Fetch Data Penilaian Guru:', error);
