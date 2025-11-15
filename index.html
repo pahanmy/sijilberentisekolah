@@ -42,9 +42,9 @@
         <!-- Pilihan Menu -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             
-            <!-- Butang 1: Borang Murid (index.html) -->
+            <!-- Butang 1: Borang Murid (murid.html) -->
             <div class="flex flex-col space-y-4">
-                <a href="index.html" class="group block p-6 sm:p-10 bg-white rounded-xl shadow-xl hover:shadow-2xl hover:scale-[1.02] transition duration-300 ease-in-out border-t-4 border-indigo-500 hover:border-indigo-700">
+                <a href="murid.html" class="group block p-6 sm:p-10 bg-white rounded-xl shadow-xl hover:shadow-2xl hover:scale-[1.02] transition duration-300 ease-in-out border-t-4 border-indigo-500 hover:border-indigo-700">
                     <div class="flex flex-col items-center">
                         <!-- Ikon Pelajar -->
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-indigo-500 group-hover:text-indigo-700 mb-4 transition duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -185,11 +185,11 @@
             // Teks mesej asas untuk dikongsikan
             const BASE_SHARE_MESSAGE = "Assalamualaikum pelajar. Sila lengkapkan maklumat sijil berhenti sekolah anda menggunakan pautan di bawah. Maklumat ini penting untuk proses dokumentasi sekolah:\n\n[PAUTAN_BORANG]";
 
-            // Tetapkan pautan borang murid (index.html)
+            // Tetapkan pautan borang murid (murid.html)
             const getMuridLink = () => {
                 const currentPath = window.location.href;
                 const basePath = currentPath.substring(0, currentPath.lastIndexOf('/') + 1);
-                return basePath + 'index.html';
+                return basePath + 'murid.html';
             };
             
             if (shareLinkInput) {
