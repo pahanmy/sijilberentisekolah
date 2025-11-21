@@ -433,11 +433,14 @@
             jawatanCList += generateJawatanRow('Jawatan 4', 'Pengawas Kelas', '4');
             jawatanCList += generateJawatanRow('Jawatan 5', 'Pengawas Perpustakaan', '5');
 
-            if (penilaian['Jawatan Khas Lain'] && penilaian['Jawatan Khas Lain'].trim() !== '') {
-                 jawatanCList += `<div style="display: flex; padding: 3px 0; font-weight: normal; font-size: 9pt;"><div style="width: 38%;">6. Lain-lain: ${penilaian['Jawatan Khas Lain'].toUpperCase()}</div><div style="width: 62%;"></div></div>`;
-            } else {
-                 jawatanCList += `<div style="display: flex; padding: 3px 0; font-weight: normal; font-size: 9pt;"><div style="width: 38%;">6. Lain-lain: TIADA</div><div style="width: 62%;"></div></div>`;
-            }
+            // KOD YANG DIUBAH: Mengasingkan 'Lain-lain' (6) daripada jadual kotak semak
+            const jawatanLain = penilaian['Jawatan Khas Lain'] && penilaian['Jawatan Khas Lain'].trim() !== '' 
+                ? penilaian['Jawatan Khas Lain'].toUpperCase() 
+                : 'TIADA';
+
+            jawatanCList += `<div style="padding: 5px 0 0 0; font-weight: normal; font-size: 10pt;">
+                                <span style="font-weight: bold; margin-right: 5px;">6. Lain-lain:</span> ${jawatanLain}
+                            </div>`;
 
 
             // --- 2. GABUNGKAN TEMPLAT YANG TELAH DISIMPAN ---
@@ -509,7 +512,7 @@
                     checkGred(penilaian['Keyakinan Diri'], 'Keyakinan Diri', docElement);
                     checkGred(penilaian.Kepimpinan, 'Kepimpinan', docElement);
                     checkGred(penilaian.Kesopanan, 'Kesopanan', docElement);
-                    checkGred(penilaian.Pergaulan, 'Pergaulan', docElement); // BARU
+                    checkGred(penilaian.Pergaulan, 'Pergaulan', docElement);
                     checkGred(penilaian.Disiplin, 'Disiplin', docElement);
                     
                     // Jawatan Khas (Jadual Kotak Semak - Teks)
@@ -548,7 +551,7 @@
                 penilaian.Jujur = 'Baik'; penilaian['Keyakinan Diri'] = 'Baik'; 
                 penilaian.Kepimpinan = 'Baik';
                 penilaian.Kesopanan = 'Baik'; 
-                penilaian.Pergaulan = 'Baik'; // BARU: Nilai lalai untuk Pergaulan
+                penilaian.Pergaulan = 'Baik';
                 penilaian.Disiplin = 'Baik';
                 penilaian['Peratus Kehadiran'] = '100';
                 penilaian.Catatan = 'TIADA DATA PENILAIAN GURU DIREKODKAN.';
