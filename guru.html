@@ -388,14 +388,16 @@
                                     <td class="text-center"><input type="radio" name="jaw-5" value="Penolong" class="custom-radio"></td>
                                     <td class="text-center"><input type="radio" name="jaw-5" value="Ahli" class="custom-radio"></td>
                                 </tr>
-                                <tr id="jaw-6">
-                                    <td>6. Lain-lain (Nyatakan)</td>
-                                    <td colspan="3"><input type="text" id="jaw-lain" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm"></td>
-                                </tr>
-                            </tbody>
+                                </tbody>
                         </table>
                     </div>
                     
+                    <div class="mt-4 p-3 bg-white border border-gray-200 rounded-lg shadow-sm">
+                        <label for="jaw-lain" class="block text-sm font-medium text-gray-700">6. Lain-lain (Nyatakan Tugas Khas/Jawatan Khas Tambahan):</label>
+                        <input type="text" id="jaw-lain" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm">
+                    </div>
+
+
                     <h4 class="text-lg font-semibold text-gray-800">D. Kehadiran Sekolah (Surat Akuan)</h4>
                     <div class="flex items-center space-x-4">
                         <label for="peratus-hadir" class="text-sm font-medium text-gray-700">Peratus Kehadiran (%):</label>
@@ -625,7 +627,6 @@
                 setRadioValue(penilaianMuridForm, 'prestasi-akademik', rekodKomprehensif.Akademik);
                 
                 // B. Kualiti Peribadi
-                // TAMBAH 'Pergaulan' ke dalam senarai key
                 const kualitiKeys = ['Bertanggungjawab', 'Daya Usaha', 'Jujur', 'Keyakinan Diri', 'Kepimpinan', 'Kesopanan', 'Pergaulan', 'Disiplin']; 
                 kualitiKeys.forEach((key, index) => {
                     setRadioValue(penilaianMuridForm, `gred-${index + 1}`, rekodKomprehensif[key]);
@@ -644,7 +645,7 @@
             } else {
                 // Set lalai jika tiada rekod sedia ada (Default Baik)
                 setRadioValue(penilaianMuridForm, 'prestasi-akademik', 'Baik');
-                for (let i = 1; i <= 8; i++) { // UBAH 7 ke 8
+                for (let i = 1; i <= 8; i++) { 
                     setRadioValue(penilaianMuridForm, `gred-${i}`, 'Baik');
                 }
             }
@@ -667,7 +668,7 @@
 
             // Kumpul data Kualiti Peribadi (Surat Akuan) (8 items)
             const kualitiPeribadiValues = [];
-            for (let i = 1; i <= 8; i++) kualitiPeribadiValues.push(getRadioValue(`gred-${i}`)); // UBAH 7 ke 8
+            for (let i = 1; i <= 8; i++) kualitiPeribadiValues.push(getRadioValue(`gred-${i}`)); 
             
             // Kumpul data Jawatan Khas (Surat Akuan)
             const jawatanKhasValues = [];
@@ -700,8 +701,8 @@
                 'Bertanggungjawab': kualitiPeribadiValues[0], 'Daya Usaha': kualitiPeribadiValues[1],
                 'Jujur': kualitiPeribadiValues[2], 'Keyakinan Diri': kualitiPeribadiValues[3],
                 'Kepimpinan': kualitiPeribadiValues[4], 'Kesopanan': kualitiPeribadiValues[5],
-                'Pergaulan': kualitiPeribadiValues[6], // TAMBAH BARU
-                'Disiplin': kualitiPeribadiValues[7], // UBAH INDEKS
+                'Pergaulan': kualitiPeribadiValues[6], 
+                'Disiplin': kualitiPeribadiValues[7], 
                 'Jawatan 1': jawatanKhasValues[0], 'Jawatan 2': jawatanKhasValues[1],
                 'Jawatan 3': jawatanKhasValues[2], 'Jawatan 4': jawatanKhasValues[3],
                 'Jawatan 5': jawatanKhasValues[4], 
