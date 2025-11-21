@@ -192,7 +192,7 @@
                     <p style="margin-top: 15px;">
                         tahun <span data-id="akuan-tarikh-masuk-tahun" style="border-bottom: 1px dashed #000; padding: 0 5px; min-width: 80px; display: inline-block;"></span>
                         hingga <span data-id="akuan-tarikh-berhenti-tahun" style="border-bottom: 1px dashed #000; padding: 0 5px; min-width: 80px; display: inline-block;"></span>
-                        . Beliau telah menamatkan persekolahannya dalam Tingkatan <span data-id="akuan-tingkatan" style="border-bottom: 1px dashed #000; padding: 0 5px; min-width: 100px; display: inline-block;"></span>
+                        . Beliau telah menamatkan persekolahnya dalam Tingkatan <span data-id="akuan-tingkatan" style="border-bottom: 1px dashed #000; padding: 0 5px; min-width: 100px; display: inline-block;"></span>
                     </p>
                 </div>
                 
@@ -399,21 +399,28 @@
             // --- 1. Sediakan Data Jawatan ---
             const jawatanTitles = [
                 'Pengawas Sekolah', 'Pengawas Tingkatan', 'Pengawas Asrama', 
-                'Pengawas Kelas', 'Pengawas Perpustakaan'
+                'Pengawas Kelas', 'Pengawas Perpustakaan', 'Lain-lain (Nyatakan)' // Item ke-6 kini adalah radio button
             ];
             
             // Logik kotak semak untuk Jawatan Khas (Halaman 1)
-            const generateJawatanRow = (key, title, jawatanColumn) => {
+            const generateJawatanRow = (index, title) => {
+                // Mengambil Jawatan 1 hingga Jawatan 6 (baru)
+                const key = `Jawatan ${index + 1}`; 
+                const jawatanColumn = index + 1;
+                
                 const jenisJawatan = penilaian[key] || 'N/A';
                 const isKetua = jenisJawatan.toUpperCase().includes('KETUA');
                 const isPenolong = jenisJawatan.toUpperCase().includes('PENOLONG') || jenisJawatan.toUpperCase().includes('SETIAUSAHA') || jenisJawatan.toUpperCase().includes('BENDAHARI') || jenisJawatan.toUpperCase().includes('BIRO');
                 
+                // Jika Jawatan 6 dipilih, ia akan memaparkan salah satu dari Ketua/Penolong/Ahli
+                const isAhli = (!isKetua && !isPenolong && jenisJawatan !== 'N/A' && jenisJawatan.trim() !== '');
+
                 return `
                     <div style="display: flex; border-bottom: 1px dashed #ccc; padding: 3px 0; font-weight: normal; font-size: 9pt;">
                         <div style="width: 38%;">${jawatanColumn}. ${title}</div>
                         <div style="width: 20%; text-align: center;">${isKetua ? '✔' : ''}</div>
                         <div style="width: 25%; text-align: center;">${isPenolong ? '✔' : ''}</div>
-                        <div style="width: 17%; text-align: center;">${(!isKetua && !isPenolong && jenisJawatan !== 'N/A' && jenisJawatan.trim() !== '') ? '✔' : ''}</div>
+                        <div style="width: 17%; text-align: center;">${isAhli ? '✔' : ''}</div>
                     </div>
                 `;
             };
@@ -427,20 +434,11 @@
                 </div>
             `;
             
-            jawatanCList += generateJawatanRow('Jawatan 1', 'Pengawas Sekolah', '1');
-            jawatanCList += generateJawatanRow('Jawatan 2', 'Pengawas Tingkatan', '2');
-            jawatanCList += generateJawatanRow('Jawatan 3', 'Pengawas Asrama', '3');
-            jawatanCList += generateJawatanRow('Jawatan 4', 'Pengawas Kelas', '4');
-            jawatanCList += generateJawatanRow('Jawatan 5', 'Pengawas Perpustakaan', '5');
-
-            // KOD YANG DIUBAH: Mengasingkan 'Lain-lain' (6) daripada jadual kotak semak
-            const jawatanLain = penilaian['Jawatan Khas Lain'] && penilaian['Jawatan Khas Lain'].trim() !== '' 
-                ? penilaian['Jawatan Khas Lain'].toUpperCase() 
-                : 'TIADA';
-
-            jawatanCList += `<div style="padding: 5px 0 0 0; font-weight: normal; font-size: 10pt;">
-                                <span style="font-weight: bold; margin-right: 5px;">6. Lain-lain:</span> ${jawatanLain}
-                            </div>`;
+            // Generate rows for 6 positions
+            for(let i = 0; i < 6; i++) {
+                 jawatanCList += generateJawatanRow(i, jawatanTitles[i]);
+            }
+            // Jawatan Khas Lain (text input) diabaikan kerana Jawatan 6 kini merangkumi Lain-lain.
 
 
             // --- 2. GABUNGKAN TEMPLAT YANG TELAH DISIMPAN ---
@@ -558,8 +556,11 @@
                 penilaian['Lencana Bintang'] = 'Baik'; 
                 penilaian['Program Nilam'] = '5 Bintang'; 
                 penilaian['Prestasi Kehadiran Sijil Khas'] = 'Cemerlang';
-                penilaian['Jawatan Khas Lain'] = '';
-                for(let i=1; i<=5; i++) { penilaian[`Jawatan ${i}`] = 'N/A'; }
+                
+                // Kerana Jawatan 6 kini menjadi radio button (default N/A) dan Jawatan Khas Lain dibuang
+                penilaian['Jawatan Khas Lain'] = ''; // Ensure this is explicitly cleared/ignored
+                
+                for(let i=1; i<=6; i++) { penilaian[`Jawatan ${i}`] = 'N/A'; } // Set default untuk 6 jawatan
             }
             // Sesuaikan nilai Akademik jika menggunakan jadual (memerlukan salah satu gred)
             if (['Cemerlang', 'Baik', 'Memuaskan'].includes(penilaian.Akademik)) {
