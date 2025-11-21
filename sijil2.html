@@ -161,28 +161,60 @@
         
         <div id="template-akuan" style="display: none;">
             <div class="print-document" data-page="akuan">
-                <div style="text-align: center; margin-bottom: 20px;">
-                    <img src="https://placehold.co/40x48/ffffff/000000?text=JATA" alt="Jata Negara Placeholder" style="margin: 0 auto 10px; display: block;">
-                    <p style="font-size: 14pt; font-weight: bold;">SURAT AKUAN</p>
-                    <p style="font-size: 12pt;">Murid Tingkatan 5</p>
-                    <p style="font-size: 10pt; font-style: italic;">(Merangkumi rekod Tingkatan 3 hingga Tingkatan 5)</p>
-                </div>
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
+                    <img src="https://placehold.co/100x120/ffffff/000000?text=JATA+SARAWAK" alt="Jata Sarawak Placeholder" style="width: 100px; height: 120px; object-fit: contain;">
 
-                <p style="text-align: justify; margin-top: 30px;">
-                    Diperakukan di sini bahawa maklumat prestasi dan kualiti peribadi murid berikut adalah benar berdasarkan rekod sekolah:
-                </p>
+                    <div style="text-align: center; font-family: 'Times New Roman', serif; line-height: 1.2;">
+                        <p style="font-size: 14pt; font-weight: bold; margin-bottom: 3px;">SEKOLAH MENENGAH KEBANGSAAN LUTONG</p>
+                        <p style="font-size: 11pt;">JALAN PANTAI,</p>
+                        <p style="font-size: 11pt;">98100 LUTONG, MIRI, SARAWAK.</p>
+                        <p style="font-size: 11pt;">Tel: 085-655205 No. Faks: 085-652503</p>
+                    </div>
+
+                    <div style="text-align: right;">
+                         <img src="https://placehold.co/100x120/ffffff/000000?text=LOGO+SEKOLAH" alt="Logo Sekolah Placeholder" style="width: 100px; height: 120px; object-fit: contain; margin-bottom: 5px;">
+                         <p style="font-style: italic; font-size: 10pt;">Move Ahead Go Beyond</p>
+                    </div>
+                </div>
                 
-                <p style="font-size: 11pt; margin-top: 20px;">Nama Murid: <strong data-id="akuan-nama" style="border-bottom: 1px dashed #000; padding: 0 5px; min-width: 300px; display: inline-block;"></strong></p>
-                <p style="font-size: 11pt;">No. K/P: <strong data-id="akuan-ic" style="border-bottom: 1px dashed #000; padding: 0 5px; min-width: 300px; display: inline-block;"></strong></p>
-                <p style="font-size: 11pt;">Sekolah: <strong data-id="akuan-sekolah" style="border-bottom: 1px dashed #000; padding: 0 5px; min-width: 300px; display: inline-block;"></strong></p>
-                <p style="font-size: 11pt;">Tingkatan Tertinggi: <strong data-id="akuan-tingkatan" style="border-bottom: 1px dashed #000; padding: 0 5px; min-width: 300px; display: inline-block;"></strong></p>
-                <p style="font-size: 11pt;">Tarikh Masuk: <strong data-id="akuan-tarikh-masuk" style="border-bottom: 1px dashed #000; padding: 0 5px; min-width: 150px; display: inline-block;"></strong></p>
-                <p style="font-size: 11pt;">Tarikh Tamat/Berhenti: <strong data-id="akuan-tarikh-berhenti" style="border-bottom: 1px dashed #000; padding: 0 5px; min-width: 150px; display: inline-block;"></strong></p>
-                <p style="font-size: 11pt;">Peperiksaan Awam Diduduki: <strong data-id="akuan-peperiksaan" style="border-bottom: 1px dashed #000; padding: 0 5px; min-width: 300px; display: inline-block;"></strong></p>
-                <p style="font-align: justify; margin-top: 15px;">Murid ini merupakan warganegara <strong data-id="akuan-warganegara"></strong> dan berhenti disebabkan <strong data-id="akuan-sebab-berhenti"></strong>.</p>
+                <div style="border-top: 2px solid #000; margin: 5px 0 20px 0;"></div>
+
+                <h2 style="font-size: 16pt; font-weight: bold; margin: 30px 0 30px 0; text-align: center;">SURAT AKUAN</h2>
+
+                <div style="margin-top: 20px; font-size: 11pt;">
+                    <p>Diperakukan di sini bahawa <span data-id="akuan-nama" style="border-bottom: 1px dashed #000; padding: 0 5px; min-width: 500px; display: inline-block;"></span></p>
+
+                    <p style="margin-top: 15px;">
+                        No. Kad Pengenalan : <span data-id="akuan-ic" style="border-bottom: 1px dashed #000; padding: 0 5px; min-width: 250px; display: inline-block;"></span>
+                        adalah seorang pelajar sekolah ini dari
+                    </p>
+
+                    <p style="margin-top: 15px;">
+                        tahun <span data-id="akuan-tarikh-masuk-tahun" style="border-bottom: 1px dashed #000; padding: 0 5px; min-width: 80px; display: inline-block;"></span>
+                        hingga <span data-id="akuan-tarikh-berhenti-tahun" style="border-bottom: 1px dashed #000; padding: 0 5px; min-width: 80px; display: inline-block;"></span>
+                        . Beliau telah menamatkan persekolahannya dalam Tingkatan <span data-id="akuan-tingkatan" style="border-bottom: 1px dashed #000; padding: 0 5px; min-width: 100px; display: inline-block;"></span>
+                    </p>
+                </div>
                 
-                <h3>A. PRESTASI AKADEMIK</h3>
-                <p>Pencapaian keseluruhan murid dalam peperiksaan sekolah dan awam adalah: <strong><span data-id="akuan-akademik"></span></strong>.</p>
+                <h3 style="font-size: 14pt; margin-top: 30px;">A. Prestasi Akademik</h3>
+                <table class="akuan-jadual" style="width: 100%; border-collapse: collapse; margin-top: 10px; table-layout: fixed;">
+                    <thead>
+                        <tr>
+                            <th style="width: 40%;"></th>
+                            <th style="width: 20%;">Cemerlang</th>
+                            <th style="width: 20%;">Baik</th>
+                            <th style="width: 20%;">Memuaskan</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="text-align: left;">Pencapaian keseluruhan dalam peperiksaan sekolah dan awam</td>
+                            <td data-gred="Cemerlang" data-prog="Akademik"></td>
+                            <td data-gred="Baik" data-prog="Akademik"></td>
+                            <td data-gred="Memuaskan" data-prog="Akademik"></td>
+                        </tr>
+                    </tbody>
+                </table>
 
                 <h3>B. KUALITI PERIBADI DAN SAHSIAH</h3>
                 <table class="akuan-jadual" style="width: 100%; border-collapse: collapse; margin-top: 10px;">
@@ -344,6 +376,13 @@
             return tarikhStr;
         };
         
+        // FUNGSI BARU: Ambil tahun sahaja dari tarikh (YYYY-MM-DD)
+        const getTahunDariTarikh = (tarikhStr) => {
+            if (!tarikhStr) return 'N/A';
+            const [tahun] = tarikhStr.split('-');
+            return tahun || 'N/A';
+        };
+
         // Fungsi untuk mencari rekod penilaian yang telah disimpan
         const cariRekodPenilaian = (ic) => {
             return dataPenilaianGlobal.find(rekod => 
@@ -453,16 +492,14 @@
                 if (docElement.getAttribute('data-page') === 'akuan') { 
                     querySelectorSafe('[data-id="akuan-nama"]').innerText = murid['Nama Murid'] || 'N/A';
                     querySelectorSafe('[data-id="akuan-ic"]').innerText = murid.IC || 'N/A';
-                    querySelectorSafe('[data-id="akuan-sekolah"]').innerText = murid.Sekolah || 'N/A';
-                    querySelectorSafe('[data-id="akuan-tingkatan"]').innerText = murid['Tingkatan Tertinggi'] || 'N/A';
-                    querySelectorSafe('[data-id="akuan-tarikh-masuk"]').innerText = formatTarikh(murid['Tarikh Masuk']) || 'N/A';
-                    querySelectorSafe('[data-id="akuan-tarikh-berhenti"]').innerText = formatTarikh(murid['Tarikh Berhenti']) || 'N/A';
-                    querySelectorSafe('[data-id="akuan-peperiksaan"]').innerText = murid['Peperiksaan Awam'] || 'TIADA';
-                    querySelectorSafe('[data-id="akuan-warganegara"]').innerText = murid.Warganegara || 'MALAYSIA';
-                    querySelectorSafe('[data-id="akuan-sebab-berhenti"]').innerText = murid['Sebab Berhenti'] || 'TAMAT TINGKATAN LIMA';
                     
-                    // Akademik
-                    querySelectorSafe('[data-id="akuan-akademik"]').innerText = penilaian.Akademik || 'BAIK';
+                    // Menggunakan tahun sahaja
+                    querySelectorSafe('[data-id="akuan-tarikh-masuk-tahun"]').innerText = getTahunDariTarikh(murid['Tarikh Masuk']) || 'N/A';
+                    querySelectorSafe('[data-id="akuan-tarikh-berhenti-tahun"]').innerText = getTahunDariTarikh(murid['Tarikh Berhenti']) || 'N/A';
+                    querySelectorSafe('[data-id="akuan-tingkatan"]').innerText = murid['Tingkatan Tertinggi'] || 'N/A';
+                    
+                    // Akademik - Menggunakan fungsi checkGred untuk jadual baru
+                    checkGred(penilaian.Akademik, 'Akademik', docElement);
                     
                     // Kualiti Peribadi (Jadual Kotak Semak)
                     checkGred(penilaian.Bertanggungjawab, 'Bertanggungjawab', docElement);
@@ -480,6 +517,14 @@
                     querySelectorSafe('[data-id="akuan-peratus-hadir"]').innerText = penilaian['Peratus Kehadiran'] || '100';
                     querySelectorSafe('[data-id="akuan-catatan"]').innerText = penilaian.Catatan || 'TIADA CATATAN KHAS';
                     querySelectorSafe('[data-id="akuan-tarikh-cetak"]').innerText = tarikhHariIni;
+                    
+                    // Hapus data yang tidak digunakan dalam format imej baru
+                    if (querySelectorSafe('[data-id="akuan-sekolah"]')) querySelectorSafe('[data-id="akuan-sekolah"]').remove();
+                    if (querySelectorSafe('[data-id="akuan-tarikh-masuk"]')) querySelectorSafe('[data-id="akuan-tarikh-masuk"]').remove();
+                    if (querySelectorSafe('[data-id="akuan-tarikh-berhenti"]')) querySelectorSafe('[data-id="akuan-tarikh-berhenti"]').remove();
+                    if (querySelectorSafe('[data-id="akuan-peperiksaan"]')) querySelectorSafe('[data-id="akuan-peperiksaan"]').remove();
+                    if (querySelectorSafe('[data-id="akuan-warganegara"]')) querySelectorSafe('[data-id="akuan-warganegara"]').remove();
+                    if (querySelectorSafe('[data-id="akuan-sebab-berhenti"]')) querySelectorSafe('[data-id="akuan-sebab-berhenti"]').remove();
                 }
             };
             
@@ -496,7 +541,7 @@
             
             if (!penilaian || !penilaian.Akademik) {
                 // Default values if no comprehensive record exists
-                penilaian.Akademik = 'TIADA DATA'; 
+                penilaian.Akademik = 'BAIK'; // Diubah dari 'TIADA DATA'
                 penilaian.Bertanggungjawab = 'Baik'; penilaian['Daya Usaha'] = 'Baik';
                 penilaian.Jujur = 'Baik'; penilaian['Keyakinan Diri'] = 'Baik'; 
                 penilaian.Kepimpinan = 'Baik';
@@ -508,6 +553,12 @@
                 penilaian['Prestasi Kehadiran Sijil Khas'] = 'Cemerlang';
                 penilaian['Jawatan Khas Lain'] = '';
                 for(let i=1; i<=5; i++) { penilaian[`Jawatan ${i}`] = 'N/A'; }
+            }
+            // Sesuaikan nilai Akademik jika menggunakan jadual (memerlukan salah satu gred)
+            if (['Cemerlang', 'Baik', 'Memuaskan'].includes(penilaian.Akademik)) {
+                // Kekalkan
+            } else {
+                 penilaian.Akademik = 'Baik'; // Defaultkan kepada 'Baik' jika nilai tiada/tidak sah
             }
             return penilaian;
         }
