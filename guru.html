@@ -93,6 +93,7 @@
                 <p id="analisis-selesai" class="text-2xl font-bold text-green-700">0</p>
             </div>
             <div class="bg-white p-4 rounded-lg shadow-md border-b-4 border-red-400">
+                <p class="text-xs font-medium text-gray-500">Belum Dinilai</p>
                 <p id="analisis-belum" class="text-2xl font-bold text-red-600">0</p>
             </div>
         </div>
@@ -389,7 +390,9 @@
                                 </tr>
                                 <tr id="jaw-6">
                                     <td>6. Lain-lain (Nyatakan)</td>
-                                    <td colspan="3"><input type="text" id="jaw-lain" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm"></td>
+                                    <td class="text-center"><input type="radio" name="jaw-6" value="Ketua" class="custom-radio"></td>
+                                    <td class="text-center"><input type="radio" name="jaw-6" value="Penolong" class="custom-radio"></td>
+                                    <td class="text-center"><input type="radio" name="jaw-6" value="Ahli" class="custom-radio"></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -630,11 +633,11 @@
                 });
                 
                 // C. Tugas Khas
-                const jawatanKeys = ['Jawatan 1', 'Jawatan 2', 'Jawatan 3', 'Jawatan 4', 'Jawatan 5'];
+                const jawatanKeys = ['Jawatan 1', 'Jawatan 2', 'Jawatan 3', 'Jawatan 4', 'Jawatan 5', 'Jawatan 6']; // Jawatan 6 kini merujuk kepada 'Lain-lain'
                 jawatanKeys.forEach((key, index) => {
                     setRadioValue(penilaianMuridForm, `jaw-${index + 1}`, rekodKomprehensif[key]);
                 });
-                document.getElementById('jaw-lain').value = rekodKomprehensif['Jawatan Khas Lain'] || '';
+                // Jawatan Khas Lain (input teks) tidak lagi wujud, jadi kita skip pre-fill ini
 
                 // D & E: Kehadiran dan Catatan
                 document.getElementById('peratus-hadir').value = rekodKomprehensif['Peratus Kehadiran'] || '100';
@@ -669,7 +672,7 @@
             
             // Kumpul data Jawatan Khas (Surat Akuan)
             const jawatanKhasValues = [];
-            for (let i = 1; i <= 5; i++) jawatanKhasValues.push(getRadioValue(`jaw-${i}`));
+            for (let i = 1; i <= 6; i++) jawatanKhasValues.push(getRadioValue(`jaw-${i}`)); // AMBIL 6 JAWATAN
             
             // Cari jika rekod sedia ada (untuk tentukan PUT atau POST)
             const icUntukUpdate = document.getElementById('penilaian-ic-hidden').value;
@@ -703,13 +706,16 @@
                 'Jawatan 1': jawatanKhasValues[0], 'Jawatan 2': jawatanKhasValues[1],
                 'Jawatan 3': jawatanKhasValues[2], 'Jawatan 4': jawatanKhasValues[3],
                 'Jawatan 5': jawatanKhasValues[4], 
-                'Jawatan Khas Lain': document.getElementById('jaw-lain').value, // Mengambil nilai dari input teks
+                'Jawatan 6': jawatanKhasValues[5], // MENGHANTAR DATA DARI RADIO BUTTON BARU (jaw-6)
+                'Jawatan Khas Lain': '', // MEMBUANG INPUT TEKS
                 'Peratus Kehadiran': document.getElementById('peratus-hadir').value,
                 'Catatan': document.getElementById('catatan-tambahan').value,
                 
                 // Jenis Rekod Tunggal
                 'Jenis Dokumen': 'Komprehensif' 
             };
+            
+            // CATATAN: Kod Jawatan Khas Lain (Jawatan Khas Lain) akan dihantar sebagai string kosong.
 
             // 1. Validasi URL API Guru
             if (!apiUrl || !apiUrl.startsWith('https://sheetdb.io/api/v1/')) {
