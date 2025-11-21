@@ -234,7 +234,8 @@
                         <tr><td>iv)</td><td>Keyakinan diri</td><td data-gred="Cemerlang" data-prog="Keyakinan Diri"></td><td data-gred="Baik" data-prog="Keyakinan Diri"></td><td data-gred="Memuaskan" data-prog="Keyakinan Diri"></td></tr>
                         <tr><td>v)</td><td>Kepimpinan</td><td data-gred="Cemerlang" data-prog="Kepimpinan"></td><td data-gred="Baik" data-prog="Kepimpinan"></td><td data-gred="Memuaskan" data-prog="Kepimpinan"></td></tr>
                         <tr><td>vi)</td><td>Kesopanan</td><td data-gred="Cemerlang" data-prog="Kesopanan"></td><td data-gred="Baik" data-prog="Kesopanan"></td><td data-gred="Memuaskan" data-prog="Kesopanan"></td></tr>
-                        <tr><td>vii)</td><td>Disiplin</td><td data-gred="Cemerlang" data-prog="Disiplin"></td><td data-gred="Baik" data-prog="Disiplin"></td><td data-gred="Memuaskan" data-prog="Disiplin"></td></tr>
+                        <tr><td>vii)</td><td>Pergaulan</td><td data-gred="Cemerlang" data-prog="Pergaulan"></td><td data-gred="Baik" data-prog="Pergaulan"></td><td data-gred="Memuaskan" data-prog="Pergaulan"></td></tr>
+                        <tr><td>viii)</td><td>Disiplin</td><td data-gred="Cemerlang" data-prog="Disiplin"></td><td data-gred="Baik" data-prog="Disiplin"></td><td data-gred="Memuaskan" data-prog="Disiplin"></td></tr>
                     </tbody>
                 </table>
 
@@ -508,6 +509,7 @@
                     checkGred(penilaian['Keyakinan Diri'], 'Keyakinan Diri', docElement);
                     checkGred(penilaian.Kepimpinan, 'Kepimpinan', docElement);
                     checkGred(penilaian.Kesopanan, 'Kesopanan', docElement);
+                    checkGred(penilaian.Pergaulan, 'Pergaulan', docElement); // BARU
                     checkGred(penilaian.Disiplin, 'Disiplin', docElement);
                     
                     // Jawatan Khas (Jadual Kotak Semak - Teks)
@@ -545,7 +547,9 @@
                 penilaian.Bertanggungjawab = 'Baik'; penilaian['Daya Usaha'] = 'Baik';
                 penilaian.Jujur = 'Baik'; penilaian['Keyakinan Diri'] = 'Baik'; 
                 penilaian.Kepimpinan = 'Baik';
-                penilaian.Kesopanan = 'Baik'; penilaian.Disiplin = 'Baik';
+                penilaian.Kesopanan = 'Baik'; 
+                penilaian.Pergaulan = 'Baik'; // BARU: Nilai lalai untuk Pergaulan
+                penilaian.Disiplin = 'Baik';
                 penilaian['Peratus Kehadiran'] = '100';
                 penilaian.Catatan = 'TIADA DATA PENILAIAN GURU DIREKODKAN.';
                 penilaian['Lencana Bintang'] = 'Baik'; 
