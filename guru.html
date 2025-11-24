@@ -389,12 +389,15 @@
                                     <td class="text-center"><input type="radio" name="jaw-5" value="Ahli" class="custom-radio"></td>
                                 </tr>
                                 <tr id="jaw-6">
-                                    <td>6. Lain-lain (Nyatakan)</td>
+                                    <td class="flex items-center space-x-2">
+                                        <span>6. Lain-lain (Nyatakan):</span>
+                                        <input type="text" id="jaw-6-text" name="jaw-6-text" placeholder="Cth: Ketua PRS" class="w-24 text-sm rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                    </td>
                                     <td class="text-center"><input type="radio" name="jaw-6" value="Ketua" class="custom-radio"></td>
                                     <td class="text-center"><input type="radio" name="jaw-6" value="Penolong" class="custom-radio"></td>
                                     <td class="text-center"><input type="radio" name="jaw-6" value="Ahli" class="custom-radio"></td>
                                 </tr>
-                            </tbody>
+                                </tbody>
                         </table>
                     </div>
                     
@@ -637,7 +640,10 @@
                 jawatanKeys.forEach((key, index) => {
                     setRadioValue(penilaianMuridForm, `jaw-${index + 1}`, rekodKomprehensif[key]);
                 });
-                // Jawatan Khas Lain (input teks) tidak lagi wujud, jadi kita skip pre-fill ini
+                
+                // C. Tugas Khas LAIN-LAIN (BARU)
+                document.getElementById('jaw-6-text').value = rekodKomprehensif['Jawatan Khas Lain'] || '';
+
 
                 // D & E: Kehadiran dan Catatan
                 document.getElementById('peratus-hadir').value = rekodKomprehensif['Peratus Kehadiran'] || '100';
@@ -648,6 +654,8 @@
                 for (let i = 1; i <= 8; i++) { 
                     setRadioValue(penilaianMuridForm, `gred-${i}`, 'Baik');
                 }
+                // Set lalai untuk Jawatan Khas Lain
+                document.getElementById('jaw-6-text').value = '';
             }
 
             // Tunjukkan modal
@@ -706,8 +714,9 @@
                 'Jawatan 1': jawatanKhasValues[0], 'Jawatan 2': jawatanKhasValues[1],
                 'Jawatan 3': jawatanKhasValues[2], 'Jawatan 4': jawatanKhasValues[3],
                 'Jawatan 5': jawatanKhasValues[4], 
-                'Jawatan 6': jawatanKhasValues[5], // MENGHANTAR DATA DARI RADIO BUTTON BARU (jaw-6)
-                'Jawatan Khas Lain': '', // MEMBUANG INPUT TEKS
+                'Jawatan 6': jawatanKhasValues[5], 
+                // PERUBAHAN DI SINI: MENGAMBIL NILAI DARI INPUT TEKS JAWATAN KHAS LAIN
+                'Jawatan Khas Lain': document.getElementById('jaw-6-text').value || '', 
                 'Peratus Kehadiran': document.getElementById('peratus-hadir').value,
                 'Catatan': document.getElementById('catatan-tambahan').value,
                 
@@ -715,8 +724,6 @@
                 'Jenis Dokumen': 'Komprehensif' 
             };
             
-            // CATATAN: Kod Jawatan Khas Lain (Jawatan Khas Lain) akan dihantar sebagai string kosong.
-
             // 1. Validasi URL API Guru
             if (!apiUrl || !apiUrl.startsWith('https://sheetdb.io/api/v1/')) {
                 // Menggunakan console.error bukan alert
@@ -769,9 +776,6 @@
             }
         };
 
-        // === FUNGSI JANA DOKUMEN CETAK GABUNGAN BARU (NAVIGATE) ===
-        // FUNGSI INI KINI DIBUANG DARI MODAL, GANTI DENGAN CETAK_AKUAN_LIST.HTML
-        
         // --- PENGENDALI ACARA SIMPAN ---
 
         // 1. Apabila butang 'Simpan Data Penilaian' diklik (Tunjuk Modal Pengesahan)
